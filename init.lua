@@ -17,15 +17,14 @@
 -- Nicolas Casalini "DarkGod"
 -- darkgod@te4.org
 
-name = "Example Module"
-long_name = "Example Module for T-Engine4"
-short_name = "example"
-author = { "DarkGod", "darkgod@te4.org" }
-homepage = "http://te4.org/modules:example"
-version = {1,0,0}
+name = "Gene-Revolution"
+long_name = "Gene-Revolution Module for T-Engine4"
+short_name = "generevolution"
+author = { "People"}
+homepage = "https://github.com/reenenlaurie/Gene-Revolution"
+version = {0,0,1}
 engine = {0,9,36,"te4"}
 description = [[
-This is *NOT* a game, just an example/template to make your own using the T-Engine4.
+Sci-fi game where the player must use gene-splicing and cybernetics to survive.
 ]]
 starter = "mod.load"
-show_only_on_cheat = true -- Example modules are not shown to normal players
