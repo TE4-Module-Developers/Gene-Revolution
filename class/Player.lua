@@ -133,14 +133,6 @@ function _M:onTalentCooledDown(tid)
 	game.log("#00ff00#Talent %s is ready to use.", t.name)
 end
 
-function _M:levelup()
-	mod.class.Actor.levelup(self)
-
-	local x, y = game.level.map:getTileToScreen(self.x, self.y)
-	game.flyers:add(x, y, 80, 0.5, -2, "LEVEL UP!", {0,255,255})
-	game.log("#00ffff#Welcome to level %d.", self.level)
-end
-
 --- Tries to get a target from the user
 function _M:getTarget(typ)
 	return game:targetGetForPlayer(typ)
