@@ -27,6 +27,8 @@ local ActorAI = require "engine.interface.ActorAI"
 local ActorLevel = require "engine.interface.ActorLevel"
 local ActorTemporaryEffects = require "engine.interface.ActorTemporaryEffects"
 local Birther = require "engine.Birther"
+local AtomicEffects = require "mod.class.AtomicEffects"
+local Probability = require "mod.class.Probability"
 
 -- Useful keybinds
 KeyBind:load("move,hotkeys,inventory,actions,interface,debug")
@@ -40,8 +42,13 @@ ActorTalents:loadDefinition("/data/talents.lua")
 -- Timed Effects
 ActorTemporaryEffects:loadDefinition("/data/timed_effects.lua")
 
+-- Atomic Effects
+AtomicEffects:loadDefinition("/data/atomic_effects.lua")
+
 -- Actor resources
-ActorResource:defineResource("Power", "power", nil, "power_regen", "Power represent your ability to use special talents.")
+ActorResource:defineResource("Homeostasis", "homeostasis", nil, nil, "Homeostasis is the measure of genetic stability.  It ranges from 100% (good) to 0% (bad).")
+ActorResource:defineResource("Coherence", "coherence", nil, nil, "Coherence is the measure of communication between organic and cybernetic parts.  It ranges from 100% (good) to 0% (bad).")
+ActorResource:defineResource("Bioenergy", "bioenergy", nil, "bioenergy_regen", "Bioenergy is the amount of energy available to your body, including cybernetic implants.")
 
 -- Actor stats
 ActorStats:defineStat("Strength",	"str", 10, 1, 100, "Strength defines your character's ability to apply physical force. It increases your melee damage, damage with heavy weapons, your chance to resist physical effects, and carrying capacity.")

@@ -31,7 +31,7 @@ module(..., package.seeall, class.make)
 function _M:bumpInto(target)
 	local reaction = self:reactionToward(target)
 	if reaction < 0 then
-		return self:attackTarget(target)
+                return self:useTalent(self.T_ATTACK, nil, nil, nil, target)
 	elseif reaction >= 0 then
 		if self.move_others then
 			-- Displace
@@ -42,15 +42,4 @@ function _M:bumpInto(target)
 			self.x, self.y, target.x, target.y = target.x, target.y, self.x, self.y
 		end
 	end
-end
-
---- Makes the death happen!
-function _M:attackTarget(target, mult)
-	if self.combat then
-		local dam = self.combat.dam + self:getStr() - target.combat_armor
-		DamageType:get(DamageType.PHYSICAL).projector(self, target.x, target.y, DamageType.PHYSICAL, math.max(0, dam))
-	end
-
-	-- We use up our own energy
-	self:useEnergy(game.energy_to_act)
 end

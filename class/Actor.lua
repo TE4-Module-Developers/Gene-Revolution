@@ -23,7 +23,6 @@ require "engine.Autolevel"
 require "engine.interface.ActorTemporaryEffects"
 require "engine.interface.ActorLife"
 require "engine.interface.ActorProject"
-require "engine.interface.ActorLevel"
 require "engine.interface.ActorStats"
 require "engine.interface.ActorTalents"
 require "engine.interface.ActorResource"
@@ -36,7 +35,6 @@ module(..., package.seeall, class.inherit(
 	engine.interface.ActorTemporaryEffects,
 	engine.interface.ActorLife,
 	engine.interface.ActorProject,
-	engine.interface.ActorLevel,
 	engine.interface.ActorStats,
 	engine.interface.ActorTalents,
 	engine.interface.ActorResource,
@@ -46,14 +44,12 @@ module(..., package.seeall, class.inherit(
 
 function _M:init(t, no_default)
 	-- Define some basic combat stats
-	self.combat_armor = 0
 
 	-- Default regen
-	t.power_regen = t.power_regen or 1
 	t.life_regen = t.life_regen or 0.25 -- Life regen real slow
+	t.bioenergy_regen = t.bioenergy_regen or 1
 
 	-- Default melee barehanded damage
-	self.combat = { dam=1 }
 
 	engine.Actor.init(self, t, no_default)
 	engine.interface.ActorTemporaryEffects.init(self, t)
@@ -62,8 +58,10 @@ function _M:init(t, no_default)
 	engine.interface.ActorTalents.init(self, t)
 	engine.interface.ActorResource.init(self, t)
 	engine.interface.ActorStats.init(self, t)
-	engine.interface.ActorLevel.init(self, t)
 	engine.interface.ActorFOV.init(self, t)
+
+	self.talents[self.T_ATTACK] = self.talents[self.T_ATTACK] or 1
+
 end
 
 function _M:act()
@@ -98,13 +96,11 @@ end
 
 function _M:tooltip()
 	return ([[%s%s
-#00ffff#Level: %d
 #ff0000#HP: %d (%d%%)
 Stats: %d /  %d / %d
 %s]]):format(
 	self:getDisplayString(),
 	self.name,
-	self.level,
 	self.life, self.life * 100 / self.max_life,
 	self:getStr(),
 	self:getDex(),
@@ -120,22 +116,7 @@ end
 function _M:die(src)
 	engine.interface.ActorLife.die(self, src)
 
-	-- Gives the killer some exp for the kill
-	if src and src.gainExp then
-		src:gainExp(self:worthExp(src))
-	end
-
 	return true
-end
-
-function _M:levelup()
-	self.max_life = self.max_life + 2
-
-	self:incMaxPower(3)
-
-	-- Heal upon new level
-	self.life = self.max_life
-	self.power = self.max_power
 end
 
 --- Notifies a change of stat value
@@ -158,13 +139,13 @@ function _M:preUseTalent(ab, silent)
 	if not self:enoughEnergy() then print("fail energy") return false end
 
 	if ab.mode == "sustained" then
-		if ab.sustain_power and self.max_power < ab.sustain_power and not self:isTalentActive(ab.id) then
-			game.logPlayer(self, "You do not have enough power to activate %s.", ab.name)
+		if ab.sustain_bioenergy and self:getMaxBioenergy() < ab.sustain_bioenergy and not self:isTalentActive(ab.id) then
+			game.logPlayer(self, "You do not have enough bioenergy to activate %s.", ab.name)
 			return false
 		end
 	else
-		if ab.power and self:getPower() < ab.power then
-			game.logPlayer(self, "You do not have enough power to cast %s.", ab.name)
+		if ab.bioenergy and self:getBioenergy() < ab.bioenergy then
+			game.logPlayer(self, "You do not have enough bioenergy to activate %s.", ab.name)
 			return false
 		end
 	end
@@ -198,17 +179,17 @@ function _M:postUseTalent(ab, ret)
 
 	if ab.mode == "sustained" then
 		if not self:isTalentActive(ab.id) then
-			if ab.sustain_power then
-				self.max_power = self.max_power - ab.sustain_power
+			if ab.sustain_bioenergy then
+				self:incMaxBioenergy(-ab.sustain_bioenergy)
 			end
 		else
-			if ab.sustain_power then
-				self.max_power = self.max_power + ab.sustain_power
+			if ab.sustain_bioenergy then
+				self:incMaxBioenergy(ab.sustain_bioenergy)
 			end
 		end
 	else
-		if ab.power then
-			self:incPower(-ab.power)
+		if ab.bioenergy then
+			self:incBioenergy(-ab.bioenergy)
 		end
 	end
 
@@ -234,50 +215,15 @@ function _M:getTalentFullDescription(t)
 	return table.concat(d, "\n").."\n#6fff83#Description: #FFFFFF#"..t.info(self, t)
 end
 
---- How much experience is this actor worth
--- @param target to whom is the exp rewarded
--- @return the experience rewarded
-function _M:worthExp(target)
-	if not target.level or self.level < target.level - 3 then return 0 end
-
-	local mult = 2
-	if self.unique then mult = 6
-	elseif self.egoed then mult = 3 end
-	return self.level * mult * self.exp_worth
-end
-
 --- Can the actor see the target actor
 -- This does not check LOS or such, only the actual ability to see it.<br/>
 -- Check for telepathy, invisibility, stealth, ...
 function _M:canSee(actor, def, def_pct)
 	if not actor then return false, 0 end
 
-	-- Check for stealth. Checks against the target cunning and level
-	if actor:attr("stealth") and actor ~= self then
-		local def = self.level / 2 + self:getCun(25)
-		local hit, chance = self:checkHit(def, actor:attr("stealth") + (actor:attr("inc_stealth") or 0), 0, 100)
-		if not hit then
-			return false, chance
-		end
-	end
-
 	if def ~= nil then
 		return def, def_pct
 	else
 		return true, 100
 	end
-end
-
---- Can the target be applied some effects
--- @param what a string describing what is being tried
-function _M:canBe(what)
-	if what == "poison" and rng.percent(100 * (self:attr("poison_immune") or 0)) then return false end
-	if what == "cut" and rng.percent(100 * (self:attr("cut_immune") or 0)) then return false end
-	if what == "confusion" and rng.percent(100 * (self:attr("confusion_immune") or 0)) then return false end
-	if what == "blind" and rng.percent(100 * (self:attr("blind_immune") or 0)) then return false end
-	if what == "stun" and rng.percent(100 * (self:attr("stun_immune") or 0)) then return false end
-	if what == "fear" and rng.percent(100 * (self:attr("fear_immune") or 0)) then return false end
-	if what == "knockback" and rng.percent(100 * (self:attr("knockback_immune") or 0)) then return false end
-	if what == "instakill" and rng.percent(100 * (self:attr("instakill_immune") or 0)) then return false end
-	return true
 end
