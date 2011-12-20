@@ -19,7 +19,7 @@
 
 name = "Gene-Revolution"
 long_name = "Gene-Revolution Module for T-Engine4"
-short_name = "generevolution"
+short_name = "Gene-Revolution"
 author = { "People"}
 homepage = "https://github.com/reenenlaurie/Gene-Revolution"
 version = {0,0,1}
