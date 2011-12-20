@@ -27,6 +27,8 @@ local ActorAI = require "engine.interface.ActorAI"
 local ActorLevel = require "engine.interface.ActorLevel"
 local ActorTemporaryEffects = require "engine.interface.ActorTemporaryEffects"
 local Birther = require "engine.Birther"
+local AtomicEffects = require "mod.class.AtomicEffects"
+local Probability = require "mod.class.Probability"
 
 -- Useful keybinds
 KeyBind:load("move,hotkeys,inventory,actions,interface,debug")
@@ -39,6 +41,9 @@ ActorTalents:loadDefinition("/data/talents.lua")
 
 -- Timed Effects
 ActorTemporaryEffects:loadDefinition("/data/timed_effects.lua")
+
+-- Atomic Effects
+AtomicEffects:loadDefinition("/data/atomic_effects.lua")
 
 -- Actor resources
 ActorResource:defineResource("Homeostasis", "homeostasis", nil, nil, "Homeostasis is the measure of genetic stability.  It ranges from 100% (good) to 0% (bad).")
