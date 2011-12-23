@@ -44,6 +44,7 @@ function _M:lnot()
 end
 
 --- Predict the probability of success
+-- WARNING: does not handle combining the same object, for example p1 * (p1 * p2) should be equivalent to (p1 * p2) but isn't.
 -- @return float between 0 and 1
 function _M:predict()
 	if type(self._val) == "number" then
