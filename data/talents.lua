@@ -67,7 +67,7 @@ newTalent{
 		local hit = AtomicEffects:getEffectFromId(AtomicEffects.ATOMICEFF_MELEE_ATTACK):calculate(self, target)
 		local knockback = AtomicEffects:getEffectFromId(AtomicEffects.ATOMICEFF_KNOCKBACK):calculate(self, target, {dist=2})
 		-- Modify the knockback probability to only fire if "hit" lands
-		knockback.prob:add_and(hit.prob)
+		knockback.prob = knockback.prob * hit.prob
 		return {hit, knockback}
 	end,
 	action = function(self, t)
