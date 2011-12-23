@@ -5,7 +5,7 @@ module(..., package.seeall, class.make)
 function _M:init(t)
 	t = t or {}
 	-- val can be either a numeric value or a 3-member table describing a logical operator
-	self._val = t.val or 100
+	self._val = t.val or 1
 	self._resolved = t._resolved or false
 	local mt = getmetatable(self)
 	mt.__call = _M.call
@@ -43,6 +43,8 @@ function _M:lnot()
 	return _M.new{val={'not', self}}
 end
 
+--- Predict the probability of success
+-- @return float between 0 and 1
 function _M:predict()
 	if type(self._val) == "number" then
 		return self._val
@@ -50,26 +52,28 @@ function _M:predict()
 		local p1 = self._val[1]:predict()
 		local p3 = self._val[3]:predict()
 		if self._val[2] == 'and' then
-			return (p1 * p3) / 100
+			return (p1 * p3)
 		elseif self._val[2] == 'or' then
-			return 100 - (100 - p1) * (100 - p3)  / 100
+			return 1 - (1 - p1) * (1 - p3)
 		elseif self._val[2] == 'xor' then
-			return (100 - p1) * p3 / 100 + (100 - p3) * p1 / 100
+			return (1 - p1) * p3 + (1 - p3) * p1
 		end
 	elseif (type(self._val) == "table") and (#self._val == 2) then
 		if self._val[1] == 'not' then
-			return (100 - self._val[2]:predict())
+			return (1 - self._val[2]:predict())
 		end
 	else
 		game.log("Could not handle %s.", self._val)
 	end
 end
 
+--- Resolve the success/failure
+-- @return boolean
 function _M:call()
 	if not self._resolved then
 		local result
 		if type(self._val) == "number" then
-			result = rng.percent(self._val)
+			result = rng.float(0, 1) <= self._val 
 		elseif (type(self._val) == "table") and (#self._val == 3) then
 			local r1 = self._val[1]()
 			local r3 = self._val[3]()

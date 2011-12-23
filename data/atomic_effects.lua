@@ -8,7 +8,7 @@ newAtomicEffect{
 	calculate = function(self, source, target, params)
 		eff = {def=self, source=source, target=target}
 		-- Compute the probability of hitting
-		eff.prob = Probability.new{val=50}
+		eff.prob = Probability.new{val=0.50}
 		eff.damage = 5
 		eff.damtype = params and params.damtype or DamageType.PHYSICAL
 		eff.params = params
@@ -29,7 +29,7 @@ newAtomicEffect{
 	calculate = function(self, source, target, params)
 		eff = {def=self, source=source, target=target}
 		-- Compute the probability of hitting
-		eff.prob = Probability.new{val=50}
+		eff.prob = Probability.new{val=0.50}
 		eff.dist = params.dist or 5
 		eff.params = params
 		return eff
@@ -49,7 +49,7 @@ newAtomicEffect{
 	calculate = function(self, source, target, params)
 		eff = {def=self, source=source, target=target}
 		-- Compute the probability of hitting
-		eff.prob = Probability.new{val=25}
+		eff.prob = Probability.new{val=0.25}
 		eff.damage = 5
 		eff.damtype = params and params.damtype or DamageType.PHYSICAL
 		eff.params = params

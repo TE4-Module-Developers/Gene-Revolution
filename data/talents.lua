@@ -40,7 +40,7 @@ newTalent{
 		if not effs then return end
 
 		for i, eff in ipairs(effs) do
-			game.log("Effect %s has a %d%% of hitting.", eff.def.name, eff.prob:predict())
+			game.log("Effect %s has a %d%% of hitting.", eff.def.name, eff.prob:predict()*100)
 			eff.def:apply(eff)
 			game.log("Effect %s %s.", eff.def.name, eff.prob._result and "succeeded" or "failed")
 		end
@@ -75,7 +75,7 @@ newTalent{
 		if not effs then return end
 
 		for i, eff in ipairs(effs) do
-			game.log("Effect %s has a %d%% of hitting.", eff.def.name, eff.prob:predict())
+			game.log("Effect %s has a %d%% of hitting.", eff.def.name, eff.prob:predict()*100)
 			eff.def:apply(eff)
 			game.log("Effect %s %s.", eff.def.name, eff.prob._result and "succeeded" or "failed")
 		end
@@ -113,7 +113,7 @@ newTalent{
 		if not effs then return end
 
 		for i, eff in ipairs(effs) do
-			game.log("Effect %s has a %d%% of hitting.", eff.def.name, eff.prob:predict())
+			game.log("Effect %s has a %d%% of hitting.", eff.def.name, eff.prob:predict()*100)
 			eff.def:apply(eff)
 			game.log("Effect %s %s.", eff.def.name, eff.prob._result and "succeeded" or "failed")
 		end
