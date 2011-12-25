@@ -22,13 +22,13 @@ local KeyBind = require "engine.KeyBind"
 local DamageType = require "engine.DamageType"
 local ActorStats = require "engine.interface.ActorStats"
 local ActorResource = require "engine.interface.ActorResource"
-local ActorTalents = require "engine.interface.ActorTalents"
 local ActorAI = require "engine.interface.ActorAI"
 local ActorLevel = require "engine.interface.ActorLevel"
 local ActorTemporaryEffects = require "engine.interface.ActorTemporaryEffects"
-local Birther = require "engine.Birther"
+local Birther = require "mod.class.Birther"
 local AtomicEffects = require "mod.class.AtomicEffects"
 local Probability = require "mod.class.Probability"
+local ActorTalents = require "mod.class.interface.ActorTalents"
 
 -- Useful keybinds
 KeyBind:load("move,hotkeys,inventory,actions,interface,debug")

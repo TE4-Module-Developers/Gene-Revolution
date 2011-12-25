@@ -35,18 +35,6 @@ newTalent{
 		local hit = AtomicEffects:getEffectFromId(AtomicEffects.ATOMICEFF_MELEE_ATTACK):calculate(self, target)
 		return {hit}
 	end,
-	action = function(self, t)
-		local effs = t.effects(self, t)
-		if not effs then return end
-
-		for i, eff in ipairs(effs) do
-			game.log("Effect %s has a %d%% of hitting.", eff.def.name, eff.prob:predict()*100)
-			eff.def:apply(eff)
-			game.log("Effect %s %s.", eff.def.name, eff.prob._result and "succeeded" or "failed")
-		end
-
-		return true
-	end,
 	info = function(self, t)
 		return "Attack!"
 	end,
@@ -69,18 +57,6 @@ newTalent{
 		-- Modify the knockback probability to only fire if "hit" lands
 		knockback.prob = knockback.prob * hit.prob
 		return {hit, knockback}
-	end,
-	action = function(self, t)
-		local effs = t.effects(self, t)
-		if not effs then return end
-
-		for i, eff in ipairs(effs) do
-			game.log("Effect %s has a %d%% of hitting.", eff.def.name, eff.prob:predict()*100)
-			eff.def:apply(eff)
-			game.log("Effect %s %s.", eff.def.name, eff.prob._result and "succeeded" or "failed")
-		end
-
-		return true
 	end,
 	info = function(self, t)
 		return "Kick!"
@@ -107,18 +83,6 @@ newTalent{
 			end
 		end)
 		return effs
-	end,
-	action = function(self, t)
-		local effs = t.effects(self, t)
-		if not effs then return end
-
-		for i, eff in ipairs(effs) do
-			game.log("Effect %s has a %d%% of hitting.", eff.def.name, eff.prob:predict()*100)
-			eff.def:apply(eff)
-			game.log("Effect %s %s.", eff.def.name, eff.prob._result and "succeeded" or "failed")
-		end
-
-		return true
 	end,
 	info = function(self, t)
 		return "Zshhhhhhhhh!"

@@ -24,10 +24,10 @@ require "engine.interface.ActorTemporaryEffects"
 require "engine.interface.ActorLife"
 require "engine.interface.ActorProject"
 require "engine.interface.ActorStats"
-require "engine.interface.ActorTalents"
 require "engine.interface.ActorResource"
 require "engine.interface.ActorFOV"
 require "mod.class.interface.Combat"
+require "mod.class.interface.ActorTalents"
 local Map = require "engine.Map"
 
 module(..., package.seeall, class.inherit(
@@ -36,10 +36,10 @@ module(..., package.seeall, class.inherit(
 	engine.interface.ActorLife,
 	engine.interface.ActorProject,
 	engine.interface.ActorStats,
-	engine.interface.ActorTalents,
 	engine.interface.ActorResource,
 	engine.interface.ActorFOV,
-	mod.class.interface.Combat
+	mod.class.interface.Combat,
+	mod.class.interface.ActorTalents
 ))
 
 function _M:init(t, no_default)
@@ -55,10 +55,10 @@ function _M:init(t, no_default)
 	engine.interface.ActorTemporaryEffects.init(self, t)
 	engine.interface.ActorLife.init(self, t)
 	engine.interface.ActorProject.init(self, t)
-	engine.interface.ActorTalents.init(self, t)
 	engine.interface.ActorResource.init(self, t)
 	engine.interface.ActorStats.init(self, t)
 	engine.interface.ActorFOV.init(self, t)
+	mod.class.interface.ActorTalents.init(self, t)
 
 	self.talents[self.T_ATTACK] = self.talents[self.T_ATTACK] or 1
 
