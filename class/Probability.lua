@@ -58,10 +58,14 @@ function _M:predict()
 			return 1 - (1 - p1) * (1 - p3)
 		elseif self._val[2] == 'xor' then
 			return (1 - p1) * p3 + (1 - p3) * p1
+		else
+			game.log("Could not handle %s.", self._val)
 		end
 	elseif (type(self._val) == "table") and (#self._val == 2) then
 		if self._val[1] == 'not' then
 			return (1 - self._val[2]:predict())
+		else
+			game.log("Could not handle %s.", self._val)
 		end
 	else
 		game.log("Could not handle %s.", self._val)

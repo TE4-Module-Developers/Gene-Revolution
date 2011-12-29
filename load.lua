@@ -26,8 +26,8 @@ local ActorAI = require "engine.interface.ActorAI"
 local ActorLevel = require "engine.interface.ActorLevel"
 local ActorTemporaryEffects = require "engine.interface.ActorTemporaryEffects"
 local Birther = require "mod.class.Birther"
-local AtomicEffects = require "mod.class.AtomicEffects"
 local Probability = require "mod.class.Probability"
+local AtomicEffects = require "mod.class.interface.AtomicEffects"
 local ActorTalents = require "mod.class.interface.ActorTalents"
 
 -- Useful keybinds
@@ -38,9 +38,6 @@ DamageType:loadDefinition("/data/damage_types.lua")
 
 -- Talents
 ActorTalents:loadDefinition("/data/talents.lua")
-
--- Timed Effects
-ActorTemporaryEffects:loadDefinition("/data/timed_effects.lua")
 
 -- Atomic Effects
 AtomicEffects:loadDefinition("/data/atomic_effects.lua")

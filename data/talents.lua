@@ -17,7 +17,6 @@
 -- Nicolas Casalini "DarkGod"
 -- darkgod@te4.org
 
-local AtomicEffects = require "mod.class.AtomicEffects"
 local DamageType = require "engine.DamageType"
 
 newTalentType{ type="role/combat", name = "combat", description = "Combat techniques" }
@@ -32,7 +31,7 @@ newTalent{
 		local x, y, target = self:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
-		local hit = AtomicEffects:getEffectFromId(AtomicEffects.ATOMICEFF_MELEE_ATTACK):calculate(self, target)
+		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target)
 		return {hit}
 	end,
 	info = function(self, t)
@@ -52,8 +51,8 @@ newTalent{
 		local x, y, target = self:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
-		local hit = AtomicEffects:getEffectFromId(AtomicEffects.ATOMICEFF_MELEE_ATTACK):calculate(self, target)
-		local knockback = AtomicEffects:getEffectFromId(AtomicEffects.ATOMICEFF_KNOCKBACK):calculate(self, target, {dist=2})
+		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target)
+		local knockback = self:calcEffect("ATOMICEFF_KNOCKBACK", target, {dist=2})
 		-- Modify the knockback probability to only fire if "hit" lands
 		knockback.prob = knockback.prob * hit.prob
 		return {hit, knockback}
@@ -78,7 +77,7 @@ newTalent{
 		self:project(tg, x, y, function(px, py, tg, self)
 			local act = game.level.map(px, py, engine.Map.ACTOR)
 			if act then
-				local hit = AtomicEffects:getEffectFromId(AtomicEffects.ATOMICEFF_RANGED_ATTACK):calculate(self, act, {damtype=DamageType.ACID})
+				local hit = self:calcEffect("ATOMICEFF_ACIDBURN", act, {dur=4})
 				effs[#effs+1] = hit
 			end
 		end)
