@@ -44,7 +44,7 @@ function _M:useTalent(id, who, force_level, ignore_cd, force_target)
 		end)
 		local ok, err = coroutine.resume(co)
 		if not ok and err then print(debug.traceback(co)) error(err) end
-	elseif ab.mode == "sustained" and ab.activate and ab.deactivate then
+	elseif ab.mode == "sustained" and ab.effects then
 		if self:isTalentCoolingDown(ab) and not ignore_cd then
 			game.logPlayer(who, "%s is still on cooldown for %d turns.", ab.name:capitalize(), self.talents_cd[ab.id])
 			return
@@ -53,16 +53,40 @@ function _M:useTalent(id, who, force_level, ignore_cd, force_target)
 			if not self.sustain_talents[id] then
 				local old_level
 				if force_level then old_level = who.talents[id]; who.talents[id] = force_level end
-				local ret = ab.activate(who, ab)
+
+				-- Handles the AtomicEffects
+				local effs = ab.effects(who, ab)
+				local ret
+				if effs then
+					for i, eff in ipairs(effs) do
+						eff.target:setEffect(eff)
+					end
+					ret = true
+				else
+					ret = false
+				end
+
 				if force_level then who.talents[id] = old_level end
 
 				if not self:postUseTalent(ab, ret) then return end
 
-				self.sustain_talents[id] = ret
+				self.sustain_talents[id] = effs
 			else
 				local old_level
 				if force_level then old_level = who.talents[id]; who.talents[id] = force_level end
-				local ret = ab.deactivate(who, ab, self.sustain_talents[id])
+
+				-- Handles the AtomicEffects
+				local effs = self.sustain_talents[id]
+				local ret
+				if effs then
+					for i, eff in ipairs(effs) do
+						eff.target:removeEffect(eff)
+					end
+					ret = true
+				else
+					ret = false
+				end
+
 				if force_level then who.talents[id] = old_level end
 
 				if not self:postUseTalent(ab, ret) then return end

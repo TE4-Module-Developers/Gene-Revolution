@@ -88,3 +88,20 @@ newTalent{
 	end,
 }
 
+newTalent{
+	name = "Run",
+	type = {"role/combat", 1},
+	points = 1,
+	cooldown = 1,
+	mode="sustained",
+	effects = function(self, t)
+		local running = self:calcEffect("ATOMICEFF_DRAIN_BIOENERGY", self, {drain=2})
+		-- Hack it to look like a temporary effect?
+		running.dur = 1
+		running.decrease = 0
+		return {running}
+	end,
+	info = function(self, t)
+		return "Run!"
+	end,
+}

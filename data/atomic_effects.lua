@@ -81,3 +81,29 @@ newAtomicEffect{
 		DamageType:get(DamageType.ACID).projector(eff.source or self, self.x, self.y, DamageType.ACID, eff.damage)
 	end,
 }
+
+newAtomicEffect{
+	name = "DRAIN_BIOENERGY",
+	desc = "Drains bioenergy.",
+	type = "physical",
+	status = "detrimental",
+	default_params = {drain=1},
+	calculate = function(self, def, target, params)
+		eff = {}
+		-- Compute the probability of hitting
+		eff.prob = Probability.new{val=1}
+		eff.drain = params.drain
+		eff.params = params
+		return eff
+	end,
+	activate = function(self, eff)
+		if eff.prob() then
+			self.bioenergy_regen = self.bioenergy_regen - eff.drain
+		end
+	end,
+	deactivate = function(self, eff)
+		if eff.prob() then
+			self.bioenergy_regen = self.bioenergy_regen + eff.drain
+		end
+	end,
+}

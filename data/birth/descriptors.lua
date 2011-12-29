@@ -38,6 +38,7 @@ newBirthDescriptor{
 	},
 	talents = {
 		[ActorTalents.T_KICK]=1,
+		[ActorTalents.T_RUN]=1,
 	},
 }
 
