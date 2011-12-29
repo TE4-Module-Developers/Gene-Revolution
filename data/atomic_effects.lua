@@ -71,7 +71,7 @@ newAtomicEffect{
 	calculate = function(self, def, target, params)
 		eff = {}
 		eff.prob = Probability.new{val=1.0}
-		eff.damage = 5
+		eff.damage = params.damage or 5
 		eff.dur = params.dur
 		return eff
 	end,

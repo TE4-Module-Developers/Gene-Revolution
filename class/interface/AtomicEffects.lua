@@ -51,10 +51,10 @@ function _M:timedEffects(filter)
 	for eff_id, eff in pairs(self.tmp) do
 		if not filter or filter(eff.def, eff) then
 			if eff.dur <= 0 then
-				todel[#todel+1] = eff_id
+				todel[#todel+1] = eff
 			else
 				if eff.def.on_timeout and eff.def.on_timeout(self, eff) then
-					todel[#todel+1] = eff_id
+					todel[#todel+1] = eff
 				end
 			end
 			eff.dur = eff.dur - eff.decrease
@@ -140,17 +140,12 @@ function _M:hasEffect(eff_id)
 end
 
 --- Removes the effect
-function _M:removeEffect(eff_id, silent, force)
-	if type(eff_id) == "string" then
-		eff_id = self[eff_id]
-	end
-	local eff = self.tmp[eff_id]
-	if not eff then return end
+function _M:removeEffect(eff, silent, force)
 	if eff.def.no_remove and not force then return end
-	self.tmp[eff_id] = nil
+	self.tmp[eff.def.id] = nil
 	self.changed = true
-	if eff.def[eff_id].on_lose then
-		local ret, fly = eff.def[eff_id].on_lose(self, eff)
+	if eff.def.on_lose then
+		local ret, fly = eff.def.on_lose(self, eff)
 		if not silent then
 			if ret then
 				game.logSeen(self, ret:gsub("#Target#", self.name:capitalize()):gsub("#target#", self.name))
@@ -168,7 +163,7 @@ end
 function _M:removeAllEffects()
 	local todel = {}
 	for eff, p in pairs(self.tmp) do
-		todel[#todel+1] = eff
+		todel[#todel+1] = p
 	end
 
 	while #todel > 0 do

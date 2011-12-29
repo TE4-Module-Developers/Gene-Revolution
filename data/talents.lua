@@ -77,7 +77,7 @@ newTalent{
 		self:project(tg, x, y, function(px, py, tg, self)
 			local act = game.level.map(px, py, engine.Map.ACTOR)
 			if act then
-				local hit = self:calcEffect("ATOMICEFF_ACIDBURN", act, {dur=4})
+				local hit = self:calcEffect("ATOMICEFF_ACIDBURN", act, {damage=1, dur=4})
 				effs[#effs+1] = hit
 			end
 		end)
