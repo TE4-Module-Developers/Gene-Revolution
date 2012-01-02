@@ -49,8 +49,8 @@ end
 function _M:timedEffects(filter)
 	local todel = {}
 	for eff_id, effs in pairs(self.effects) do
-		for eff, _ in pairs(effs) do
-			if not filter or filter(eff.def, eff) then
+		for instance_id, eff in pairs(effs) do
+			if (instance_id ~= "n") and (not filter or filter(eff.def, eff)) then
 				if eff.dur and (eff.dur <= 0) then
 					todel[#todel+1] = eff
 				else
@@ -117,8 +117,13 @@ function _M:setEffect(eff, silent)
 	local active = eff.def.activate(self, eff)
 	if active or eff.active then
 		eff.active = true
-		self.effects[eff.def.id] = self.effects[eff.def.id] or {}
-		self.effects[eff.def.id][eff] = true
+		if not self.effects[eff.def.id] then self.effects[eff.def.id] = {n=1} end
+		local effs = self.effects[eff.def.id]
+		local id = effs.n
+		while effs[id] ~= nil do id = id + 1 end
+		eff.instance_id = id
+		effs[id] = eff
+		effs.n = id + 1
 	end
 	self.changed = true
 end
@@ -135,15 +140,8 @@ end
 
 --- Removes the effect
 function _M:removeEffect(eff, silent, force)
-	if eff.def.no_remove and not force then return end
-	local effs = self.effects[eff.def.id]
-	effs[eff] = nil
-	-- Remove the list if empty
-	if (#effs == 0) then
-		self.effects[eff.def.id] = nil
-	end
+	if (eff.def.no_remove or not eff.active) and not force then return end
 	self.changed = true
-	if not eff.active then return end
 	if eff.def.on_lose then
 		local ret, fly = eff.def.on_lose(self, eff)
 		if not silent then
@@ -157,14 +155,21 @@ function _M:removeEffect(eff, silent, force)
 		end
 	end
 	eff.def.deactivate(self, eff)
+	local effs = self.effects[eff.def.id]
+	effs[eff.instance_id] = nil
+	eff.active = nil
+	effs.n = math.min(effs.n, eff.instance_id)
+	eff.instance_id = nil
 end
 
 --- Removes the effect
 function _M:removeAllEffects()
 	local todel = {}
 	for eff_id, effs in pairs(self.effects) do
-		for eff, _ in pairs(effs) do
-			todel[#todel+1] = eff
+		for instance_id, eff in pairs(effs) do
+			if instance_id ~= "n" then
+				todel[#todel+1] = eff
+			end
 		end
 	end
 
