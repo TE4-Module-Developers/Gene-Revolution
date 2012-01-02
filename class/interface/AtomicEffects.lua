@@ -41,23 +41,25 @@ function _M:newAtomicEffect(t)
 end
 
 function _M:init(t)
-	self.tmp = t.tmp or {}
+	self.effects = t.effects or {}
 end
 
 --- Counts down timed effects, call from your actors "act" method
 -- @param filter if not nil a function that gets passed the effect and its parameters, must return true to handle the effect
 function _M:timedEffects(filter)
 	local todel = {}
-	for eff_id, eff in pairs(self.tmp) do
-		if not filter or filter(eff.def, eff) then
-			if eff.dur <= 0 then
-				todel[#todel+1] = eff
-			else
-				if eff.def.on_timeout and eff.def.on_timeout(self, eff) then
+	for eff_id, effs in pairs(self.effects) do
+		for eff, _ in pairs(effs) do
+			if not filter or filter(eff.def, eff) then
+				if eff.dur and (eff.dur <= 0) then
 					todel[#todel+1] = eff
+				else
+					if eff.def.on_timeout and eff.def.on_timeout(self, eff) then
+						todel[#todel+1] = eff
+					end
 				end
+				eff.dur = eff.dur - eff.decrease
 			end
-			eff.dur = eff.dur - eff.decrease
 		end
 	end
 
@@ -94,24 +96,10 @@ end
 -- @param eff instance table from calcEffect method
 -- @parm silent true to suppress messages
 function _M:setEffect(eff, silent)
+	if eff.active then return end
 	if eff.dur then eff.dur = math.floor(eff.dur) end
 
 	self:check("on_set_temporary_effect", eff)
-
-	-- If we already have it, we check if it knows how to "merge", or else we remove it and re-add it
-	if self:hasEffect(eff_id) then
-		if eff.def.on_merge then
-			self.tmp[eff.def.id] = eff.def.on_merge(self, self.tmp[eff.def.id], eff)
-			self.changed = true
-			return
-		else
-			self:removeEffect(eff.def.id, true)
-		end
-	end
-
-	if eff.dur then
-		self.tmp[eff.def.id] = eff
-	end
 
 	if eff.def.on_gain then
 		local ret, fly = eff.def.on_gain(self, eff)
@@ -125,7 +113,13 @@ function _M:setEffect(eff, silent)
 			end
 		end
 	end
-	eff.def.activate(self, eff)
+
+	local active = eff.def.activate(self, eff)
+	if active or eff.active then
+		eff.active = true
+		self.effects[eff.def.id] = self.effects[eff.def.id] or {}
+		self.effects[eff.def.id][eff] = true
+	end
 	self.changed = true
 end
 
@@ -136,14 +130,20 @@ function _M:hasEffect(eff_id)
 	if type(eff_id) == "string" then
 		eff_id = self[eff_id]
 	end
-	return self.tmp[eff_id]
+	return self.effects[eff_id]
 end
 
 --- Removes the effect
 function _M:removeEffect(eff, silent, force)
 	if eff.def.no_remove and not force then return end
-	self.tmp[eff.def.id] = nil
+	local effs = self.effects[eff.def.id]
+	effs[eff] = nil
+	-- Remove the list if empty
+	if (#effs == 0) then
+		self.effects[eff.def.id] = nil
+	end
 	self.changed = true
+	if not eff.active then return end
 	if eff.def.on_lose then
 		local ret, fly = eff.def.on_lose(self, eff)
 		if not silent then
@@ -162,8 +162,10 @@ end
 --- Removes the effect
 function _M:removeAllEffects()
 	local todel = {}
-	for eff, p in pairs(self.tmp) do
-		todel[#todel+1] = p
+	for eff_id, effs in pairs(self.effects) do
+		for eff, _ in pairs(effs) do
+			todel[#todel+1] = eff
+		end
 	end
 
 	while #todel > 0 do

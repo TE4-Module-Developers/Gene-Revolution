@@ -75,6 +75,7 @@ newAtomicEffect{
 		eff.dur = params.dur
 		return eff
 	end,
+	activate = function() return true end,
 	on_gain = function(self, err) return "#Target# is covered in acid!", "+Acid" end,
 	on_lose = function(self, err) return "#Target# is free from the acid.", "-Acid" end,
 	on_timeout = function(self, eff)
@@ -99,6 +100,7 @@ newAtomicEffect{
 	activate = function(self, eff)
 		if eff.prob() then
 			self.bioenergy_regen = self.bioenergy_regen - eff.drain
+			return true
 		end
 	end,
 	deactivate = function(self, eff)
