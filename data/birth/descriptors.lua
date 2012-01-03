@@ -22,6 +22,8 @@ newBirthDescriptor{
 	name = "base",
 	desc = {
 	},
+	
+	body = { INVEN = 10, MAINHAND = 1, OFFHAND = 1, BODY = 1, HEAD = 1 },
 
 	copy = {
 		lite = 4,

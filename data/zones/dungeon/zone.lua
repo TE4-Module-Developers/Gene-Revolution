@@ -41,6 +41,10 @@ return {
 			nb_npc = {20, 30},
 --			guardian = "SHADE_OF_ANGMAR", -- The guardian is set in the static map
 		},
+		object = {
+            class = "engine.generator.object.Random",
+            nb_object = {20, 30},
+        },
 	},
 	levels =
 	{

@@ -16,3 +16,26 @@
 --
 -- Nicolas Casalini "DarkGod"
 -- darkgod@te4.org
+
+newEntity{
+    define_as = "BASE_BATTLEAXE",
+    slot = "MAINHAND",
+    slot_forbid = "OFFHAND",
+    type = "weapon", subtype="battleaxe",
+    display = "/", color=colors.SLATE,
+    encumber = 3,
+    rarity = 5,
+    combat = { sound = "actions/melee", sound_miss = "actions/melee_miss", },
+    name = "a generic battleaxe",
+    desc = [[t4modules massive two-handed battleaxes.]],
+}
+
+newEntity{ base = "BASE_BATTLEAXE",
+    name = "iron battleaxe",
+    level_range = {1, 10},
+    require = { stat = { str=11 }, },
+    cost = 5,
+    combat = {
+        dam = 10,
+    },
+}
