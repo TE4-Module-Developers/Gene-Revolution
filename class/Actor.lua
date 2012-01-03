@@ -46,6 +46,7 @@ module(..., package.seeall, class.inherit(
 
 function _M:init(t, no_default)
 	-- Define some basic combat stats
+	t.size = 25 -- 25 is the "humanoid" reference size, used in combat accuracy calculations
 
 	-- Default regen
 	t.life_regen = t.life_regen or 0.25 -- Life regen real slow
