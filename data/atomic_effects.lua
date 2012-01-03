@@ -10,7 +10,7 @@ newAtomicEffect{
 		-- Compute the probability of hitting
 		eff.prob = Probability.new{val=0.50}
 		eff.damage = 5
-		eff.damtype = params and params.damtype or DamageType.PHYSICAL
+		eff.damtype = params and params.damtype or DamageType.KINETIC
 		eff.params = params
 		return eff
 	end,
@@ -51,7 +51,7 @@ newAtomicEffect{
 		-- Compute the probability of hitting
 		eff.prob = Probability.new{val=0.25}
 		eff.damage = 5
-		eff.damtype = params and params.damtype or DamageType.PHYSICAL
+		eff.damtype = params and params.damtype or DamageType.KINETIC
 		eff.params = params
 		return eff
 	end,
@@ -79,7 +79,7 @@ newAtomicEffect{
 	on_gain = function(self, err) return "#Target# is covered in acid!", "+Acid" end,
 	on_lose = function(self, err) return "#Target# is free from the acid.", "-Acid" end,
 	on_timeout = function(self, eff)
-		DamageType:get(DamageType.ACID).projector(eff.source or self, self.x, self.y, DamageType.ACID, eff.damage)
+		DamageType:get(DamageType.CHEMICAL).projector(eff.source or self, self.x, self.y, DamageType.CHEMICAL, eff.damage)
 	end,
 }
 

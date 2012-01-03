@@ -44,10 +44,13 @@ setDefaultProjector(function(src, x, y, type, dam)
 end)
 
 newDamageType{
-	name = "physical", type = "PHYSICAL",
+	name = "kinetic", type = "KINETIC", text_color = "#GREY#",
 }
 
--- Acid destroys potions
 newDamageType{
-	name = "acid", type = "ACID", text_color = "#GREEN#",
+	name = "chemical", type = "CHEMICAL", text_color = "#GREEN#",
+}
+
+newDamageType{
+	name = "energy", type = "ENERGY", text_color = "#BLUE#",
 }
