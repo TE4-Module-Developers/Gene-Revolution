@@ -32,7 +32,23 @@ newTalent{
 		if not x or not y or not target then return nil end
 		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
 		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target)
-		return {hit}
+		local precision = 1 -- this whole method is really messy, in need of expert attention
+		if self:getInven(self.INVEN_MAINHAND) then
+			for i, o in ipairs(self:getInven(self.INVEN_MAINHAND)) do
+				precision = o.combat.precision
+			end
+		end
+		local try_hit = {}
+		try_hit[1] = self:calcEffect("ATOMICEFF_TRY_HIT", target)
+		hit.prob = hit.prob * try_hit[1].prob
+		if precision > 1 then
+			for i = 2, precision do
+				try_hit[i] = self:calcEffect("ATOMICEFF_TRY_HIT", target)
+				hit.prob = hit.prob / try_hit[i].prob
+			end
+		end
+		try_hit[precision + 1] = hit
+		return try_hit
 	end,
 	info = function(self, t)
 		return "Attack!"

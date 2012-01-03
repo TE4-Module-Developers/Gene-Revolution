@@ -18,24 +18,28 @@
 -- darkgod@te4.org
 
 newEntity{
-    define_as = "BASE_BATTLEAXE",
+    define_as = "BASE_MELEE_ONEHAND",
     slot = "MAINHAND",
     --slot_forbid = "OFFHAND",
-    type = "weapon", subtype="battleaxe",
-    display = "/", color=colors.SLATE,
+    type = "melee", subtype="one-handed",
+    display = "[", color=colors.SLATE,
     encumber = 3,
     rarity = 5,
     combat = { sound = "actions/melee", sound_miss = "actions/melee_miss", },
-    name = "a generic battleaxe",
-    desc = [[t4modules massive two-handed battleaxes.]],
+    name = "a generic body part",
+    desc = [[A one-handed melee weapon.]],
 }
 
-newEntity{ base = "BASE_BATTLEAXE",
-    name = "iron battleaxe",
+newEntity{ base = "BASE_MELEE_ONEHAND",
+    name = "hammer arm",
     level_range = {1, 10},
     require = {}, --{ stat = { str=11 }, },
     cost = 5,
+    wielder = {
+    	max_life = 10,
+    },
     combat = {
         dam = 10,
+        precision = 5,
     },
 }
