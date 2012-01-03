@@ -39,9 +39,10 @@ newBirthDescriptor{
 	talents = {
 		[ActorTalents.T_KICK]=1,
 		[ActorTalents.T_RUN]=1,
+		[ActorTalents.T_ACID_SPRAY]=1,
 	},
 }
-
+--[[
 newBirthDescriptor{
 	type = "role",
 	name = "Acid-maniac",
@@ -52,4 +53,4 @@ newBirthDescriptor{
 	talents = {
 		[ActorTalents.T_ACID_SPRAY]=1,
 	},
-}
+}]]
