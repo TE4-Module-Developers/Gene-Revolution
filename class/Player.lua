@@ -188,3 +188,52 @@ end
 function _M:mouseMove(tmx, tmy)
 	return engine.interface.PlayerMouse.mouseMove(self, tmx, tmy, spotHostiles)
 end
+
+function _M:playerPickup()
+    -- If 2 or more objects, display a pickup dialog, otherwise just picks up
+    if game.level.map:getObject(self.x, self.y, 2) then
+        local d d = self:showPickupFloor("Pickup", nil, function(o, item)
+            self:pickupFloor(item, true)
+            self.changed = true
+            d:used()
+        end)
+    else
+        self:pickupFloor(1, true)
+        self:sortInven()
+        self:useEnergy()
+    self.changed = true
+    end
+end
+
+function _M:playerDrop()
+    local inven = self:getInven(self.INVEN_INVEN)
+    local d d = self:showInventory("Drop object", inven, nil, function(o, item)
+        self:dropFloor(inven, item, true, true)
+        self:sortInven(inven)
+        self:useEnergy()
+        self.changed = true
+        return true
+    end)
+end
+
+function _M:doWear(inven, item, o)
+    self:removeObject(inven, item, true)
+    local ro = self:wearObject(o, true, true)
+    if ro then
+        if type(ro) == "table" then self:addObject(inven, ro) end
+    elseif not ro then
+        self:addObject(inven, o)
+    end
+    self:sortInven()
+    self:useEnergy()
+    self.changed = true
+end
+
+function _M:doTakeoff(inven, item, o)
+    if self:takeoffObject(inven, item) then
+        self:addObject(self.INVEN_INVEN, o)
+    end
+    self:sortInven()
+    self:useEnergy()
+    self.changed = true
+end

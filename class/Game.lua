@@ -386,6 +386,29 @@ function _M:setupCommands()
 			local ok, err = coroutine.resume(co)
 			if not ok and err then print(debug.traceback(co)) error(err) end
 		end,
+		
+		PICKUP_FLOOR = function()
+			if self.player.no_inventory_access then return end
+			self.player:playerPickup()
+		end,
+		DROP_FLOOR = function()
+			if self.player.no_inventory_access then return end
+			self.player:playerDrop()
+		end,
+		
+		SHOW_INVENTORY = function()
+			if self.player.no_inventory_access then return end
+			local d
+			d = self.player:showEquipInven("Inventory", nil, function(o, inven, item, button, event)
+				if not o then return end
+				local ud = require("mod.dialogs.UseItemDialog").new(event == "button", self.player, o, item, inven, function(_, _, _, stop)
+					d:generate()
+					d:generateList()
+					if stop then self:unregisterDialog(d) end
+				end)
+				self:registerDialog(ud)
+			end)
+		end,
 	}
 	self.key:setCurrent()
 end

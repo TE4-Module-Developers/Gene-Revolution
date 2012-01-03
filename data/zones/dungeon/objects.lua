@@ -20,7 +20,7 @@
 newEntity{
     define_as = "BASE_BATTLEAXE",
     slot = "MAINHAND",
-    slot_forbid = "OFFHAND",
+    --slot_forbid = "OFFHAND",
     type = "weapon", subtype="battleaxe",
     display = "/", color=colors.SLATE,
     encumber = 3,
@@ -33,7 +33,7 @@ newEntity{
 newEntity{ base = "BASE_BATTLEAXE",
     name = "iron battleaxe",
     level_range = {1, 10},
-    require = { stat = { str=11 }, },
+    require = {}, --{ stat = { str=11 }, },
     cost = 5,
     combat = {
         dam = 10,
