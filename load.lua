@@ -43,8 +43,8 @@ ActorTalents:loadDefinition("/data/talents.lua")
 AtomicEffects:loadDefinition("/data/atomic_effects.lua")
 
 -- Actor resources
-ActorResource:defineResource("Homeostasis", "homeostasis", nil, nil, "Homeostasis is the measure of genetic stability.  It ranges from 100% (good) to 0% (bad).")
-ActorResource:defineResource("Coherence", "coherence", nil, nil, "Coherence is the measure of communication between organic and cybernetic parts.  It ranges from 100% (good) to 0% (bad).")
+ActorResource:defineResource("Fidelity", "fidelity", nil, "fidelity_regen", "Fidelity is the measure of genetic stability.  It ranges from 100% (good) to 0% (bad).")
+ActorResource:defineResource("Sync", "sync", nil, "sync_regen", "Sync is the measure of communication between organic and cybernetic parts.  It ranges from 100% (good) to 0% (bad).")
 ActorResource:defineResource("Bioenergy", "bioenergy", nil, "bioenergy_regen", "Bioenergy is the amount of energy available to your body, including cybernetic implants.")
 
 -- Actor stats

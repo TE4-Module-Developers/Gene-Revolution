@@ -47,6 +47,8 @@ function _M:init(t, no_default)
 
 	-- Default regen
 	t.life_regen = t.life_regen or 0.25 -- Life regen real slow
+	t.fidelity_regen = t.fidelity_regen or 1
+	t.sync_regen = t.sync_regen or 1
 	t.bioenergy_regen = t.bioenergy_regen or 1
 
 	-- Default melee barehanded damage
