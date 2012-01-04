@@ -1,34 +1,24 @@
 local Probability = require "mod.class.Probability"
 
 newAtomicEffect{
-	name = "TRY_HIT",
-	desc = "Try to hit with an attack.",
-	type = "physical", -- ?
-	status = "detrimental", -- ?
-	calculate = function(self, def, target, params)
-		eff = {}
-		-- This will need to be expanded for various attack styles
-		eff.prob = Probability.new{ val = target.size / (target.size + 5 * ((self.x - target.x)^2 + (self.y-target.y)^2)) }
-		eff.params = params
-		return eff
-	end,
-	activate = function() return end,
-}
-
-newAtomicEffect{
 	name = "MELEE_ATTACK",
 	desc = "Melee attack.",
 	type = "physical",
 	status = "detrimental",
 	calculate = function(self, def, target, params)
+		local prob_hit = target.size / (target.size + 5 * ((self.x - target.x)^2 + (self.y-target.y)^2))
+		local precision = 1
 		eff = {}
-		eff.prob = Probability.new{val = 1}
+		eff.damage = 5 -- base unarmed damage
 		if self:getInven(self.INVEN_MAINHAND) then
 			for i, o in ipairs(self:getInven(self.INVEN_MAINHAND)) do
 				eff.damage = o.combat.dam
+				precision = o.combat.precision
 			end
 		end
-		eff.damage = eff.damage or 5 -- base unarmed damage
+		for i = 1, precision do -- establish the chance-to-hit or 'OR' the two chances
+			eff.prob = eff.prob and (eff.prob * Probability.new{val = prob_hit}) or Probability.new{val = prob_hit}
+		end
 		eff.damtype = params and params.damtype or DamageType.PHYSICAL
 		eff.params = params
 		return eff

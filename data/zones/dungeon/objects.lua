@@ -40,6 +40,6 @@ newEntity{ base = "BASE_MELEE_ONEHAND",
     },
     combat = {
         dam = 10,
-        precision = 5,
+        precision = 3,
     },
 }
