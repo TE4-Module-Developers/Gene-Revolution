@@ -125,32 +125,6 @@ newAtomicEffect{
 }
 
 newAtomicEffect{
-	name = "ADD_MELEE_EFFECT",
-	desc = "Add a melee effect to a body part.",
-	type = "physical",
-	status = "detrimental",
-	default_params = {drain=1},
-	calculate = function(self, def, target, params)
-		eff = {}
-		-- Compute the probability of hitting
-		eff.prob = Probability.new{val=1}
-		eff.params = params
-		return eff
-	end,
-	activate = function(self, eff)
-		if eff.prob() then
-			eff.temp = eff.part.combat.on_hit
-			return true
-		end
-	end,
-	deactivate = function(self, eff)
-		if eff.prob() then
-			
-		end
-	end,
-}
-
-newAtomicEffect{
 	name = "GAIN_LIFE",
 	desc = "Gain life.",
 	type = "physical",

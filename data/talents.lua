@@ -108,13 +108,11 @@ newTalent{
 	end,
 }
 
---[[
 newTalent{
 	name = "Acid Bite", --could also be a sustain that drain bioenergy on-hit
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
-	bioenergy = 2,
 	effects = function(self, t)
 		local tg = {type="hit", range=self:getTalentRange(t)}
 		local x, y, target = self:getTarget(tg)
@@ -128,24 +126,6 @@ newTalent{
 	info = function(self, t)
 		return "You bite your target with an acidic saliva attack."
 	end,
-}]]
-
-newTalent{
-	name = "Acid Bite",
-	type = {"role/combat", 1},
-	points = 1,
-	cooldown = 1,
-	mode="sustained",
-	effects = function(self, t)
-		local part
-		if self:getInven(self.INVEN_MAINHAND) then part = self:getInven(self.INVEN_MAINHAND)[1] else return nil end
-		local acid = self:calcEffect("ATOMICEFF_ADD_MELEE_EFFECT", self, {part = part, effect = "ATOMICEFF_ACIDBURN", params = {damage = 2, dur = 2}})
-		--local drain = self:calcEffect("ATOMICEFF_ADD_MELEE_EFFECT", self, {effect = "ATOMICEFF_DRAIN_BIOENERGY", params = {drain = 2}})
-		return {acid}--, drain}
-	end,
-	info = function(self, t)
-		return "Adds acidic saliva to your melee attacks."
-	end,
 }
 
 newTalent{
@@ -153,7 +133,6 @@ newTalent{
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
-	bioenergy = 3,
 	effects = function(self, t)
 		local tg = {type="hit", range=self:getTalentRange(t)}
 		local x, y, target = self:getTarget(tg)
