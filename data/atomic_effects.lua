@@ -17,8 +17,9 @@ newAtomicEffect{
 			end
 		end
 		for i = 1, precision do -- establish the chance-to-hit or 'OR' the two chances
-			eff.prob = eff.prob and (eff.prob * Probability.new{val = prob_hit}) or Probability.new{val = prob_hit}
+			eff.prob = ( eff.prob and (eff.prob / Probability.new{val = prob_hit}) ) or Probability.new{val = prob_hit}
 		end
+		game.logPlayer(self, "%f", eff.prob:predict())
 		eff.damtype = params and params.damtype or DamageType.PHYSICAL
 		eff.params = params
 		return eff
