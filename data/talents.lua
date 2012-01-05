@@ -29,9 +29,11 @@ newTalent{
 	effects = function(self, t)
 		local tg = {type="hit", range=self:getTalentRange(t)}
 		local x, y, target = self:getTarget(tg)
+		local part
+		if self:getInven(self.INVEN_MAINHAND) then part = self:getInven(self.INVEN_MAINHAND)[1] end
 		if not x or not y or not target then return nil end
 		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
-		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target)
+		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {attack_with = part})
 		return {hit}
 	end,
 	info = function(self, t)
@@ -77,7 +79,7 @@ newTalent{
 		self:project(tg, x, y, function(px, py, tg, self)
 			local act = game.level.map(px, py, engine.Map.ACTOR)
 			if act then
-				local hit = self:calcEffect("ATOMICEFF_ACIDBURN", act, {damage=1, dur=4})
+				local hit = self:calcEffect("ATOMICEFF_ACIDBURN", act, {damage=3, dur=4})
 				effs[#effs+1] = hit
 			end
 		end)
@@ -103,5 +105,47 @@ newTalent{
 	end,
 	info = function(self, t)
 		return "Run!"
+	end,
+}
+
+newTalent{
+	name = "Acid Bite", --could also be a sustain that drain bioenergy on-hit
+	type = {"role/combat", 1},
+	points = 1,
+	range = 1,
+	effects = function(self, t)
+		local tg = {type="hit", range=self:getTalentRange(t)}
+		local x, y, target = self:getTarget(tg)
+		if not x or not y or not target then return nil end
+		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
+		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target)
+		local acid_bite = self:calcEffect("ATOMICEFF_ACIDBURN", target, {damage=2, dur = 3})
+		acid_bite.prob = acid_bite.prob * hit.prob
+		return {hit, acid_bite}
+	end,
+	info = function(self, t)
+		return "You bite your target with an acidic saliva attack."
+	end,
+}
+
+newTalent{
+	name = "Devour",
+	type = {"role/combat", 1},
+	points = 1,
+	range = 1,
+	effects = function(self, t)
+		local tg = {type="hit", range=self:getTalentRange(t)}
+		local x, y, target = self:getTarget(tg)
+		local part
+		if self:getInven(self.INVEN_MAINHAND) then part = self:getInven(self.INVEN_MAINHAND)[1] end
+		if not x or not y or not target then return nil end
+		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
+		local dam_mod = target:hasEffect("ATOMICEFF_ACIDBURN") and 2 or 1
+		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {attack_with = part, dam_mod = dam_mod})
+		local heal = self:calcEffect("ATOMICEFF_GAIN_LIFE", self, {heal = hit.damage/2})
+		return {hit, heal}
+	end,
+	info = function(self, t)
+		return "With great ferocity, you devour a portion of your target, healing yourself for 50%% of the damage.  The damage is doubled if the target is covered with acid."
 	end,
 }

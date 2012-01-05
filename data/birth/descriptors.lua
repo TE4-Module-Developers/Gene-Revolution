@@ -39,9 +39,9 @@ newBirthDescriptor{
 		"Crashhhhh!",
 	},
 	talents = {
-		[ActorTalents.T_KICK]=1,
-		[ActorTalents.T_RUN]=1,
 		[ActorTalents.T_ACID_SPRAY]=1,
+		[ActorTalents.T_ACID_BITE]=1,
+		[ActorTalents.T_DEVOUR]=1,
 	},
 }
 --[[

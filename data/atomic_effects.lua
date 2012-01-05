@@ -5,26 +5,30 @@ newAtomicEffect{
 	desc = "Melee attack.",
 	type = "physical",
 	status = "detrimental",
+	default_params = { dam_mod = 1 },
 	calculate = function(self, def, target, params)
 		local prob_hit = target.size / (target.size + 5 * ((self.x - target.x)^2 + (self.y-target.y)^2))
-		local precision = 1
+		local precision
 		eff = {}
-		eff.damage = 5 -- base unarmed damage
-		if self:getInven(self.INVEN_MAINHAND) then
-			for i, o in ipairs(self:getInven(self.INVEN_MAINHAND)) do
-				eff.damage = o.combat.dam
-				precision = o.combat.precision
-			end
+		eff.params = params or {}
+		if eff.params.dam_mod and eff.params.dam_mod > 1 then
+			game.logPlayer(self, "yo yo debug")
 		end
+		if eff.params.attack_with then
+			eff.damage = params.attack_with.combat.dam
+			precision = params.attack_with.combat.precision
+		end
+		eff.damage = eff.damage or 5 -- 0
+		precision = precision or 1
 		for i = 1, precision do -- establish the chance-to-hit or 'OR' the two chances
 			eff.prob = ( eff.prob and (eff.prob / Probability.new{val = prob_hit}) ) or Probability.new{val = prob_hit}
 		end
-		game.logPlayer(self, "%f", eff.prob:predict())
-		eff.damtype = params and params.damtype or DamageType.PHYSICAL
-		eff.params = params
+		eff.damtype = eff.params.damtype or DamageType.PHYSICAL
+		eff.damage = eff.damage * ( eff.params.dam_mod or 1 )
 		return eff
 	end,
 	activate = function(self, eff)
+		--game.logPlayer(self, "%f", eff.prob:predict())
 		if eff.prob() then
 			DamageType:get(eff.damtype).projector(eff.source, eff.target.x, eff.target.y, eff.damtype, eff.damage)
 		end
@@ -116,6 +120,26 @@ newAtomicEffect{
 	deactivate = function(self, eff)
 		if eff.prob() then
 			self.bioenergy_regen = self.bioenergy_regen + eff.drain
+		end
+	end,
+}
+
+newAtomicEffect{
+	name = "GAIN_LIFE",
+	desc = "Gain life.",
+	type = "physical",
+	status = "beneficial",
+	calculate = function(self, def, target, params)
+		eff = {}
+		eff.params = params or {}
+		eff.heal = eff.params.heal or 0
+		eff.prob = Probability.new{val = 1}
+		return eff
+	end,
+	activate = function(self, eff)
+		if eff.prob() then
+			eff.target:heal(eff.heal, eff.self)
+			-- it would be nice if this gave a message like damage
 		end
 	end,
 }

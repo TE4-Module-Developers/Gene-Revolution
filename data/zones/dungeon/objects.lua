@@ -31,15 +31,23 @@ newEntity{
 }
 
 newEntity{ base = "BASE_MELEE_ONEHAND",
-    name = "hammer arm",
+    name = "techhammer",
     level_range = {1, 10},
     require = {}, --{ stat = { str=11 }, },
     cost = 5,
-    wielder = {
-    	max_life = 10,
-    },
     combat = {
-        dam = 10,
+        dam = 8,
         precision = 3,
+    },
+}
+
+newEntity{ base = "BASE_MELEE_ONEHAND",
+    name = "devourer's mouth",
+    level_range = {1, 10},
+    require = {},
+    cost = 5,
+    combat = {
+        dam = 12,
+        precision = 1,
     },
 }
