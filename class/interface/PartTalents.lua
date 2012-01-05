@@ -12,7 +12,7 @@ function _M:useTalent(id, who, force_level, ignore_cd, force_target)
 
 	if ab.mode == "activated" and ab.effects then
 		if self:isTalentCoolingDown(ab) and not ignore_cd then
-			game.logPlayer(who, "%s is still on cooldown for %d turns.", ab.name:capitalize(), self.talents_cd[ab.id])
+			game.logPlayer(who.actor, "%s is still on cooldown for %d turns.", ab.name:capitalize(), self.talents_cd[ab.id])
 			return
 		end
 		if not self:preUseTalent(ab) then return end
@@ -20,10 +20,10 @@ function _M:useTalent(id, who, force_level, ignore_cd, force_target)
 			local old_level
 			local old_target
 			if force_level then old_level = who.talents[id]; who.talents[id] = force_level end
-			if force_target then old_target = rawget(who, "getTarget"); who.getTarget = function(a) return force_target.x, force_target.y, not force_target.__no_self and force_target end end
+			if force_target then old_target = rawget(who.actor, "getTarget"); who.actor.getTarget = function(a) return force_target.x, force_target.y, not force_target.__no_self and force_target end end
 
 			-- Handles the AtomicEffects
-			local effs = ab.effects(who, ab)
+			local effs = ab.effects(who.actor, who, ab)
 			local ret
 			if effs then
 				for i, eff in ipairs(effs) do
@@ -46,7 +46,7 @@ function _M:useTalent(id, who, force_level, ignore_cd, force_target)
 		if not ok and err then print(debug.traceback(co)) error(err) end
 	elseif ab.mode == "sustained" and ab.effects then
 		if self:isTalentCoolingDown(ab) and not ignore_cd then
-			game.logPlayer(who, "%s is still on cooldown for %d turns.", ab.name:capitalize(), self.talents_cd[ab.id])
+			game.logPlayer(who.actor, "%s is still on cooldown for %d turns.", ab.name:capitalize(), self.talents_cd[ab.id])
 			return
 		end
 		local co = coroutine.create(function()
@@ -55,7 +55,7 @@ function _M:useTalent(id, who, force_level, ignore_cd, force_target)
 				if force_level then old_level = who.talents[id]; who.talents[id] = force_level end
 
 				-- Handles the AtomicEffects
-				local effs = ab.effects(who, ab)
+				local effs = ab.effects(who.actor, who, ab)
 				local ret
 				if effs then
 					for i, eff in ipairs(effs) do

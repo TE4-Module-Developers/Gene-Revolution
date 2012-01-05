@@ -110,7 +110,7 @@ end
 
 function _M:loaded()
 	engine.GameTurnBased.loaded(self)
-	Zone:setup{npc_class="mod.class.NPC", grid_class="mod.class.Grid", }
+	Zone:setup{npc_class="mod.class.NPC", grid_class="mod.class.Grid", object_class="mod.class.Object"}
 	Map:setViewerActor(self.player)
 	Map:setViewPort(200, 20, self.w - 200, math.floor(self.h * 0.80) - 20, 32, 32, nil, 22, true)
 	self.key = engine.KeyBind.new()
@@ -339,6 +339,21 @@ function _M:setupCommands()
 		SHOW_CHARACTER_SHEET = function()
 			self:registerDialog(require("mod.dialogs.CharacterSheet").new(self.player))
 		end,
+
+                SHOW_INVENTORY = function()
+                        local d
+                        d = self.player:showEquipInven("Inventory", nil, function(o, inven, item, button, event)
+                                if not o then return end
+                                local ud = require("mod.dialogs.UseItemDialog").new(self.player, o, item, inven, function(_, _, _, stop)
+                                        d:generate()
+                                        d:generateList()
+                                        if stop then self:unregisterDialog(d) end
+                                end)
+                                self:registerDialog(ud)
+                        end)
+                end,
+
+                SHOW_EQUIPMENT = "SHOW_INVENTORY",
 
 		-- Exit the game
 		QUIT_GAME = function()

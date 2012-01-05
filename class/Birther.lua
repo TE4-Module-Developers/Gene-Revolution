@@ -7,7 +7,6 @@ module(..., package.seeall, class.inherit(Birther))
 -- Static!
 function _M:loadDefinition(file)
         local f, err = util.loadfilemods(file, setmetatable({
-                ActorTalents = require("mod.class.interface.ActorTalents"),
                 newBirthDescriptor = function(t) self:newBirthDescriptor(t) end,
                 getBirthDescriptor = function(type, name) return self:getBirthDescriptor(type, name) end,
                 setAuto = function(type, v) self.birth_auto[type] = v end,

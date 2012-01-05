@@ -17,15 +17,13 @@
 -- Nicolas Casalini "DarkGod"
 -- darkgod@te4.org
 
-local Talents = require("engine.interface.ActorTalents")
-
 newEntity{
 	define_as = "BASE_NPC_KOBOLD",
 	type = "humanoid", subtype = "kobold",
 	display = "k", color=colors.WHITE,
 	desc = [[Ugly and green!]],
 
-	ai = "dumb_talented_simple", ai_state = { talent_in=3, },
+	ai = "move_simple", ai_state = { talent_in=3, },
 	stats = { str=5, dex=5, con=5 },
 	combat_armor = 0,
 }

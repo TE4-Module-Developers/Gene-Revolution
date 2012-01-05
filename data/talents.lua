@@ -22,43 +22,45 @@ local DamageType = require "engine.DamageType"
 newTalentType{ type="role/combat", name = "combat", description = "Combat techniques" }
 
 newTalent{
-	name = "Attack",
+	name = "Punch",
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
-	effects = function(self, t)
-		local tg = {type="hit", range=self:getTalentRange(t)}
-		local x, y, target = self:getTarget(tg)
-		if not x or not y or not target then return nil end
-		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
-		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target)
+	effects = function(actor, part, t)
+		local tg = {type="hit", range=part:getTalentRange(t)}
+		local x, y, target = actor:getTarget(tg)
+		if not x or not y or not target then game.logPlayer(actor, "No valid target selected.") return end
+		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
+		local hit = actor:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {weapon=part})
+		game.tmp_eff = hit
 		return {hit}
 	end,
-	info = function(self, t)
-		return "Attack!"
+	info = function(actor, part, t)
+		return "A solid right hook."
 	end,
 }
 
 newTalent{
-	name = "Kick",
+	name = "Concussive Punch",
 	type = {"role/combat", 1},
 	points = 1,
 	cooldown = 6,
 	bioenergy = 2,
 	range = 1,
-	effects = function(self, t)
-		local tg = {type="hit", range=self:getTalentRange(t)}
-		local x, y, target = self:getTarget(tg)
+	effects = function(actor, part, t)
+		local tg = {type="hit", range=part:getTalentRange(t)}
+		local x, y, target = actor:getTarget(tg)
 		if not x or not y or not target then return nil end
-		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
-		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target)
-		local knockback = self:calcEffect("ATOMICEFF_KNOCKBACK", target, {dist=2})
+		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
+
+		local hit = actor:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {weapon=part})
+		local knockback = actor:calcEffect("ATOMICEFF_KNOCKBACK", target, {dist=2})
 		-- Modify the knockback probability to only fire if "hit" lands
 		knockback.prob = knockback.prob * hit.prob
 		return {hit, knockback}
 	end,
-	info = function(self, t)
-		return "Kick!"
+	info = function(actor, part, t)
+		return "A punch followed by a compressed blast of air."
 	end,
 }
 
@@ -69,39 +71,22 @@ newTalent{
 	cooldown = 6,
 	bioenergy = 2,
 	range = 6,
-	effects = function(self, t)
-		local tg = {type="ball", range=self:getTalentRange(t), radius=1, talent=t}
-		local x, y = self:getTarget(tg)
+	effects = function(actor, part, t)
+		local tg = {type="ball", range=part:getTalentRange(t), radius=1, talent=t}
+		local x, y = actor:getTarget(tg)
 		if not x or not y then return nil end
+
 		local effs = {}
-		self:project(tg, x, y, function(px, py, tg, self)
+		actor:project(tg, x, y, function(px, py, tg, actor)
 			local act = game.level.map(px, py, engine.Map.ACTOR)
 			if act then
-				local hit = self:calcEffect("ATOMICEFF_ACIDBURN", act, {damage=1, dur=4})
+				local hit = actor:calcEffect("ATOMICEFF_ACIDBURN", act, {damage=1, dur=4})
 				effs[#effs+1] = hit
 			end
 		end)
 		return effs
 	end,
-	info = function(self, t)
-		return "Zshhhhhhhhh!"
-	end,
-}
-
-newTalent{
-	name = "Run",
-	type = {"role/combat", 1},
-	points = 1,
-	cooldown = 1,
-	mode="sustained",
-	effects = function(self, t)
-		local running = self:calcEffect("ATOMICEFF_DRAIN_BIOENERGY", self, {drain=2})
-		-- Hack it to look like a temporary effect?
-		running.dur = 1
-		running.decrease = 0
-		return {running}
-	end,
-	info = function(self, t)
-		return "Run!"
+	info = function(actor, part, t)
+		return "Spit a large amount of acid."
 	end,
 }

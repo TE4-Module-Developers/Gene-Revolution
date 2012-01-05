@@ -17,6 +17,8 @@ newAtomicEffect{
 	activate = function(self, eff)
 		if eff.prob() then
 			DamageType:get(eff.damtype).projector(eff.source, eff.target.x, eff.target.y, eff.damtype, eff.damage)
+		else
+			game.log("%s misses.", eff.source.name:capitalize())
 		end
 	end,
 }

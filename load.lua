@@ -25,10 +25,11 @@ local ActorResource = require "engine.interface.ActorResource"
 local ActorAI = require "engine.interface.ActorAI"
 local ActorLevel = require "engine.interface.ActorLevel"
 local ActorTemporaryEffects = require "engine.interface.ActorTemporaryEffects"
+local ActorInventory = require "engine.interface.ActorInventory"
 local Birther = require "mod.class.Birther"
 local Probability = require "mod.class.Probability"
 local AtomicEffects = require "mod.class.interface.AtomicEffects"
-local ActorTalents = require "mod.class.interface.ActorTalents"
+local PartTalents = require "mod.class.interface.PartTalents"
 
 -- Useful keybinds
 KeyBind:load("move,hotkeys,inventory,actions,interface,debug")
@@ -36,8 +37,15 @@ KeyBind:load("move,hotkeys,inventory,actions,interface,debug")
 -- Damage types
 DamageType:loadDefinition("/data/damage_types.lua")
 
+-- Body parts
+ActorInventory:defineInventory("TORSO", "Torso", true, "The big middle bit... hopefully not too squishy.")
+ActorInventory:defineInventory("ARMS", "Arms", true, "The things that you use to whack other things with.")
+ActorInventory:defineInventory("HEAD", "Head", true, "Where most creatures keep their brain and sensory organs.")
+ActorInventory:defineInventory("EYES", "Eyes", true, "See Spot run.")
+ActorInventory:defineInventory("LEGS", "Legs", true, "Run away!")
+
 -- Talents
-ActorTalents:loadDefinition("/data/talents.lua")
+PartTalents:loadDefinition("/data/talents.lua")
 
 -- Atomic Effects
 AtomicEffects:loadDefinition("/data/atomic_effects.lua")
@@ -54,6 +62,9 @@ ActorStats:defineStat("Constitution",	"con", 10, 1, 100, "Constitution defines y
 
 -- Actor AIs
 ActorAI:loadDefinition("/engine/ai/")
+
+-- Additional resolvers
+dofile("/mod/resolvers.lua")
 
 -- Birther descriptor
 Birther:loadDefinition("/data/birth/descriptors.lua")
