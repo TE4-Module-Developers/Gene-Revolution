@@ -26,6 +26,20 @@ newTalent{
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
+	get_effects = function(self, target, params)
+		local effs = {}
+		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, params)
+		effs[1] = hit
+		if params.attack_with and params.attack_with.combat.on_hit then
+			for eff, par in pairs(params.attack_with.combat.on_hit) do
+				local current = self:calcEffect(eff, (par.force_target == "self" and self) or target, par) -- default to hitting target
+				current.prob = current.prob * hit.prob -- only apply if the melee attack hits
+				-- there may be sitautions where you want an effect to always apply (or only on misses)
+				effs[#effs + 1] = current
+			end
+		end
+		return effs
+	end,
 	effects = function(self, t)
 		local tg = {type="hit", range=self:getTalentRange(t)}
 		local x, y, target = self:getTarget(tg)
@@ -33,8 +47,8 @@ newTalent{
 		if self:getInven(self.INVEN_MAINHAND) then part = self:getInven(self.INVEN_MAINHAND)[1] end
 		if not x or not y or not target then return nil end
 		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
-		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {attack_with = part})
-		return {hit}
+		--local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {attack_with = part})
+		return t.get_effects(self, target, {attack_with = part})
 	end,
 	info = function(self, t)
 		return "Attack!"

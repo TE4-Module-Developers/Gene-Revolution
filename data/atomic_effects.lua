@@ -127,10 +127,11 @@ newAtomicEffect{
 	desc = "Gain life.",
 	type = "physical",
 	status = "beneficial",
+	default_params = {heal = 0},
 	calculate = function(self, def, target, params)
 		eff = {}
 		eff.params = params or {}
-		eff.heal = eff.params.heal or 0
+		eff.heal = eff.params.heal
 		eff.prob = Probability.new{val = 1}
 		return eff
 	end,
@@ -140,4 +141,52 @@ newAtomicEffect{
 			-- it would be nice if this gave a message like damage
 		end
 	end,
+}	
+
+newAtomicEffect{
+	name = "DECREASE_BIOENERGY",
+	desc = "Decreases bioenergy.",
+	type = "physical",
+	status = "detrimental",
+	default_params = {drain=1},
+	calculate = function(self, def, target, params)
+		eff = {}
+		eff.params = params or {}
+		eff.drain = params.drain
+		eff.prob = Probability.new{val = 1}
+		return eff
+	end,
+	activate = function(self, eff)
+		if eff.prob() then
+			eff.target:incBioenergy(-eff.drain)
+		end
+	end,
 }
+
+
+--[[ --this is going to take some more thought
+newAtomicEffect{
+	name = "ADD_COMBAT_EFFECT",
+	desc = "Adds an atomic effect to a part's combat.",
+	type = "physical",
+	status = "beneficial",
+	calculate = function(self, def, target, params)
+		eff = {}
+		eff.prob = Probability.new{val=1}
+		eff.part = params.part
+		eff.params = params
+		return eff
+	end,
+	activate = function(self, eff)
+		if eff.prob() then
+			eff.part.combat.on_hit = eff.part.combat.on_hit or {}
+			eff.part.combat.on_hit
+			return true
+		end
+	end,
+	deactivate = function(self, eff)
+		if eff.prob() then
+			eff.part.combat.on_hit:removeTemporaryValue(eff.params.eff, eff.temp)
+		end
+	end,
+}]]

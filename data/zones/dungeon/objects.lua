@@ -36,7 +36,7 @@ newEntity{ base = "BASE_MELEE_ONEHAND",
     require = {}, --{ stat = { str=11 }, },
     cost = 5,
     combat = {
-        dam = 8,
+        dam = 4,
         precision = 3,
     },
 }
@@ -47,7 +47,11 @@ newEntity{ base = "BASE_MELEE_ONEHAND",
     require = {},
     cost = 5,
     combat = {
-        dam = 12,
-        precision = 1,
+        dam = 6,
+        precision = 1,--[[
+        on_hit = {
+        	ATOMICEFF_ACIDBURN = {damage=1, dur=2},
+        	ATOMICEFF_DECREASE_BIOENERGY = {force_target = "self", drain = 10},
+        },]]
     },
 }
