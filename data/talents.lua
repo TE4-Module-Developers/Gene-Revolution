@@ -32,7 +32,6 @@ newTalent{
 		if not x or not y or not target then game.logPlayer(actor, "No valid target selected.") return end
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
 		local hit = actor:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {weapon=part})
-		game.tmp_eff = hit
 		return {hit}
 	end,
 	info = function(actor, part, t)
