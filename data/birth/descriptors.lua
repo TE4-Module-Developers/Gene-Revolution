@@ -44,6 +44,7 @@ newBirthDescriptor{
 		[ActorTalents.T_DEVOUR]=1,
 		[ActorTalents.T_KNOCKBACK] = 1,
 		[ActorTalents.T_POWER_SWEEP] = 1,
+		[ActorTalents.T_GROUND_POUND] = 1,
 	},
 }
 --[[

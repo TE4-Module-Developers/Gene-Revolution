@@ -197,3 +197,28 @@ newTalent{
 		return "Sweep out with your arm, attacking your target and any adjacent."
 	end,
 }
+
+newTalent{
+	name = "Ground Pound",
+	type = {"role/combat", 1},
+	points = 1,
+	range = 1,
+	cooldown = 10,
+	bioenergy = 15,
+	effects = function(self, t)
+		local part
+		if self:getInven(self.INVEN_MAINHAND) then part = self:getInven(self.INVEN_MAINHAND)[1] end
+		local eff = {}
+		for i = -1, 1 do for j = -1, 1 do
+			local x, y = self.x + i, self.y + j
+			if (self.x ~= x or self.y ~= y) and game.level.map:isBound(x, y) and game.level.map(x, y, Map.ACTOR) then
+				local target = game.level.map(x, y, Map.ACTOR)
+				eff[#eff + 1] = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {attack_with = part, dam_mod = 0.5})
+			end
+		end end
+		return eff
+	end,
+	info = function(self, t)
+		return "Smash the ground, hitting all adjacent foes."
+	end,
+}
