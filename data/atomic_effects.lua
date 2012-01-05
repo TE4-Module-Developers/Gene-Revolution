@@ -20,8 +20,9 @@ newAtomicEffect{
 		end
 		eff.damage = eff.damage or 5 -- 0
 		precision = precision or 1
-		for i = 1, precision do -- establish the chance-to-hit or 'OR' the two chances
-			eff.prob = ( eff.prob and (eff.prob / Probability.new{val = prob_hit}) ) or Probability.new{val = prob_hit}
+		eff.prob = Probability.new{val = prob.hit}
+		for i = 2, precision do
+			eff.prob = eff.prob / Probability.new{val = prob_hit}
 		end
 		eff.damtype = eff.params.damtype or DamageType.PHYSICAL
 		eff.damage = eff.damage * ( eff.params.dam_mod or 1 )
