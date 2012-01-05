@@ -113,6 +113,7 @@ newTalent{
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
+	bioenergy = 2,
 	effects = function(self, t)
 		local tg = {type="hit", range=self:getTalentRange(t)}
 		local x, y, target = self:getTarget(tg)
@@ -133,6 +134,7 @@ newTalent{
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
+	bioenergy = 3,
 	effects = function(self, t)
 		local tg = {type="hit", range=self:getTalentRange(t)}
 		local x, y, target = self:getTarget(tg)
