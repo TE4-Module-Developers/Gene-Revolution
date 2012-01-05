@@ -42,6 +42,8 @@ newBirthDescriptor{
 		[ActorTalents.T_ACID_SPRAY]=1,
 		[ActorTalents.T_ACID_BITE]=1,
 		[ActorTalents.T_DEVOUR]=1,
+		[ActorTalents.T_KNOCKBACK] = 1,
+		[ActorTalents.T_POWER_SWEEP] = 1,
 	},
 }
 --[[

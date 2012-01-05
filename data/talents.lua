@@ -56,25 +56,25 @@ newTalent{
 }
 
 newTalent{
-	name = "Kick",
+	name = "Knockback",
 	type = {"role/combat", 1},
 	points = 1,
 	cooldown = 6,
-	bioenergy = 2,
+	bioenergy = 5,
 	range = 1,
 	effects = function(self, t)
 		local tg = {type="hit", range=self:getTalentRange(t)}
 		local x, y, target = self:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
-		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target)
+		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {dam_mod = 1.5})
 		local knockback = self:calcEffect("ATOMICEFF_KNOCKBACK", target, {dist=2})
 		-- Modify the knockback probability to only fire if "hit" lands
 		knockback.prob = knockback.prob * hit.prob
 		return {hit, knockback}
 	end,
 	info = function(self, t)
-		return "Kick!"
+		return "Knock back a foe with a mighty swing of your arm."
 	end,
 }
 
@@ -161,5 +161,39 @@ newTalent{
 	end,
 	info = function(self, t)
 		return "With great ferocity, you devour a portion of your target, healing yourself for 50%% of the damage.  The damage is doubled if the target is covered with acid."
+	end,
+}
+
+newTalent{
+	name = "Power Sweep",
+	type = {"role/combat", 1},
+	points = 1,
+	range = 1,
+	cooldown = 4,
+	bioenergy = 10,
+	effects = function(self, t)
+		local tg = {type="hit", range=self:getTalentRange(t)}
+		local x, y, target = self:getTarget(tg)
+		if not x or not y or not target then return nil end
+		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
+		local dir = util.getDir(x, y, self.x, self.y)
+		if dir == 5 then return nil end
+		local lx, ly = util.coordAddDir(self.x, self.y, dir_sides[dir].left)
+		local rx, ry = util.coordAddDir(self.x, self.y, dir_sides[dir].right)
+		local lt, rt = game.level.map(lx, ly, Map.ACTOR), game.level.map(rx, ry, Map.ACTOR)
+		
+		local part
+		if self:getInven(self.INVEN_MAINHAND) then part = self:getInven(self.INVEN_MAINHAND)[1] end
+		local eff = {self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {attack_with = part, dam_mod = 2})}
+		if lt then
+			eff[#eff + 1] = self:calcEffect("ATOMICEFF_MELEE_ATTACK", lt, {attack_with = part, dam_mod = 2})
+		end
+		if rt then
+			eff[#eff + 1] = self:calcEffect("ATOMICEFF_MELEE_ATTACK", rt, {attack_with = part, dam_mod = 2})
+		end
+		return eff
+	end,
+	info = function(self, t)
+		return "Sweep out with your arm, attacking your target and any adjacent."
 	end,
 }
