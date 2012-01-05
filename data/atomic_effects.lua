@@ -11,16 +11,13 @@ newAtomicEffect{
 		local precision
 		eff = {}
 		eff.params = params or {}
-		if eff.params.dam_mod and eff.params.dam_mod > 1 then
-			game.logPlayer(self, "yo yo debug")
-		end
 		if eff.params.attack_with then
 			eff.damage = params.attack_with.combat.dam
 			precision = params.attack_with.combat.precision
 		end
 		eff.damage = eff.damage or 5 -- 0
 		precision = precision or 1
-		eff.prob = Probability.new{val = prob.hit}
+		eff.prob = Probability.new{val = prob_hit}
 		for i = 2, precision do
 			eff.prob = eff.prob / Probability.new{val = prob_hit}
 		end
