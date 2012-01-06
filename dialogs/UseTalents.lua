@@ -99,15 +99,15 @@ function _M:generateList()
 	local list = {}
 	list.chars = {}
 	local letter = 1
-	for i, slot in ipairs(self.actor.inven) do
-		if slot.name ~= "INVEN" then	
+	for i, slot in pairs(self.actor.inven) do
+		if slot.name ~= "INVEN" then
 			-- Iterate through all parts
 			for j, part in ipairs(slot) do
 				local where = #list
 				local added = false
 				for tid, lvl in pairs(part.talents) do
 					local t = part:getTalentFromId(tid)
-					if part:knowTalent(t.id) and t.mode ~= "passive" then
+					if t.mode ~= "passive" then
 						local typename = "talent"
 						local status = tstring{{"color", "LIGHT_GREEN"}, "Active"}
 						if part:isTalentCoolingDown(t) then status = tstring{{"color", "LIGHT_RED"}, part:isTalentCoolingDown(t).." turns"}
