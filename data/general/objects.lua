@@ -21,6 +21,8 @@ newEntity{base = "ARM_PART",
 	talents = {
 		[Talents.T_PUNCH] = 5,
 		[Talents.T_CONCUSSIVE_PUNCH] = 25,
+		[Talents.T_POWER_SWEEP] = 50,
+		[Talents.T_GROUND_POUND] = 75,
 	},
 }
 
@@ -43,7 +45,9 @@ newEntity{base = "HEAD_ORGANICPART",
 	level_range = {1, 10},
 	power_level = 10,
 	talents = {
-		[Talents.T_ACID_SPRAY] = 5,
+		[Talents.T_ACID_BITE] = 5,
+		[Talents.T_ACID_SPRAY] = 25,
+		[Talents.T_DEVOUR] = 75,
 	},
 	desc = [[Remember the movie Aliens?  Like that.]],
 }

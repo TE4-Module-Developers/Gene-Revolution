@@ -24,6 +24,7 @@ local ActorStats = require "engine.interface.ActorStats"
 local ActorResource = require "engine.interface.ActorResource"
 local ActorAI = require "engine.interface.ActorAI"
 local ActorLevel = require "engine.interface.ActorLevel"
+local ActorInventory = require "engine.interface.ActorInventory"
 local ActorTemporaryEffects = require "engine.interface.ActorTemporaryEffects"
 local ActorInventory = require "engine.interface.ActorInventory"
 local Birther = require "mod.class.Birther"
@@ -68,5 +69,11 @@ dofile("/mod/resolvers.lua")
 
 -- Birther descriptor
 Birther:loadDefinition("/data/birth/descriptors.lua")
+
+-- Equipment slots
+ActorInventory:defineInventory("HEAD", "head", true, "")
+ActorInventory:defineInventory("MAINHAND", "main hand", true, "")
+ActorInventory:defineInventory("OFFHAND", "off hand", true, "")
+ActorInventory:defineInventory("BODY", "body", true, "")
 
 return {require "mod.class.Game" }

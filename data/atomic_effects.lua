@@ -5,13 +5,21 @@ newAtomicEffect{
 	desc = "Melee attack.",
 	type = "physical",
 	status = "detrimental",
+	default_params = { dam_mod = 1 },
 	calculate = function(self, def, target, params)
-		eff = {}
-		-- Compute the probability of hitting
-		eff.prob = Probability.new{val=0.50}
-		eff.damage = 5
-		eff.damtype = params and params.damtype or DamageType.KINETIC
-		eff.params = params
+		local eff = {}
+		eff.params = params or {}
+		eff.damage = (params.attack_with and params.attack_with.combat and type(params.attack_with.combat.dam) == "number" and params.attack_with.combat.dam) or 5
+		eff.precision = (params.attack_with and params.attack_with.combat and type(params.attack_with.combat.precision) == "number" and params.attack_with.combat.precision) or 1
+		-- lukep's size-hit formula
+		local prob_hit = target.size / (target.size + 5 * ((self.x - target.x)^2 + (self.y-target.y)^2))
+		-- Apply the precision OR chain
+		eff.prob = Probability.new{val = prob_hit}
+		for i = 2, eff.precision do
+			eff.prob = eff.prob / Probability.new{val = prob_hit}
+		end
+		eff.damtype = eff.params.damtype or DamageType.KINETIC
+		eff.damage = eff.damage * ( eff.params.dam_mod or 1 )
 		return eff
 	end,
 	activate = function(self, eff)
@@ -38,6 +46,7 @@ newAtomicEffect{
 	end,
 	activate = function(self, eff)
 		if eff.prob() then
+			game.logSeen(eff.target, "%s is knocked away from %s.", eff.target, eff.source)
 			eff.target:knockback(eff.source.x, eff.source.y, eff.dist)
 		end
 	end,
@@ -49,12 +58,19 @@ newAtomicEffect{
 	type = "physical",
 	status = "detrimental",
 	calculate = function(self, def, target, params)
-		eff = {}
-		-- Compute the probability of hitting
-		eff.prob = Probability.new{val=0.25}
-		eff.damage = 5
-		eff.damtype = params and params.damtype or DamageType.KINETIC
-		eff.params = params
+		local eff = {}
+		eff.params = params or {}
+		eff.damage = (params.attack_with and params.attack_with.combat and type(params.attack_with.combat.dam) == "number" and params.attack_with.combat.dam) or 5
+		eff.precision = (params.attack_with and params.attack_with.combat and type(params.attack_with.combat.precision) == "number" and params.attack_with.combat.precision) or 1
+		-- lukep's size-hit formula
+		local prob_hit = target.size / (target.size + 5 * ((self.x - target.x)^2 + (self.y-target.y)^2))
+		-- Apply the precision OR chain
+		eff.prob = Probability.new{val = prob_hit}
+		for i = 2, eff.precision do
+			eff.prob = eff.prob / Probability.new{val = prob_hit}
+		end
+		eff.damtype = eff.params.damtype or DamageType.KINETIC
+		eff.damage = eff.damage * ( eff.params.dam_mod or 1 )
 		return eff
 	end,
 	activate = function(self, eff)
@@ -92,7 +108,7 @@ newAtomicEffect{
 	status = "detrimental",
 	default_params = {drain=1},
 	calculate = function(self, def, target, params)
-		eff = {}
+		local eff = {}
 		-- Compute the probability of hitting
 		eff.prob = Probability.new{val=1}
 		eff.drain = params.drain
@@ -111,3 +127,73 @@ newAtomicEffect{
 		end
 	end,
 }
+
+newAtomicEffect{
+	name = "GAIN_LIFE",
+	desc = "Gain life.",
+	type = "physical",
+	status = "beneficial",
+	default_params = {heal = 0},
+	calculate = function(self, def, target, params)
+		local eff = {}
+		eff.params = params or {}
+		eff.heal = eff.params.heal
+		eff.prob = Probability.new{val = 1}
+		return eff
+	end,
+	activate = function(self, eff)
+		if eff.prob() then
+			local old_life = eff.target.life
+			eff.target:heal(eff.heal, eff.self)
+			game.logSeen(eff.target, "%s heals %d.", eff.target.name:capitalize(), eff.target.life - old_life)
+		end
+	end,
+}	
+
+newAtomicEffect{
+	name = "DECREASE_BIOENERGY",
+	desc = "Decreases bioenergy.",
+	type = "physical",
+	status = "detrimental",
+	default_params = {drain=1},
+	calculate = function(self, def, target, params)
+		local eff = {}
+		eff.params = params or {}
+		eff.drain = params.drain
+		eff.prob = Probability.new{val = 1}
+		return eff
+	end,
+	activate = function(self, eff)
+		if eff.prob() then
+			eff.target:incBioenergy(-eff.drain)
+		end
+	end,
+}
+
+
+--[[ --this is going to take some more thought
+newAtomicEffect{
+	name = "ADD_COMBAT_EFFECT",
+	desc = "Adds an atomic effect to a part's combat.",
+	type = "physical",
+	status = "beneficial",
+	calculate = function(self, def, target, params)
+		local eff = {}
+		eff.prob = Probability.new{val=1}
+		eff.part = params.part
+		eff.params = params
+		return eff
+	end,
+	activate = function(self, eff)
+		if eff.prob() then
+			eff.part.combat.on_hit = eff.part.combat.on_hit or {}
+			eff.part.combat.on_hit
+			return true
+		end
+	end,
+	deactivate = function(self, eff)
+		if eff.prob() then
+			eff.part.combat.on_hit:removeTemporaryValue(eff.params.eff, eff.temp)
+		end
+	end,
+}]]

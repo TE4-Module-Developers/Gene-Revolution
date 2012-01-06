@@ -44,6 +44,7 @@ module(..., package.seeall, class.inherit(
 
 function _M:init(t, no_default)
 	-- Define some basic combat stats
+	t.size = 25 -- 25 is the "humanoid" reference size, used in combat accuracy calculations
 
 	-- Default regen
 	t.life_regen = t.life_regen or 0.25 -- Life regen real slow
@@ -156,4 +157,22 @@ end
 -- @param target the actor attacking us
 function _M:attack(target, x, y)
         game.logSeen(target, "%s tries to attack %s.", self.name:capitalize(), target.name:capitalize())
+end
+
+function _M:melee_attack_effects(target, params)
+	local effs = {}
+	local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, params)
+	effs[1] = hit
+	effs.hit = hit
+	if params.attack_with and params.attack_with.combat and params.attack_with.combat.on_hit then
+		for eff, par in pairs(params.attack_with.combat.on_hit) do
+			-- default to hitting target
+			local current = self:calcEffect(eff, par.target or target, par)
+			-- only apply if the melee attack hits
+			current.prob = current.prob * hit.prob
+			-- there may be situations where you want an effect to always apply (or only on misses)
+			effs[#effs + 1] = current
+		end
+	end
+	return effs
 end
