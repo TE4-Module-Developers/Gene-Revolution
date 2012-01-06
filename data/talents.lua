@@ -18,6 +18,7 @@
 -- darkgod@te4.org
 
 local DamageType = require "engine.DamageType"
+local Probability = require "mod.class.Probability"
 
 newTalentType{ type="role/combat", name = "combat", description = "Combat techniques" }
 
@@ -67,7 +68,9 @@ newTalent{
 		local x, y, target = self:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
-		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {dam_mod = 1.5})
+		local part
+		if self:getInven(self.INVEN_MAINHAND) then part = self:getInven(self.INVEN_MAINHAND)[1] end
+		local hit = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {attack_with = part, dam_mod = 1.5})
 		local knockback = self:calcEffect("ATOMICEFF_KNOCKBACK", target, {dist=2})
 		-- Modify the knockback probability to only fire if "hit" lands
 		knockback.prob = knockback.prob * hit.prob
@@ -213,7 +216,9 @@ newTalent{
 			local x, y = self.x + i, self.y + j
 			if (self.x ~= x or self.y ~= y) and game.level.map:isBound(x, y) and game.level.map(x, y, Map.ACTOR) then
 				local target = game.level.map(x, y, Map.ACTOR)
-				eff[#eff + 1] = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {attack_with = part, dam_mod = 0.5})
+				local current = self:calcEffect("ATOMICEFF_MELEE_ATTACK", target, {dam_mod = 0.5})
+				current.prob = Probability.new{val = prob_hit}
+				eff[#eff + 1] = current
 			end
 		end end
 		return eff
