@@ -40,6 +40,7 @@ local LogFlasher = require "engine.LogFlasher"
 local DebugConsole = require "engine.DebugConsole"
 local FlyingText = require "engine.FlyingText"
 local Tooltip = require "engine.Tooltip"
+local PlayerDisplay = require "mod.class.PlayerDisplay"
 
 local QuitDialog = require "mod.dialogs.Quit"
 
@@ -121,6 +122,8 @@ function _M:setupDisplayMode()
 	Map:setViewPort(200, 20, self.w - 200, math.floor(self.h * 0.80) - 20, 32, 32, nil, 22, true)
 	Map:resetTiles()
 	Map.tiles.use_images = false
+	-- Setup the player display
+	self.player_display = PlayerDisplay.new(0, 20, 200, math.floor(self.h * 0.80) - 20, {0, 0, 0}, "/data/font/VeraMono.ttf", 10)
 
 	if self.level then
 		self.level.map:recreate()
@@ -230,6 +233,7 @@ function _M:display(nb_keyframe)
 
 	-- We display the player's interface
 	self.flash:toScreen(nb_keyframe)
+	self.player_display:toScreen(nb_keyframe)
 	self.logdisplay:toScreen()
 	if self.show_npc_list then
 		self.npcs_display:toScreen()
