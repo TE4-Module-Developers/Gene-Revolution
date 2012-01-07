@@ -40,6 +40,7 @@ local LogFlasher = require "engine.LogFlasher"
 local DebugConsole = require "engine.DebugConsole"
 local FlyingText = require "engine.FlyingText"
 local Tooltip = require "engine.Tooltip"
+local PlayerDisplay = require "mod.class.PlayerDisplay"
 
 local QuitDialog = require "mod.dialogs.Quit"
 
@@ -110,7 +111,7 @@ end
 
 function _M:loaded()
 	engine.GameTurnBased.loaded(self)
-	Zone:setup{npc_class="mod.class.NPC", grid_class="mod.class.Grid", }
+	Zone:setup{npc_class="mod.class.NPC", grid_class="mod.class.Grid", object_class="mod.class.Object"}
 	Map:setViewerActor(self.player)
 	Map:setViewPort(200, 20, self.w - 200, math.floor(self.h * 0.80) - 20, 32, 32, nil, 22, true)
 	self.key = engine.KeyBind.new()
@@ -121,6 +122,8 @@ function _M:setupDisplayMode()
 	Map:setViewPort(200, 20, self.w - 200, math.floor(self.h * 0.80) - 20, 32, 32, nil, 22, true)
 	Map:resetTiles()
 	Map.tiles.use_images = false
+	-- Setup the player display
+	self.player_display = PlayerDisplay.new(0, 20, 200, math.floor(self.h * 0.80) - 20, {0, 0, 0}, "/data/font/VeraMono.ttf", 10)
 
 	if self.level then
 		self.level.map:recreate()
@@ -230,6 +233,7 @@ function _M:display(nb_keyframe)
 
 	-- We display the player's interface
 	self.flash:toScreen(nb_keyframe)
+	self.player_display:toScreen(nb_keyframe)
 	self.logdisplay:toScreen()
 	if self.show_npc_list then
 		self.npcs_display:toScreen()
@@ -340,6 +344,21 @@ function _M:setupCommands()
 			self:registerDialog(require("mod.dialogs.CharacterSheet").new(self.player))
 		end,
 
+                SHOW_INVENTORY = function()
+                        local d
+                        d = self.player:showEquipInven("Inventory", nil, function(o, inven, item, button, event)
+                                if not o then return end
+                                local ud = require("mod.dialogs.UseItemDialog").new(self.player, o, item, inven, function(_, _, _, stop)
+                                        d:generate()
+                                        d:generateList()
+                                        if stop then self:unregisterDialog(d) end
+                                end)
+                                self:registerDialog(ud)
+                        end)
+                end,
+
+                SHOW_EQUIPMENT = "SHOW_INVENTORY",
+
 		-- Exit the game
 		QUIT_GAME = function()
 			self:onQuit()
@@ -385,6 +404,29 @@ function _M:setupCommands()
 			local co = coroutine.create(function() self.player:getTarget{type="hit", no_restrict=true, range=2000} end)
 			local ok, err = coroutine.resume(co)
 			if not ok and err then print(debug.traceback(co)) error(err) end
+		end,
+		
+		PICKUP_FLOOR = function()
+			if self.player.no_inventory_access then return end
+			self.player:playerPickup()
+		end,
+		DROP_FLOOR = function()
+			if self.player.no_inventory_access then return end
+			self.player:playerDrop()
+		end,
+		
+		SHOW_INVENTORY = function()
+			if self.player.no_inventory_access then return end
+			local d
+			d = self.player:showEquipInven("Inventory", nil, function(o, inven, item, button, event)
+				if not o then return end
+				local ud = require("mod.dialogs.UseItemDialog").new(event == "button", self.player, o, item, inven, function(_, _, _, stop)
+					d:generate()
+					d:generateList()
+					if stop then self:unregisterDialog(d) end
+				end)
+				self:registerDialog(ud)
+			end)
 		end,
 	}
 	self.key:setCurrent()
