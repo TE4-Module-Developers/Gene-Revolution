@@ -24,6 +24,9 @@ newEntity{base = "ARM_PART",
 		[Talents.T_POWER_SWEEP] = 50,
 		[Talents.T_GROUND_POUND] = 75,
 	},
+	wielder = {
+		max_sync = 20,
+	},
 }
 
 newEntity{
@@ -48,6 +51,9 @@ newEntity{base = "HEAD_ORGANICPART",
 		[Talents.T_ACID_BITE] = 5,
 		[Talents.T_ACID_SPRAY] = 25,
 		[Talents.T_DEVOUR] = 75,
+	},
+	wielder = {
+		max_fidelity = 20,
 	},
 	desc = [[Remember the movie Aliens?  Like that.]],
 }

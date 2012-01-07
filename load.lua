@@ -71,10 +71,4 @@ dofile("/mod/resolvers.lua")
 -- Birther descriptor
 Birther:loadDefinition("/data/birth/descriptors.lua")
 
--- Equipment slots
-ActorInventory:defineInventory("HEAD", "head", true, "")
-ActorInventory:defineInventory("MAINHAND", "main hand", true, "")
-ActorInventory:defineInventory("OFFHAND", "off hand", true, "")
-ActorInventory:defineInventory("BODY", "body", true, "")
-
 return {require "mod.class.Game" }

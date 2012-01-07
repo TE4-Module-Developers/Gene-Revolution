@@ -176,3 +176,13 @@ function _M:melee_attack_effects(target, params)
 	end
 	return effs
 end
+
+function _M:getFidelityEff()  -- ranges from 20% (at 0) to 100% (at max)
+	if not self.max_fidelity then return 0.2 end
+	return (self:getFidelity()*.8 + self.max_fidelity*0.2)/(self.max_fidelity)
+end
+
+function _M:getSyncEff()
+	if not self.max_sync then return 0.2 end
+	return (self:getSync()*.8 + self.max_sync*0.2)/(self.max_sync)
+end

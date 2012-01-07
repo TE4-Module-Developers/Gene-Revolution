@@ -120,13 +120,13 @@ function _M:display()
 		{r=0x7f / 5, g=0xff / 5, b=0xd4 / 5}
 	)) h = h + self.font_h
 	
-	local eff = (player:getFidelity()*.8 + player.max_fidelity*0.2)/(player.max_fidelity)*100
+	local eff = player:getFidelityEff() * 100
 	self:mouseTooltip("As you utilize your genetic abilities, your Fidelity decreases, reducing the effectiveness of all genetic abilities.  The exact effects depend upon the ability.", self:makeTextureBar("#c0c000#Fidelity:", ("%d (%d%s)"):format(player:getFidelity(), eff, "%%"), player:getFidelity(), player.max_fidelity, player.fidelity_regen, x, h, 255, 255, 255,
 		{r=0xff / 2, g=0xff / 2, b=0x00 / 2},
 		{r=0xff / 5, g=0xff / 5, b=0x00 / 5}
 	)) h = h + self.font_h
 	
-	local eff = (player:getSync()*.8 + player.max_sync*0.2)/(player.max_sync)*100
+	local eff = player:getSyncEff() * 100
 	self:mouseTooltip("As you utilize your cybernetic abilities, your Sync decreases, reducing the effectiveness of all cybernetic abilities.  The exact effects depend upon the ability.", self:makeTextureBar("#00c000#Sync:", ("%d (%d%s)"):format(player:getSync(), eff, "%%"), player:getSync(), player.max_sync, player.sync_regen, x, h, 255, 255, 255,
 		{r=0x00 / 2, g=0xff / 2, b=0x00 / 2},
 		{r=0x00 / 5, g=0xff / 5, b=0x00 / 5}
