@@ -41,12 +41,13 @@ newAtomicEffect{
 		-- Compute the probability of hitting
 		eff.prob = Probability.new{val=0.50}
 		eff.dist = params.dist or 5
+		eff.source = self
 		eff.params = params
 		return eff
 	end,
 	activate = function(self, eff)
 		if eff.prob() then
-			game.logSeen(eff.target, "%s is knocked away from %s.", eff.target, eff.source)
+			game.logSeen(eff.target, "%s is knocked away from %s.", eff.target.name:capitalize(), eff.source.name)
 			eff.target:knockback(eff.source.x, eff.source.y, eff.dist)
 		end
 	end,
@@ -145,7 +146,9 @@ newAtomicEffect{
 		if eff.prob() then
 			local old_life = eff.target.life
 			eff.target:heal(eff.heal, eff.self)
-			game.logSeen(eff.target, "%s heals %d.", eff.target.name:capitalize(), eff.target.life - old_life)
+			if eff.target.life > old_life then
+				game.logSeen(eff.target, "%s heals %d.", eff.target.name:capitalize(), eff.target.life - old_life)
+			end
 		end
 	end,
 }	

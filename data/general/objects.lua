@@ -26,6 +26,7 @@ newEntity{base = "ARM_PART",
 	},
 	wielder = {
 		max_sync = 20,
+		sync_regen = 1,
 	},
 }
 
@@ -54,6 +55,7 @@ newEntity{base = "HEAD_ORGANICPART",
 	},
 	wielder = {
 		max_fidelity = 20,
+		fidelity_regen = 1,
 	},
 	desc = [[Remember the movie Aliens?  Like that.]],
 }

@@ -86,6 +86,14 @@ function _M:postUseTalent(ab, ret)
 			self.actor:incBioenergy(-ab.bioenergy)
 		end
 	end
+	
+	if ab.fidelity then
+		self.actor:incFidelity(-ab.fidelity) -- sync/fidelity are charged after using the talent - keep this in mind if you want a talent to "fail" but still reduce sync/fidelity
+	end
+	
+	if ab.sync then
+		self.actor:incSync(-ab.sync)
+	end
 
 	return true
 end
