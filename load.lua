@@ -31,6 +31,7 @@ local Birther = require "mod.class.Birther"
 local Probability = require "mod.class.Probability"
 local AtomicEffects = require "mod.class.interface.AtomicEffects"
 local PartTalents = require "mod.class.interface.PartTalents"
+local PlayerDisplay = require "mod.class.PlayerDisplay"
 
 -- Useful keybinds
 KeyBind:load("move,hotkeys,inventory,actions,interface,debug")
