@@ -22,13 +22,16 @@ local KeyBind = require "engine.KeyBind"
 local DamageType = require "engine.DamageType"
 local ActorStats = require "engine.interface.ActorStats"
 local ActorResource = require "engine.interface.ActorResource"
-local ActorTalents = require "engine.interface.ActorTalents"
 local ActorAI = require "engine.interface.ActorAI"
 local ActorLevel = require "engine.interface.ActorLevel"
+local ActorInventory = require "engine.interface.ActorInventory"
 local ActorTemporaryEffects = require "engine.interface.ActorTemporaryEffects"
-local Birther = require "engine.Birther"
-local AtomicEffects = require "mod.class.AtomicEffects"
+local ActorInventory = require "engine.interface.ActorInventory"
+local Birther = require "mod.class.Birther"
 local Probability = require "mod.class.Probability"
+local AtomicEffects = require "mod.class.interface.AtomicEffects"
+local PartTalents = require "mod.class.interface.PartTalents"
+local PlayerDisplay = require "mod.class.PlayerDisplay"
 
 -- Useful keybinds
 KeyBind:load("move,hotkeys,inventory,actions,interface,debug")
@@ -36,19 +39,23 @@ KeyBind:load("move,hotkeys,inventory,actions,interface,debug")
 -- Damage types
 DamageType:loadDefinition("/data/damage_types.lua")
 
--- Talents
-ActorTalents:loadDefinition("/data/talents.lua")
+-- Body parts
+ActorInventory:defineInventory("TORSO", "Torso", true, "The big middle bit... hopefully not too squishy.")
+ActorInventory:defineInventory("ARMS", "Arms", true, "The things that you use to whack other things with.")
+ActorInventory:defineInventory("HEAD", "Head", true, "Where most creatures keep their brain and sensory organs.")
+ActorInventory:defineInventory("EYES", "Eyes", true, "See Spot run.")
+ActorInventory:defineInventory("LEGS", "Legs", true, "Run away!")
 
--- Timed Effects
-ActorTemporaryEffects:loadDefinition("/data/timed_effects.lua")
+-- Talents
+PartTalents:loadDefinition("/data/talents.lua")
 
 -- Atomic Effects
 AtomicEffects:loadDefinition("/data/atomic_effects.lua")
 
 -- Actor resources
-ActorResource:defineResource("Homeostasis", "homeostasis", nil, nil, "Homeostasis is the measure of genetic stability.  It ranges from 100% (good) to 0% (bad).")
-ActorResource:defineResource("Coherence", "coherence", nil, nil, "Coherence is the measure of communication between organic and cybernetic parts.  It ranges from 100% (good) to 0% (bad).")
-ActorResource:defineResource("Bioenergy", "bioenergy", nil, "bioenergy_regen", "Bioenergy is the amount of energy available to your body, including cybernetic implants.")
+ActorResource:defineResource("Fidelity", "fidelity", nil, "fidelity_regen", "Fidelity is the measure of genetic stability.  It ranges from 100% (good) to 0% (bad).", nil, 0) -- fidelity/sync come from parts
+ActorResource:defineResource("Sync", "sync", nil, "sync_regen", "Sync is the measure of communication between organic and cybernetic parts.  It ranges from 100% (good) to 0% (bad).", nil, 0)
+ActorResource:defineResource("Bioenergy", "bioenergy", nil, "bioenergy_regen", "Bioenergy is the amount of energy available to your body, including cybernetic implants.", nil, 50) -- bioenergy is innate but can also come from other sources
 
 -- Actor stats
 ActorStats:defineStat("Strength",	"str", 10, 1, 100, "Strength defines your character's ability to apply physical force. It increases your melee damage, damage with heavy weapons, your chance to resist physical effects, and carrying capacity.")
@@ -57,6 +64,9 @@ ActorStats:defineStat("Constitution",	"con", 10, 1, 100, "Constitution defines y
 
 -- Actor AIs
 ActorAI:loadDefinition("/engine/ai/")
+
+-- Additional resolvers
+dofile("/mod/resolvers.lua")
 
 -- Birther descriptor
 Birther:loadDefinition("/data/birth/descriptors.lua")

@@ -83,7 +83,7 @@ end
 --- Restore resources
 function _M:restoreResources()
 	self.actor.life = self.actor.max_life
-	self.actor.power = self.actor.max_power
+	self.actor.bioenergy = self.actor.max_bioenergy
 
 	self.actor.energy.value = game.energy_to_act
 end
@@ -115,7 +115,7 @@ function _M:use(item)
 	elseif act == "cheat" then
 		game.logPlayer(self.actor, "#LIGHT_BLUE#You resurrect! CHEATER !")
 
-		self:cleanActor()
+		--self:cleanActor()
 		self:restoreResources()
 		self:resurrectBasic()
 	end

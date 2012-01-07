@@ -23,6 +23,8 @@ newBirthDescriptor{
 	desc = {
 	},
 
+        body = { INVEN = 100, ARMS = 2, TORSO = 1, HEAD = 1, EYES = 2, LEGS = 1 },
+
 	copy = {
 		lite = 4,
 		max_life = 25,
@@ -31,24 +33,28 @@ newBirthDescriptor{
 
 newBirthDescriptor{
 	type = "role",
-	name = "Destroyer",
+	name = "Mr. Roboto",
 	desc =
 	{
-		"Crashhhhh!",
+		"I am the modern man.",
 	},
-	talents = {
-		[ActorTalents.T_KICK]=1,
-	},
+        copy = {
+                equipment = resolvers.equip{
+                        {type="cyberpart", slot="LEFTARM",},
+                },
+        },
 }
 
 newBirthDescriptor{
 	type = "role",
-	name = "Acid-maniac",
+	name = "Aliens",
 	desc =
 	{
-		"Zshhhhhhhh!",
+		"As in the movie.",
 	},
-	talents = {
-		[ActorTalents.T_ACID_SPRAY]=1,
-	},
+        copy = {
+                equipment = resolvers.equip{
+                        {type="organicpart", slot="HEAD",},
+                },
+        },
 }
