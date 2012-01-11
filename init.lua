@@ -20,10 +20,10 @@
 name = "Gene-Revolution"
 long_name = "Gene-Revolution Module for T-Engine4"
 short_name = "Gene-Revolution"
-author = { "People"}
-homepage = "https://github.com/reenenlaurie/Gene-Revolution"
+author = { "People" }
+homepage = "https://github.com/TE4-Module-Developers/Gene-Revolution"
 version = {0,0,1}
-engine = {0,9,36,"te4"}
+engine = {0,9,38,"te4"}
 description = [[
 Sci-fi game where the player must use gene-splicing and cybernetics to survive.
 ]]
