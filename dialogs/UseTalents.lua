@@ -76,8 +76,8 @@ function _M:defineHotkey(id)
 	local item = self.list[self.c_list.sel]
 	if not item or not item.talent then return end
 
-	self.actor.hotkey[id] = {"talent", item.talent}
-	self:simplePopup("Hotkey "..id.." assigned", self.actor:getTalentFromId(item.talent).name:capitalize().." assigned to hotkey "..id)
+	self.actor.hotkey[id] = {"talent", item.part, item.talent}
+	self:simplePopup("Hotkey "..id.." assigned", item.part:getTalentFromId(item.talent).name:capitalize().." assigned to hotkey "..id)
 	self.actor.changed = true
 end
 

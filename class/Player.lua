@@ -236,3 +236,27 @@ function _M:doTakeoff(inven, item, o)
     self:useEnergy()
     self.changed = true
 end
+
+--- Uses an hotkeyed talent
+function _M:activateHotkey(id)
+	if self.hotkey[id] then
+		self["hotkey"..self.hotkey[id][1]:capitalize()](self, self.hotkey[id][2], self.hotkey[id][3])
+	else
+		Dialog:simplePopup("Hotkey not defined", "You may define a hotkey by pressing 'm' and following the instructions there.")
+	end
+end
+
+--- Activates a hotkey with a type "talent"
+function _M:hotkeyTalent(part, tid)
+	part:useTalent(tid)
+end
+
+--- Activates a hotkey with a type "inventory"
+function _M:hotkeyInventory(name)
+	local o, item, inven = self:findInAllInventories(name)
+	if not o then
+		Dialog:simplePopup("Item not found", "You do not have any "..name..".")
+	else
+		self:playerUseItem(o, item, inven)
+	end
+end
