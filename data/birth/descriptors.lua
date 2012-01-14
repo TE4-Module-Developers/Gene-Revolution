@@ -27,14 +27,16 @@ newBirthDescriptor{
 	name = "base",
 	desc = {
 	},
-	body = { INVEN = 100, ARMS = 2, TORSO = 1, HEAD = 1, EYES = 2, LEGS = 2 },
+	body = { INVEN = 100, TORSO = 1 },
 	copy = {
 		lite = 4,
 		max_life = 25,
 		resolvers.equip{
-			{type="organicpart", subtype="humanoid", special=slotCheck("ARMS")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("ARMS")},
 			{type="organicpart", subtype="humanoid", special=slotCheck("TORSO")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("ARMS")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("ARMS")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("HANDS")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("HANDS")},
 			{type="organicpart", subtype="humanoid", special=slotCheck("HEAD")},
 			{type="organicpart", subtype="humanoid", special=slotCheck("EYES")},
 			{type="organicpart", subtype="humanoid", special=slotCheck("EYES")},

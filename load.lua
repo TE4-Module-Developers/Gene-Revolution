@@ -42,6 +42,7 @@ DamageType:loadDefinition("/data/damage_types.lua")
 -- Body parts
 ActorInventory:defineInventory("TORSO", "Torso", true, "The big middle bit... hopefully not too squishy.")
 ActorInventory:defineInventory("ARMS", "Arms", true, "The things that you use to whack other things with.")
+ActorInventory:defineInventory("HANDS", "Hands", true, "Those opposable thumbs do come in handy.")
 ActorInventory:defineInventory("HEAD", "Head", true, "Where most creatures keep their brain and sensory organs.")
 ActorInventory:defineInventory("EYES", "Eyes", true, "See Spot run.")
 ActorInventory:defineInventory("LEGS", "Legs", true, "Run away!")
