@@ -14,6 +14,12 @@
     <property name="value" value="&quot;GRASS&quot;"/>
    </properties>
   </tile>
+  <tile id="15">
+   <properties>
+    <property name="display" value="="/>
+    <property name="value" value="&quot;Window&quot;"/>
+   </properties>
+  </tile>
   <tile id="30">
    <properties>
     <property name="display" value="_"/>
@@ -53,11 +59,13 @@
   <tile id="0">
    <properties>
     <property name="display" value="1"/>
+    <property name="value" value="&quot;Turbolift&quot;"/>
    </properties>
   </tile>
   <tile id="1">
    <properties>
     <property name="display" value="2"/>
+    <property name="value" value="&quot;EscapePod&quot;"/>
    </properties>
   </tile>
   <tile id="2">
@@ -68,6 +76,7 @@
   <tile id="3">
    <properties>
     <property name="display" value="4"/>
+    <property name="value" value="&quot;Turbolift&quot;"/>
    </properties>
   </tile>
   <tile id="4">
@@ -124,6 +133,12 @@
     <property name="value" value="&quot;HARDWALL&quot;"/>
    </properties>
   </tile>
+  <tile id="16">
+   <properties>
+    <property name="display" value="#"/>
+    <property name="value" value="&quot;Wall&quot;"/>
+   </properties>
+  </tile>
   <tile id="73">
    <properties>
     <property name="display" value="&gt;"/>
@@ -141,6 +156,24 @@
     <property name="value" value="{&quot;CRYSTAL_WALL&quot;,&quot;CRYSTAL_WALL2&quot;,&quot;CRYSTAL_WALL3&quot;,&quot;CRYSTAL_WALL4&quot;,&quot;CRYSTAL_WALL5&quot;,&quot;CRYSTAL_WALL6&quot;,&quot;CRYSTAL_WALL7&quot;,&quot;CRYSTAL_WALL8&quot;,&quot;CRYSTAL_WALL9&quot;,&quot;CRYSTAL_WALL10&quot;,&quot;CRYSTAL_WALL11&quot;,&quot;CRYSTAL_WALL12&quot;,&quot;CRYSTAL_WALL13&quot;,&quot;CRYSTAL_WALL14&quot;,&quot;CRYSTAL_WALL15&quot;,&quot;CRYSTAL_WALL16&quot;,&quot;CRYSTAL_WALL17&quot;,&quot;CRYSTAL_WALL18&quot;,&quot;CRYSTAL_WALL19&quot;,&quot;CRYSTAL_WALL20&quot;,}"/>
    </properties>
   </tile>
+  <tile id="114">
+   <properties>
+    <property name="display" value="."/>
+    <property name="value" value="&quot;Floor&quot;"/>
+   </properties>
+  </tile>
+  <tile id="121">
+   <properties>
+    <property name="display" value="#"/>
+    <property name="value" value="&quot;inner wall&quot;"/>
+   </properties>
+  </tile>
+  <tile id="129">
+   <properties>
+    <property name="display" value="+"/>
+    <property name="value" value="&quot;Sliding Door&quot;"/>
+   </properties>
+  </tile>
   <tile id="135">
    <properties>
     <property name="display" value="&lt;"/>
@@ -150,6 +183,12 @@
  </tileset>
  <tileset firstgid="361" name="dg_town132" tilewidth="32" tileheight="32">
   <image source="../../tomegit/tiled-maps/gfx/dg_town132.gif" width="288" height="128"/>
+  <tile id="2">
+   <properties>
+    <property name="display" value="-"/>
+    <property name="value" value="&quot;Outerspace&quot;"/>
+   </properties>
+  </tile>
   <tile id="4">
    <properties>
     <property name="display" value="2"/>
@@ -188,7 +227,7 @@
  </tileset>
  <layer name="Terrain" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJztl1tuxCAMRZn1dQfZwqyvo3xmHd1BdtEiFdVybWMDdoiGj6skDg9fDo/k+UjpubS0tPTm+kr/dXVOrR4+Hn+6mxfKwx29cB6gl6tz7GFxJyY5v8+Kjzswyfmdv6LyL+9m9gHn1MZwKPGZ5xZcFxKPcj+zj5PQzsRn8wHPa4oBpxnOefy9Yclf8hPhqZY7NXeyNuFdlCfc7p7k3C0cpLr7oG9MPO54H23NXeMJxvE+bfFTysN24dWav7Ws1K/FSy73Qhxwu97C/ZU8XkofmAU1Lj3jreUlzQMNE8hiRh5aJtSZ3Oujpw7FQ/MtwPHAXKJ44P5H8oiSBw9uXnGcqHndUs5rfUjnuZSH5IM7zyN5aMeT81Hj6blfZXHfftq4ppwHD+4/1VvO+9Xx0+6Rr1g4ri1HxCPWx1GU+8zXDcRgHD/j+MaXd18fOL+iFh9C/VAewnhqx53j6c2DnNcOct2vTvBOe7+ntnpU/4PXh/m+t57T+gj3EXGe1+5LPUsdbx7R8uZhUW+9kTwsXGplLG1E7Fe1HGpjrG3DY3208Kg9a3xcyWOkj8WD5qH5nxrhgxo/icc34plBCw==
+   eJztV9uRwyAMJB1cX+mAFlLfZfh0HekgXdwxCXOKIiHxEJA5PnZsywi0Wgnsy8m5y8bGxsY/x5d7x+yYajmcT3/4NC4Uh0/kwnGAXGbHKOHmHsjxSGNmxyrx+BZ4JC6zY5V43J+g4k/vVuYB+9szOiT7yv0O+zunR7pflQesKYjA2FerrduzRqR9CgP6zY69Jn6OzyhOUuxU7UT4zLtRnOCcQRF7iQ6Sb3CvvGpzD89m3yn2Uk5pXRhPKQc4J7zW5L2GE7VuCZeo4RXpgOe1Bl4vxXFV1hjWgspLa741/pweWk2gFivqodWEOpNbebT4UHpovgU4PbAuo/TA6/fUYxQs9ODqitOJquuacVb9gc907jzkeFPPlH9w7/NY6qHNJ8dD0tNyv4rgvv20ds04Cz24/1RrGO9Xx++8R7xiYLt2HGEf0R9HQlwzXj2wQTt+xnbPjzfvDxxfQg2PjP9QPTL51Oad09NaD7KuDWC6X93BO+19cHV+1Pqd+6P4vtXPqD+G8xhxnkv3ya/Ex1qP0bDWowStfj31KNFFGlMyx4j9SopByrF2Dov+qNFDetbwmKlHTx5bD1oPzf9UDx5U/nJ6/ACl8g45
   </data>
  </layer>
 </map>
