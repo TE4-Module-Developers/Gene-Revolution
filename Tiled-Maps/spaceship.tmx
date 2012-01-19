@@ -135,7 +135,7 @@
   </tile>
   <tile id="16">
    <properties>
-    <property name="display" value="#"/>
+    <property name="display" value="%"/>
     <property name="value" value="&quot;Wall&quot;"/>
    </properties>
   </tile>
@@ -227,7 +227,7 @@
  </tileset>
  <layer name="Terrain" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJztV9uRwyAMJB1cX+mAFlLfZfh0HekgXdwxCXOKIiHxEJA5PnZsywi0Wgnsy8m5y8bGxsY/x5d7x+yYajmcT3/4NC4Uh0/kwnGAXGbHKOHmHsjxSGNmxyrx+BZ4JC6zY5V43J+g4k/vVuYB+9szOiT7yv0O+zunR7pflQesKYjA2FerrduzRqR9CgP6zY69Jn6OzyhOUuxU7UT4zLtRnOCcQRF7iQ6Sb3CvvGpzD89m3yn2Uk5pXRhPKQc4J7zW5L2GE7VuCZeo4RXpgOe1Bl4vxXFV1hjWgspLa741/pweWk2gFivqodWEOpNbebT4UHpovgU4PbAuo/TA6/fUYxQs9ODqitOJquuacVb9gc907jzkeFPPlH9w7/NY6qHNJ8dD0tNyv4rgvv20ds04Cz24/1RrGO9Xx++8R7xiYLt2HGEf0R9HQlwzXj2wQTt+xnbPjzfvDxxfQg2PjP9QPTL51Oad09NaD7KuDWC6X93BO+19cHV+1Pqd+6P4vtXPqD+G8xhxnkv3ya/Ex1qP0bDWowStfj31KNFFGlMyx4j9SopByrF2Dov+qNFDetbwmKlHTx5bD1oPzf9UDx5U/nJ6/ACl8g45
+   eJztV9GNwyAMpRvcXrcBK3S+q/jMHN2gW7SoRee6NjYQGyrl4ymJg7GfH4bkfArhfODAgQOd+AmfmJ1TL4ff0z++jQvF4Ru5cBwgl9k5SriGJ2o8ypjZuUo8/gQehcvsXCUetxeo/Mu7lXnA/o6MDsW+cr/D/q7pUe5X5QHXFERi7KutretrjUj7FAb0m517T/4cHy9OUu7U2smIlXdenOCcSZF7iw6SbwrvvHprD8/muFPurZxKXJhPKwc4J7z21L2HExW3hUvW8IJ0wPNaA8creVyUawxrQdVltN4af04PrSZQixX10GpCncmjPEZ8KD003wKcHlgXLz1w/D318IKFHty64nSi1nXPOKv+wGc6dx5yvKlnyj+Fz3ks9dDWk+Mh6Wm5X2Vw335au2achR7cf6o1jPer7THvlq8Y2K4dR9g9+mMryDHzNQIbtONnbI/8ePP+wPkV9PCo+LvqUamntu6cntZ6kOvaAKb71Q28096n0OdHxd+5P5rvR/2M+sOdh8d5Lt0XvxYfaz28Ya1HC0b99tSjRRdpTMscHvuVlINUY+0cFv2h+e7FeUrPFGpxvfUY4eF5fnjyOPR4rwPUxQtUfE6PO5joGgA=
   </data>
  </layer>
 </map>
