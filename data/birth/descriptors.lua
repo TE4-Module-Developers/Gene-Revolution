@@ -33,15 +33,15 @@ newBirthDescriptor{
 		max_life = 25,
 		resolvers.equip{
 			{type="organicpart", subtype="humanoid", special=slotCheck("TORSO")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("ARMS")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("ARMS")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("HANDS")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("HANDS")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("ARM")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("ARM")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("HAND")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("HAND")},
 			{type="organicpart", subtype="humanoid", special=slotCheck("HEAD")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("EYES")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("EYES")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("LEGS")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("LEGS")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("EYE")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("EYE")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("LEG")},
+			{type="organicpart", subtype="humanoid", special=slotCheck("LEG")},
 		},
 	},
 }
@@ -55,7 +55,7 @@ newBirthDescriptor{
 	},
 	copy = {
 		equipment = resolvers.equip{
-			{type="cyberpart", subtype="humanoid", special=slotCheck("ARMS")},
+			{type="cyberpart", subtype="humanoid", special=slotCheck("ARM")},
 		},
 	},
 }

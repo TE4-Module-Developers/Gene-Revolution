@@ -10,14 +10,14 @@ newEntity{base = "HUMANOID_ORGANICPART",
 	slot = "TORSO",
 	rarity = 10,
 	on_wear = function(self, actor)
-		actor:addSlot("ARMS", 2)
-		actor:addSlot("LEGS", 2)
-		actor:addSlot("HEAD", 1)
+		self:addSlot("ARM", 2)
+		self:addSlot("LEG", 2)
+		self:addSlot("HEAD", 1)
 	end,
 	on_takeoff = function(self, actor)
-		actor:removeSlot("ARMS", 2)
-		actor:removeSlot("LEGS", 2)
-		actor:removeSlot("HEAD", 1)
+		self:removeSlot("ARM", 2)
+		self:removeSlot("LEG", 2)
+		self:removeSlot("HEAD", 1)
 	end,
 	level_range = {1, 10},
 	power_level = 10,
@@ -33,10 +33,10 @@ newEntity{base = "HUMANOID_ORGANICPART",
 	slot = "HEAD",
 	rarity = 10,
 	on_wear = function(self, actor)
-		actor:addSlot("EYES", 2)
+		self:addSlot("EYE", 2)
 	end,
 	on_takeoff = function(self, actor)
-		actor:removeSlot("EYES", 2)
+		self:removeSlot("EYE", 2)
 	end,
 	level_range = {1, 10},
 	power_level = 10,
@@ -49,13 +49,13 @@ newEntity{base = "HUMANOID_ORGANICPART",
 
 newEntity{base = "HUMANOID_ORGANICPART",
 	name = "Arm",
-	slot = "ARMS",
+	slot = "ARM",
 	rarity = 10,
 	on_wear = function(self, actor)
-		actor:addSlot("HANDS", 1)
+		self:addSlot("HAND", 1)
 	end,
 	on_takeoff = function(self, actor)
-		actor:removeSlot("HANDS", 1)
+		self:removeSlot("HAND", 1)
 	end,
 	level_range = {1, 10},
 	power_level = 10,
@@ -68,7 +68,7 @@ newEntity{base = "HUMANOID_ORGANICPART",
 
 newEntity{base = "HUMANOID_ORGANICPART",
 	name = "Leg",
-	slot = "LEGS",
+	slot = "LEG",
 	rarity = 10,
 	level_range = {1, 10},
 	power_level = 10,
@@ -81,7 +81,7 @@ newEntity{base = "HUMANOID_ORGANICPART",
 
 newEntity{base = "HUMANOID_ORGANICPART",
 	name = "Eye",
-	slot = "EYES",
+	slot = "EYE",
 	rarity = 10,
 	level_range = {1, 10},
 	power_level = 10,

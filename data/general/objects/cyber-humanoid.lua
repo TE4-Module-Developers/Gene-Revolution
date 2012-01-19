@@ -7,7 +7,7 @@ newEntity{base = "BASE_CYBERPART",
 
 newEntity{base = "HUMANOID_CYBERPART",
 	name = "Pneumatic arm",
-	slot = "ARMS",
+	slot = "ARM",
 	rarity = 10,
 	level_range = {1, 10},
 	power_level = 10,
