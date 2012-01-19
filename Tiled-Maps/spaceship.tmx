@@ -162,10 +162,16 @@
     <property name="value" value="&quot;Floor&quot;"/>
    </properties>
   </tile>
+  <tile id="120">
+   <properties>
+    <property name="display" value="@"/>
+    <property name="value" value="&quot;cannon&quot;"/>
+   </properties>
+  </tile>
   <tile id="121">
    <properties>
-    <property name="display" value="#"/>
-    <property name="value" value="&quot;inner wall&quot;"/>
+    <property name="display" value="$"/>
+    <property name="value" value="&quot;Outside Wingl&quot;"/>
    </properties>
   </tile>
   <tile id="129">
@@ -227,7 +233,7 @@
  </tileset>
  <layer name="Terrain" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJztV9GNwyAMpRvcXrcBK3S+q/jMHN2gW7SoRee6NjYQGyrl4ymJg7GfH4bkfArhfODAgQOd+AmfmJ1TL4ff0z++jQvF4Ru5cBwgl9k5SriGJ2o8ypjZuUo8/gQehcvsXCUetxeo/Mu7lXnA/o6MDsW+cr/D/q7pUe5X5QHXFERi7KutretrjUj7FAb0m517T/4cHy9OUu7U2smIlXdenOCcSZF7iw6SbwrvvHprD8/muFPurZxKXJhPKwc4J7z21L2HExW3hUvW8IJ0wPNaA8creVyUawxrQdVltN4af04PrSZQixX10GpCncmjPEZ8KD003wKcHlgXLz1w/D318IKFHty64nSi1nXPOKv+wGc6dx5yvKlnyj+Fz3ks9dDWk+Mh6Wm5X2Vw335au2achR7cf6o1jPer7THvlq8Y2K4dR9g9+mMryDHzNQIbtONnbI/8ePP+wPkV9PCo+LvqUamntu6cntZ6kOvaAKb71Q28096n0OdHxd+5P5rvR/2M+sOdh8d5Lt0XvxYfaz28Ya1HC0b99tSjRRdpTMscHvuVlINUY+0cFv2h+e7FeUrPFGpxvfUY4eF5fnjyOPR4rwPUxQtUfE6PO5joGgA=
+   eJztl0FygzAMRc0Neq+uypIrcIleqhmWOUdu0Fs0TNFEKJL1ZTBOZlj8ARzL1tezwRm7lMZTp06dKtRHelbrnEo9fHYPvZsXzcM7erE8cC+tc/R0S//K+aA+rXP1fPw4PshL61w9H7+LtPzpt1Y+vhbl+vD9PRgcqB3Z78ictXzwuls86P5VffA1xTUZ7d7aOtrHbVkj3ntKise18kE5lORv+ZGeavnwctfWzqwh85vnaS8ffMwJyD3CwYud0tpXSf70zaW6DzvlHvVE8/J8oh74mPxaUvcST9q8ES8zw4vgIMetLTkf5XEB15hkodVla72ReIsHyoSzeEUeKBPtm7zVx5YYjQdyFrB4SC5H8ZDz78njKNXgYa0ri5O2rkv6leyPHuAhv+nW99DyrT1r8VN6HkfyuOf7PT608hHlgdbT8uHxzPHI+UD3h3X2Q9uRfjV4WP9Tayv3vtqBx/U+7nW+Ssl2tJ/SXsSjj+2PK2mec74OrI23y2fZPtj9of3RGz7A7/kqP1KJj0w8xMPyEeWRqSdad4tnmEcf46Gu6wqCefSKj8j5Cr2fUlkc8r6yfETOu5H7rXF78WjtowaPWUPgnuIiMVEefRfjcbRQHtJHjf8fW+P25BHh4vWJjIG+r0p4oDl4NUbHqLE/kHOvzNN71pSb92geW3zU5tHKx8ljXQfO5Shp81s8/gAe0y2J
   </data>
  </layer>
 </map>
