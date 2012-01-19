@@ -215,28 +215,6 @@ function _M:playerDrop()
     end)
 end
 
-function _M:doWear(inven, item, o)
-    self:removeObject(inven, item, true)
-    local ro = self:wearObject(o, true, true)
-    if ro then
-        if type(ro) == "table" then self:addObject(inven, ro) end
-    elseif not ro then
-        self:addObject(inven, o)
-    end
-    self:sortInven()
-    self:useEnergy()
-    self.changed = true
-end
-
-function _M:doTakeoff(inven, item, o)
-    if self:takeoffObject(inven, item) then
-        self:addObject(self.INVEN_INVEN, o)
-    end
-    self:sortInven()
-    self:useEnergy()
-    self.changed = true
-end
-
 --- Uses an hotkeyed talent
 function _M:activateHotkey(id)
 	if self.hotkey[id] then

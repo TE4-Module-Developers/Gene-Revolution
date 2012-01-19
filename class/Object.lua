@@ -2,27 +2,28 @@ require "engine.class"
 require "engine.Object"
 
 local Stats = require("engine.interface.ActorStats")
+local ActorInventory = require "mod.class.interface.ActorInventory"
 local Talents = require("mod.class.interface.PartTalents")
 local DamageType = require("engine.DamageType")
 
 module(..., package.seeall, class.inherit(
-        engine.Object,
-        mod.class.interface.PartTalents
+	engine.Object,
+	mod.class.interface.ActorInventory,
+	mod.class.interface.PartTalents
 ))
 
 function _M:init(t, no_default)
-        t.encumber = t.encumber or 0
+	t.encumber = t.encumber or 0
 
-        engine.Object.init(self, t, no_default)
-        mod.class.interface.PartTalents.init(self, t)
+	engine.Object.init(self, t, no_default)
+	mod.class.interface.ActorInventory.init(self, t)
+	-- Remove the INVEN_INVEN value
+	self.inven[self.INVEN_INVEN] = nil
+	mod.class.interface.PartTalents.init(self, t)
 end
 
-function _M:on_wear(act)
-	self.actor = act
-end
-
-function _M:on_takeoff(act)
-	self.actor = nil
+function _M:useEnergy(val)
+	if self.actor then return self.actor:useEnergy(val) end
 end
 
 --- Called before a talent is used

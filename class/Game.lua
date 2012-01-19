@@ -417,9 +417,9 @@ function _M:setupCommands()
 		
 		SHOW_INVENTORY = function()
 			local d
-			d = self.player:showEquipInven("Inventory", nil, function(o, inven, item, button, event)
+			d = self.player:showEquipInven("Inventory", nil, function(o, part, inven, item, button, event)
 				if not o then return end
-				local ud = require("mod.dialogs.UseItemDialog").new(self.player, o, item, inven, function(_, _, _, stop)
+				local ud = require("mod.dialogs.UseItemDialog").new(part, o, item, inven, function(_, _, _, stop)
 					d:generate()
 					d:generateList()
 					if stop then self:unregisterDialog(d) end

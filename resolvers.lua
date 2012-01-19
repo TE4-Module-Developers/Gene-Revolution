@@ -23,10 +23,22 @@ function resolvers.calc.equip(t, e)
 		if o then
 			print("Zone made us an equipment according to filter!", o:getName())
 
-			if e:wearObject(o, true, false) == false then
+			-- Find a slot for the object, recursing down
+			local recursive_wear
+			recursive_wear = function(e, o)
+				local worn = e:wearObject(o, true, false)
+				if worn == false then
+					for i, inven in pairs(e.inven) do
+						for j, part in ipairs(inven) do
+							worn = recursive_wear(part, o)
+							if worn == true then return worn end
+						end
+					end
+				else return worn end
+			end
+			if recursive_wear(e, o) == false then
 				e:addObject(e.INVEN_INVEN, o)
 			end
-
 			-- Do not drop it unless it is an ego or better
 			if filter.force_drop then o.no_drop = nil end
 			if filter.never_drop then o.no_drop = true end
