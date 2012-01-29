@@ -24,3 +24,4 @@ newEntity{
 loadIfNot("/data/general/objects/organic-humanoid.lua")
 loadIfNot("/data/general/objects/cyber-humanoid.lua")
 loadIfNot("/data/general/objects/organic-alien.lua")
+loadIfNot("/data/general/objects/organic-amoeba.lua")
