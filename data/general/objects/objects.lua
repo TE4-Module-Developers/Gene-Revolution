@@ -4,7 +4,6 @@ local loadIfNot = function(f)
 end
 
 -- Some base definitions
-
 newEntity{
 	define_as = "BASE_ORGANICPART",
 	level_resource = "fidelity",
@@ -22,7 +21,6 @@ newEntity{
 }
 
 -- And now everything else
-
 loadIfNot("/data/general/objects/organic-humanoid.lua")
 loadIfNot("/data/general/objects/cyber-humanoid.lua")
 loadIfNot("/data/general/objects/organic-alien.lua")

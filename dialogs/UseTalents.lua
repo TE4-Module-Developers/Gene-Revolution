@@ -102,7 +102,7 @@ function _M:generateList()
 	local search_inven
 	search_inven = function(inven)
 		for i, slot in pairs(inven) do
-			if slot.name ~= "INVEN" then
+			if slot.worn then
 				-- Iterate through all parts
 				for j=1,slot.max do
 					local part = slot[j]

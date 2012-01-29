@@ -12,7 +12,8 @@ newAtomicEffect{
 		eff.damage = (params.attack_with and params.attack_with.combat and type(params.attack_with.combat.dam) == "number" and params.attack_with.combat.dam) or 5
 		eff.precision = (params.attack_with and params.attack_with.combat and type(params.attack_with.combat.precision) == "number" and params.attack_with.combat.precision) or 1
 		-- lukep's size-hit formula
-		local prob_hit = target.size / (target.size + 5 * ((self.x - target.x)^2 + (self.y-target.y)^2))
+		local target_size = target:getSize()
+		local prob_hit = target_size / (target_size + 5 * ((self.x - target.x)^2 + (self.y-target.y)^2))
 		-- Apply the precision OR chain
 		eff.prob = Probability.new{val = prob_hit}
 		for i = 2, eff.precision do

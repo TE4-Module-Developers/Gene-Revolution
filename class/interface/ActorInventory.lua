@@ -126,3 +126,17 @@ function _M:doTakeoff(inven, item)
 --	self:useEnergy()
 --	self.changed = true
 end
+
+function _M:getSize()
+	local size = self.size or 0
+	if self.inven then
+		for i, inven in pairs(self.inven) do
+			if inven.worn then
+				for j, item in ipairs(inven) do
+					size = item:getSize()
+				end
+			end
+		end
+	end
+	return size
+end
