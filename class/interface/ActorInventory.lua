@@ -127,16 +127,38 @@ function _M:doTakeoff(inven, item)
 --	self.changed = true
 end
 
-function _M:getSize()
-	local size = self.size or 0
-	if self.inven then
-		for i, inven in pairs(self.inven) do
-			if inven.worn then
-				for j, item in ipairs(inven) do
-					size = item:getSize()
+function _M:applyToWornParts(func)
+	for i, slot in pairs(self.inven) do
+		if slot.worn then
+			-- Iterate through all parts
+			for j=1,slot.max do
+				local part = slot[j]
+				if part then
+					func(part)
+					part:applyToWornParts(func)
 				end
 			end
 		end
 	end
+end
+
+function _M:getSize()
+	local size = self.size or 0
+	local sum_size = function(part)
+		size = size + part:getSize()
+	end
+	self:applyToWornParts(sum_size)
 	return size
+end
+
+function _M:getSizeTable()
+	local t = {total = 0}
+	local collect_size = function(part)
+		if part.size then
+			t.total = t.total + part.size
+			t[#t+1] = {hit=t.total, e=part}
+		end
+	end
+	self:applyToWornParts(collect_size)
+	return t
 end
