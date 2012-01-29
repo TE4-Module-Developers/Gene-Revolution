@@ -36,6 +36,15 @@ newEntity{base = "HUMANOID_ORGANICPART",
 }
 
 newEntity{base = "HUMANOID_ORGANICPART",
+	name = "Hand",
+	slot = "HAND",
+	body = { GRIP = 1 },
+	level_range = {1, 10},
+	rarity = 1,
+	desc = [[Opposable thumbs are a great thing.]],
+}
+
+newEntity{base = "HUMANOID_ORGANICPART",
 	name = "Leg",
 	slot = "LEG",
 	size = 8,

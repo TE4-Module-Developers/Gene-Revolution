@@ -46,6 +46,8 @@ ActorInventory:defineInventory("HAND", "Hand", true, "Those opposable thumbs do 
 ActorInventory:defineInventory("HEAD", "Head", true, "Where most creatures keep their brain and sensory organs.")
 ActorInventory:defineInventory("EYE", "Eye", true, "See Spot run.")
 ActorInventory:defineInventory("LEG", "Leg", true, "Run away!")
+ActorInventory:defineInventory("COVER", "Cover", true, "We cannot have nudity.")
+ActorInventory:defineInventory("GRIP", "Grip", true, "Put those opposable appendages to work.")
 
 -- Talents
 PartTalents:loadDefinition("/data/talents.lua")
