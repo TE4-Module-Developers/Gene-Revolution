@@ -29,8 +29,12 @@ newTalent{
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
+	requires_target = true,
+	target = function(part, t)
+		return {type="hit", range=part:getTalentRange(t)}
+	end,
 	effects = function(actor, part, t)
-		local tg = {type="hit", range=part:getTalentRange(t)}
+		local tg = part:getTalentTarget(t)
 		local x, y, target = actor:getTarget(tg)
 		if not x or not y or not target then game.logPlayer(actor, "No valid target selected.") return end
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
@@ -53,8 +57,12 @@ newTalent{
 	-- this may seem like a lot but keep in mind the diminishing returns with sync/fidelity
 	sync = 5,
 	range = 1,
+	requires_target = true,
+	target = function(part, t)
+		return {type="hit", range=part:getTalentRange(t)}
+	end,
 	effects = function(actor, part, t)
-		local tg = {type="hit", range=part:getTalentRange(t)}
+		local tg = part:getTalentTarget(t)
 		local x, y, target = actor:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
@@ -80,8 +88,12 @@ newTalent{
 --	cooldown = 4,
 	bioenergy = 20, -- 5 uses, 2 turns/use recovery
 	sync = 10,
+	requires_target = true,
+	target = function(part, t)
+		return {type="hit", range=part:getTalentRange(t)}
+	end,
 	effects = function(actor, part, t)
-		local tg = {type="hit", range=part:getTalentRange(t)}
+		local tg = part:getTalentTarget(t)
 		local x, y, target = actor:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
@@ -92,7 +104,7 @@ newTalent{
 		local lx, ly = util.coordAddDir(actor.x, actor.y, dir_sides[dir].left)
 		local rx, ry = util.coordAddDir(actor.x, actor.y, dir_sides[dir].right)
 		local lt, rt = game.level.map(lx, ly, Map.ACTOR), game.level.map(rx, ry, Map.ACTOR)
-		
+
 		local effs = actor:melee_attack_effects(target, {attack_with = part, dam_mod = 2*eff})
 		if lt then
 			local tmp = actor:melee_attack_effects(lt, {attack_with = part, dam_mod = 2*eff})
@@ -101,7 +113,7 @@ newTalent{
 			end
 		end
 		if rt then
-			local tmp = actor:melee_attack_effects(lt, {attack_with = part, dam_mod = 2*eff})
+			local tmp = actor:melee_attack_effects(rt, {attack_with = part, dam_mod = 2*eff})
 			for i, eff in ipairs(tmp) do
 				effs[#effs+1] = eff
 			end
@@ -121,8 +133,12 @@ newTalent{
 --	cooldown = 10,
 	bioenergy = 30, -- 2.33 uses, 3 turns/use recovery
 	sync = 20,
+	requires_target = true,
+	target = function(part, t)
+		return {type="ball", radius=1, talent=t}
+	end,
 	effects = function(actor, part, t)
-		local tg = {type="ball", radius=1, talent=t}
+		local tg = part:getTalentTarget(t)
 		local eff = actor:getSyncEff()
 		local effs = {}
 		actor:project(tg, actor.x, actor.y, function(px, py, tg, actor)
@@ -152,8 +168,12 @@ newTalent{
 	bioenergy = 30, -- 2.33 uses, 3 turns/use to recover
 	range = 6,
 	fidelity = 20,
+	requires_target = true,
+	target = function(part, t)
+		return {type="ball", range=part:getTalentRange(t), radius=1, talent=t}
+	end,
 	effects = function(actor, part, t)
-		local tg = {type="ball", range=part:getTalentRange(t), radius=1, talent=t}
+		local tg = part:getTalentTarget(t)
 		local x, y = actor:getTarget(tg)
 		if not x or not y then return nil end
 		local eff = actor:getFidelityEff()
@@ -180,8 +200,12 @@ newTalent{
 	range = 1,
 	bioenergy = 15, -- 10 uses, 1.5 to recover
 	fidelity = 5,
+	requires_target = true,
+	target = function(part, t)
+		return {type="hit", range=part:getTalentRange(t)}
+	end,
 	effects = function(actor, part, t)
-		local tg = {type="hit", range=part:getTalentRange(t)}
+		local tg = part:getTalentTarget(t)
 		local x, y, target = actor:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
@@ -205,8 +229,12 @@ newTalent{
 	range = 1,
 	bioenergy = 30, -- 2.33 uses, 3 turns/use to recover
 	fidelity = 10,
+	requires_target = true,
+	target = function(part, t)
+		return {type="hit", range=part:getTalentRange(t)}
+	end,
 	effects = function(actor, part, t)
-		local tg = {type="hit", range=part:getTalentRange(t)}
+		local tg = part:getTalentTarget(t)
 		local x, y, target = actor:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
