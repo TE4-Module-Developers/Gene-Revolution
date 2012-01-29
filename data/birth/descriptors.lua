@@ -31,18 +31,7 @@ newBirthDescriptor{
 	copy = {
 		lite = 4,
 		max_life = 25,
-		resolvers.equip{
-			{type="organicpart", subtype="humanoid", special=slotCheck("TORSO")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("ARM")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("ARM")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("HAND")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("HAND")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("HEAD")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("EYE")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("EYE")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("LEG")},
-			{type="organicpart", subtype="humanoid", special=slotCheck("LEG")},
-		},
+		resolvers.recursiveequip{type="organicpart", subtype="humanoid"},
 	},
 }
 

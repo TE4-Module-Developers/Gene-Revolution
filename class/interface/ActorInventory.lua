@@ -127,15 +127,22 @@ function _M:doTakeoff(inven, item)
 --	self.changed = true
 end
 
-function _M:applyToWornParts(func)
+--- Recursively iterates through all worn parts and applies the functions
+-- @param present_func A function that receives a part filling a slot
+-- @param missing_func A function that receives the part and inven with an empty slot
+function _M:applyToWornParts(present_func, missing_func)
 	for i, slot in pairs(self.inven) do
 		if slot.worn then
 			-- Iterate through all parts
 			for j=1,slot.max do
 				local part = slot[j]
 				if part then
-					func(part)
-					part:applyToWornParts(func)
+					if present_func then
+						present_func(part)
+					end
+					part:applyToWornParts(present_func, missing_func)
+				elseif missing_func then
+					missing_func(self, slot)
 				end
 			end
 		end

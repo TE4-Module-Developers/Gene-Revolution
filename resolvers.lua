@@ -49,3 +49,29 @@ function resolvers.calc.equip(t, e)
 	-- Delete the origin field
 	return nil
 end
+
+--- Recursively resolves equipment creation for an actor
+function resolvers.recursiveequip(t)
+	return {__resolver="recursiveequip", __resolve_last=true, t}
+end
+--- Actually resolve the equipment creation
+function resolvers.calc.recursiveequip(t, e)
+	local slotCheck = function(slot)
+		return function(e) return e.slot == slot end
+	end
+	local added = true
+	local equip
+	equip = function(part, slot)
+		print("Equipment resolver", slot.name, t[1].type, t[1].subtype)
+		local filter = table.clone(t[1], true)
+		filter.special = slotCheck(slot.name)
+		local o = game.zone:makeEntity(game.level, "object", filter, nil, true)
+		if o then
+			added = added or part:wearObject(o, true, false)
+		end
+	end
+	while added do
+		added = false
+		e:applyToWornParts(nil, equip)
+	end
+end
