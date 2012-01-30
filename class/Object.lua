@@ -117,3 +117,12 @@ function _M:getTalentFullDescription(t)
 
 	return table.concat(d, "\n").."\n#6fff83#Description: #FFFFFF#"..t.info(self, t)
 end
+
+--- Returns a tooltip for the object
+function _M:tooltip()
+	return ([[%s
+%s]]):format(
+	self.name,
+	self.desc or ""
+	)
+end
