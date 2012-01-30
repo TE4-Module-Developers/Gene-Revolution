@@ -34,32 +34,6 @@ function _M:onTakeoff(o)
 	ActorInventory.onTakeoff(self, o)
 end
 
-function _M:findInvenDown(inven_id, empty)
-	local found = self:getInven(inven_id)
-	if empty then
-		found = found and (#found < found.max)
-	end
-	if found then return self end
-	for i, inven in pairs(self.inven) do
-		for j, part in ipairs(inven) do
-			found = part:findInvenDown(inven_id, empty)
-			if found then return found end
-		end
-	end
-end
-
-function _M:findInvenUp(inven_id, empty)
-	local found = self:getInven(inven_id)
-	if empty then
-		found = found and (#found < found.max)
-	end
-	if found then
-		return self
-	elseif self.parent then
-		return self.parent:findInvenUp(inven_id, empty)
-	end
-end
-
 function _M:addSlot(inven_id, amount)
 	local amount = amount or 1
 	-- If the inventory does not exist, add it first
@@ -74,10 +48,10 @@ function _M:removeSlot(inven_id, amount)
 	if self.inven[self["INVEN_"..inven_id]] then
 		-- Remove any item in that slot
 		local inven = self.inven[self["INVEN_"..inven_id]]
-		local inven_holder = self:findInvenUp("INVEN")
-		for	 i = 1, amount do
+		local inven_holder = self.actor or self
+		for i = 1, amount do
 			local o = self:removeObject(inven, inven.max, true)
-			if o and inven_holder then
+			if o and inven_holder and inven_holder:getInven("INVEN") then
 				inven_holder:addObject(inven_holder.INVEN_INVEN, o)
 			end
 			inven.max = inven.max - 1
@@ -86,7 +60,7 @@ function _M:removeSlot(inven_id, amount)
 		if inven.max <= 0 then
 			self.inven[self["INVEN_"..inven_id]] = nil
 		end
-		if inven_holder then
+		if inven_holder and inven_holder:getInven("INVEN") then
 			inven_holder:sortInven(inven_holder.INVEN_INVEN)
 		end
 	end
@@ -95,8 +69,8 @@ end
 -- Have to wrap the default INVEN_INVEN behavior
 function _M:sortInven(inven)
 	if not inven then
-		local inven_holder = self:findInvenUp("INVEN")
-		if inven_holder then
+		local inven_holder = self.actor or self
+		if inven_holder and inven_holder:getInven("INVEN") then
 			inven_holder:sortInven(inven_holder.INVEN_INVEN)
 		end
 	else
@@ -108,10 +82,17 @@ function _M:doDrop(inven, item)
 end
 
 function _M:doWear(inven, item, o)
-	local holder = self:findInvenDown(o:wornInven(), true)
-	if not holder then return end
-	if self:removeObject(inven, item, true) then
-		holder:wearObject(o, true, true)
+	local wear_object
+	wear_object = function(part, slot)
+		if slot.id == o:wornInven() then
+			if self:removeObject(inven, item, true) then
+				part:wearObject(o, true, true)
+				return true
+			end
+		end
+	end
+	if not self:applyToWornParts(nil, wear_object) then
+		game.logSeen(self, "%s cannot wear %s.", self.name, o.name)
 	end
 -- Not sure what is happening here... looks like we try to wear the replaced object 
 --	if ro then
@@ -127,8 +108,8 @@ end
 function _M:doTakeoff(inven, item)
 	local o = self:takeoffObject(inven, item)
 	if o then
-		local inven_holder = self:findInvenUp("INVEN", true)
-		if inven_holder then
+		local inven_holder = self.actor or self
+		if inven_holder and inven_holder:getInven("INVEN") then
 			inven_holder:addObject(inven_holder.INVEN_INVEN, o)
 			inven_holder:sortInven()
 		end
@@ -138,8 +119,8 @@ function _M:doTakeoff(inven, item)
 end
 
 --- Recursively iterates through all worn parts and applies the functions
--- @param present_func A function that receives a part filling a slot
--- @param missing_func A function that receives the part and inven with an empty slot
+-- @param present_func A function that receives a part filling a slot, and returns true to stop recursion.
+-- @param missing_func A function that receives the part and inven with an empty slot, and returns true to stop recursion.
 function _M:applyToWornParts(present_func, missing_func)
 	for i, slot in pairs(self.inven) do
 		if slot.worn then
@@ -148,11 +129,11 @@ function _M:applyToWornParts(present_func, missing_func)
 				local part = slot[j]
 				if part then
 					if present_func then
-						present_func(part)
+						if present_func(part, slot) then return true end
 					end
 					part:applyToWornParts(present_func, missing_func)
 				elseif missing_func then
-					missing_func(self, slot)
+					if missing_func(self, slot) then return true end
 				end
 			end
 		end
