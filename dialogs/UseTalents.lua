@@ -76,8 +76,8 @@ function _M:defineHotkey(id)
 	local item = self.list[self.c_list.sel]
 	if not item or not item.talent then return end
 
-	self.actor.hotkey[id] = {"talent", item.talent}
-	self:simplePopup("Hotkey "..id.." assigned", self.actor:getTalentFromId(item.talent).name:capitalize().." assigned to hotkey "..id)
+	self.actor.hotkey[id] = {"talent", item.part, item.talent}
+	self:simplePopup("Hotkey "..id.." assigned", item.part:getTalentFromId(item.talent).name:capitalize().." assigned to hotkey "..id)
 	self.actor.changed = true
 end
 
@@ -99,32 +99,28 @@ function _M:generateList()
 	local list = {}
 	list.chars = {}
 	local letter = 1
-	for i, slot in pairs(self.actor.inven) do
-		if slot.name ~= "INVEN" then
-			-- Iterate through all parts
-			for j, part in ipairs(slot) do
-				local where = #list
-				local added = false
-				for tid, lvl in pairs(part.talents) do
-					local t = part:getTalentFromId(tid)
-					if t.mode ~= "passive" then
-						local typename = "talent"
-						local status = tstring{{"color", "LIGHT_GREEN"}, "Active"}
-						if part:isTalentCoolingDown(t) then status = tstring{{"color", "LIGHT_RED"}, part:isTalentCoolingDown(t).." turns"}
-						elseif t.mode == "sustained" then status = part:isTalentActive(t.id) and tstring{{"color", "YELLOW"}, "Sustaining"} or tstring{{"color", "LIGHT_GREEN"}, "Sustain"} end
-						list[#list+1] = { char=self:makeKeyChar(letter), name=t.name.." ("..typename..")", status=status, part=part, talent=t.id, desc=part:getTalentFullDescription(t) }
-						list.chars[self:makeKeyChar(letter)] = list[#list]
-						if not self.sel then self.sel = #list + 1 end
-						letter = letter + 1
-						added = true
-					end
-				end
-				if added then
-					table.insert(list, where+1, { char="", name=tstring{{"font","bold"}, part.name:capitalize(), {"font","normal"}}, color={0x80, 0x80, 0x80}, status="", desc=part.name })
-				end
+	local process_talents = function(part)
+		local where = #list
+		local added = false
+		for tid, lvl in pairs(part.talents) do
+			local t = part:getTalentFromId(tid)
+			if t.mode ~= "passive" then
+				local typename = "talent"
+				local status = tstring{{"color", "LIGHT_GREEN"}, "Active"}
+				if part:isTalentCoolingDown(t) then status = tstring{{"color", "LIGHT_RED"}, part:isTalentCoolingDown(t).." turns"}
+				elseif t.mode == "sustained" then status = part:isTalentActive(t.id) and tstring{{"color", "YELLOW"}, "Sustaining"} or tstring{{"color", "LIGHT_GREEN"}, "Sustain"} end
+				list[#list+1] = { char=self:makeKeyChar(letter), name=t.name.." ("..typename..")", status=status, part=part, talent=t.id, desc=part:getTalentFullDescription(t) }
+				list.chars[self:makeKeyChar(letter)] = list[#list]
+				if not self.sel then self.sel = #list + 1 end
+				letter = letter + 1
+				added = true
 			end
 		end
+		if added then
+			table.insert(list, where+1, { char="", name=tstring{{"font","bold"}, part.name:capitalize(), {"font","normal"}}, color={0x80, 0x80, 0x80}, status="", desc=part.name })
+		end
 	end
+	self.actor:applyToWornParts(process_talents)
 	for i = 1, #list do list[i].id = i end
 	self.list = list
 end

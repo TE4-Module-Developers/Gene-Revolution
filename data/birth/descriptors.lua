@@ -8,7 +8,7 @@
 --
 -- This program is distributed in the hope that it will be useful,
 -- but WITHOUT ANY WARRANTY; without even the implied warranty of
--- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
 -- GNU General Public License for more details.
 --
 -- You should have received a copy of the GNU General Public License
@@ -17,17 +17,21 @@
 -- Nicolas Casalini "DarkGod"
 -- darkgod@te4.org
 
+local slotCheck = function(slot)
+	local temp = function(e) return e.slot == slot end
+	return temp
+end
+
 newBirthDescriptor{
 	type = "base",
 	name = "base",
 	desc = {
 	},
-
-        body = { INVEN = 100, ARMS = 2, TORSO = 1, HEAD = 1, EYES = 2, LEGS = 1 },
-
+	body = { INVEN = 100, TORSO = 1 },
 	copy = {
 		lite = 4,
-		max_life = 25,
+		max_life = 100,
+		resolvers.recursiveequip{type="organicpart", subtype="humanoid"},
 	},
 }
 
@@ -38,11 +42,11 @@ newBirthDescriptor{
 	{
 		"I am the modern man.",
 	},
-        copy = {
-                equipment = resolvers.equip{
-                        {type="cyberpart", slot="LEFTARM",},
-                },
-        },
+	copy = {
+		equipment = resolvers.equip{
+			{type="cyberpart", subtype="humanoid", special=slotCheck("ARM")},
+		},
+	},
 }
 
 newBirthDescriptor{
@@ -52,9 +56,9 @@ newBirthDescriptor{
 	{
 		"As in the movie.",
 	},
-        copy = {
-                equipment = resolvers.equip{
-                        {type="organicpart", slot="HEAD",},
-                },
-        },
+	copy = {
+		equipment = resolvers.equip{
+			{type="organicpart", subtype="alien", special=slotCheck("HEAD")},
+		},
+	},
 }
