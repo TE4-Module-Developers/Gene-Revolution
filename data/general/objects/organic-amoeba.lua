@@ -13,6 +13,9 @@ newEntity{base = "AMOEBA_ORGANICPART",
 	level_range = {1, 10},
 	rarity = 1,
 	desc = [[The core part of an amoeba.]],
+	talents = {
+		[Talents.T_DEVOUR] = 1,
+	}
 }
 
 newEntity{base = "AMOEBA_ORGANICPART",
@@ -32,7 +35,9 @@ newEntity{base = "AMOEBA_ORGANICPART",
 	name = "Nucleus",
 	slot = "HEAD",
 	size = 0,
+	body = { GENE = 1 },
 	level_range = {1, 10},
 	rarity = 1,
 	desc = [[The thinking part of an amoeba.]],
+	resolvers.recursiveequip{type="gene", subtype="HEAD"},
 }

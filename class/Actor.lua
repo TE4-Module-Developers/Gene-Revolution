@@ -99,16 +99,26 @@ function _M:move(x, y, force)
 end
 
 function _M:tooltip()
+	local parts_list = ""
+	local collect_parts
+	collect_parts = function(part)
+		parts_list = parts_list .. part.name .. ", "
+	end
+	self:applyToWornParts(collect_parts)
 	return ([[%s%s
 #ff0000#HP: %d (%d%%)
+Bioenergy: %d (%d%%)
 Stats: %d /  %d / %d
+Parts: %s
 %s]]):format(
 	self:getDisplayString(),
 	self.name,
 	self.life, self.life * 100 / self.max_life,
+	self:getBioenergy(), self:getBioenergy() * 100 / self:getMaxBioenergy(),
 	self:getStr(),
 	self:getDex(),
 	self:getCon(),
+	parts_list,
 	self.desc or ""
 	)
 end
@@ -145,15 +155,30 @@ end
 
 --- Show usage dialog
 function _M:useTalents(add_cols)
-        local d = require("mod.dialogs.UseTalents").new(self, add_cols)
-        game:registerDialog(d)
+	local d = require("mod.dialogs.UseTalents").new(self, add_cols)
+	game:registerDialog(d)
+end
+
+-- @param filter A function(part, tid) that will filter out returned talents.
+function _M:getTalents(filter)
+	local talents = {}
+	local collect_talent
+	collect_talent = function(part)
+		for tid, lvl in pairs(part.talents) do
+			if not filter or filter(part, tid) then
+				talents[#talents+1] = {part=part, tid=tid}
+			end
+		end
+	end
+	self:applyToWornParts(collect_talent)
+	return talents
 end
 
 --- Actor is being attacked!
 -- Module authors should rewrite it to handle combat, dialog, ...
 -- @param target the actor attacking us
 function _M:attack(target, x, y)
-        game.logSeen(target, "%s tries to attack %s.", self.name:capitalize(), target.name:capitalize())
+	game.logSeen(target, "%s tries to attack %s.", self.name:capitalize(), target.name:capitalize())
 end
 
 function _M:melee_attack_effects(target, params)

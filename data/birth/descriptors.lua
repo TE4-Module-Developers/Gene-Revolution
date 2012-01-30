@@ -30,7 +30,7 @@ newBirthDescriptor{
 	body = { INVEN = 100, TORSO = 1 },
 	copy = {
 		lite = 4,
-		max_life = 25,
+		max_life = 100,
 		resolvers.recursiveequip{type="organicpart", subtype="humanoid"},
 	},
 }

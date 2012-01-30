@@ -22,10 +22,12 @@ newAI("dumb_talented", function(self)
 	-- Find available talents
 	local avail = {}
 	local target_dist = core.fov.distance(self.x, self.y, self.ai_target.actor.x, self.ai_target.actor.y)
+	print(self.name, self.uid, "targeting", self.ai_target.actor.name, "range", target_dist)
+	print(self.name, self.uid, "dumb ai talents can try to use", "t.name", "tid", "::", "Mode", "notCooling", "withinRange", "preUse", "canProject")
 	local process_talents = function(part)
 		for tid, _ in pairs(part.talents) do
 			local t = part:getTalentFromId(tid)
-	--		print(self.name, self.uid, "dumb ai talents can try use", t.name, tid, "::", t.mode, not self:isTalentCoolingDown(t), target_dist <= self:getTalentRange(t), self:preUseTalent(t, true), self:canProject({type="bolt"}, self.ai_target.actor.x, self.ai_target.actor.y))
+			print(self.name, self.uid, "dumb ai talents can try to use", t.name, tid, "::", t.mode, not part:isTalentCoolingDown(t), target_dist <= part:getTalentRange(t), part:preUseTalent(t, true), self:canProject({type="bolt"}, self.ai_target.actor.x, self.ai_target.actor.y))
 			-- For dumb AI assume we need range and LOS
 			-- No special check for bolts, etc.
 			local total_range = part:getTalentRange(t) + part:getTalentRadius(t)
