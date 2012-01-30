@@ -130,6 +130,27 @@ end
 function _M:die(src)
 	engine.interface.ActorLife.die(self, src)
 
+	-- Extract and drop the genes first
+	local extract_genes
+	extract_genes = function(part, slot)
+		if part.slot == "GENE" or part.slot == "MODULE" then
+			if part.parent then
+				part.parent:removeObject(slot, part.parent:itemPosition(slot, part), true)
+			end
+			game.level.map:addObject(self.x, self.y, part)
+		end
+	end
+	self:applyToWornParts(extract_genes)
+	-- Drop the parts
+	for i, slot in pairs(self.inven) do
+		for j=1,slot.max do
+			local part = slot[j]
+			if part then
+				self:removeObject(slot, j, true)
+				game.level.map:addObject(self.x, self.y, part)
+			end
+		end
+	end
 	return true
 end
 
