@@ -15,11 +15,21 @@ function _M:onWear(o)
 	ActorInventory.onWear(self, o)
 	o.parent = self
 	o.actor = find_actor(self)
+	local set_actor
+	set_actor = function(part)
+		part.actor = o.actor
+	end
+	self:applyToWornParts(set_actor)
 end
 
 --- Call when an object is taken off
 function _M:onTakeoff(o)
 	o.actor = nil
+	local set_actor
+	set_actor = function(part)
+		part.actor = o.actor
+	end
+	self:applyToWornParts(set_actor)
 	o.parent = nil
 	ActorInventory.onTakeoff(self, o)
 end
