@@ -8,7 +8,7 @@
 --
 -- This program is distributed in the hope that it will be useful,
 -- but WITHOUT ANY WARRANTY; without even the implied warranty of
--- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
 -- GNU General Public License for more details.
 --
 -- You should have received a copy of the GNU General Public License
@@ -33,7 +33,7 @@ local Actor = require "mod.class.Actor"
 local Player = require "mod.class.Player"
 local NPC = require "mod.class.NPC"
 
-local HotkeysDisplay = require "engine.HotkeysDisplay"
+local HotkeysDisplay = require "mod.class.HotkeysDisplay"
 local ActorsSeenDisplay = require "engine.ActorsSeenDisplay"
 local LogDisplay = require "engine.LogDisplay"
 local LogFlasher = require "engine.LogFlasher"
@@ -97,7 +97,7 @@ function _M:newGame()
 
 	self.creating_player = true
 	local birth = Birther.new(nil, self.player, {"base", "role" }, function()
-		self:changeLevel(1, "dungeon")
+		self:changeLevel(1, "forest")
 		print("[PLAYER BIRTH] resolve...")
 		self.player:resolve()
 		self.player:resolve(nil, true)
@@ -344,20 +344,20 @@ function _M:setupCommands()
 			self:registerDialog(require("mod.dialogs.CharacterSheet").new(self.player))
 		end,
 
-                SHOW_INVENTORY = function()
-                        local d
-                        d = self.player:showEquipInven("Inventory", nil, function(o, inven, item, button, event)
-                                if not o then return end
-                                local ud = require("mod.dialogs.UseItemDialog").new(self.player, o, item, inven, function(_, _, _, stop)
-                                        d:generate()
-                                        d:generateList()
-                                        if stop then self:unregisterDialog(d) end
-                                end)
-                                self:registerDialog(ud)
-                        end)
-                end,
+		SHOW_INVENTORY = function()
+			local d
+			d = self.player:showEquipInven("Inventory", nil, function(o, inven, item, button, event)
+				if not o then return end
+				local ud = require("mod.dialogs.UseItemDialog").new(self.player, o, item, inven, function(_, _, _, stop)
+					d:generate()
+					d:generateList()
+					if stop then self:unregisterDialog(d) end
+				end)
+				self:registerDialog(ud)
+			end)
+		end,
 
-                SHOW_EQUIPMENT = "SHOW_INVENTORY",
+		SHOW_EQUIPMENT = "SHOW_INVENTORY",
 
 		-- Exit the game
 		QUIT_GAME = function()
@@ -416,11 +416,10 @@ function _M:setupCommands()
 		end,
 		
 		SHOW_INVENTORY = function()
-			if self.player.no_inventory_access then return end
 			local d
-			d = self.player:showEquipInven("Inventory", nil, function(o, inven, item, button, event)
+			d = self.player:showEquipInven("Inventory", nil, function(o, part, inven, item, button, event)
 				if not o then return end
-				local ud = require("mod.dialogs.UseItemDialog").new(event == "button", self.player, o, item, inven, function(_, _, _, stop)
+				local ud = require("mod.dialogs.UseItemDialog").new(part, o, item, inven, function(_, _, _, stop)
 					d:generate()
 					d:generateList()
 					if stop then self:unregisterDialog(d) end

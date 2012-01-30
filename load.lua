@@ -41,10 +41,15 @@ DamageType:loadDefinition("/data/damage_types.lua")
 
 -- Body parts
 ActorInventory:defineInventory("TORSO", "Torso", true, "The big middle bit... hopefully not too squishy.")
-ActorInventory:defineInventory("ARMS", "Arms", true, "The things that you use to whack other things with.")
+ActorInventory:defineInventory("ARM", "Arm", true, "The things that you use to whack other things with.")
+ActorInventory:defineInventory("HAND", "Hand", true, "Those opposable thumbs do come in handy.")
 ActorInventory:defineInventory("HEAD", "Head", true, "Where most creatures keep their brain and sensory organs.")
-ActorInventory:defineInventory("EYES", "Eyes", true, "See Spot run.")
-ActorInventory:defineInventory("LEGS", "Legs", true, "Run away!")
+ActorInventory:defineInventory("EYE", "Eye", true, "See Spot run.")
+ActorInventory:defineInventory("LEG", "Leg", true, "Run away!")
+ActorInventory:defineInventory("COVER", "Cover", true, "We cannot have nudity.")
+ActorInventory:defineInventory("GRIP", "Grip", true, "Put those opposable appendages to work.")
+ActorInventory:defineInventory("GENE", "Gene", true, "Evolution is the name of the game.")
+ActorInventory:defineInventory("MODULE", "Module", true, "Remember, the square peg goes in the square hole.")
 
 -- Talents
 PartTalents:loadDefinition("/data/talents.lua")
@@ -53,9 +58,9 @@ PartTalents:loadDefinition("/data/talents.lua")
 AtomicEffects:loadDefinition("/data/atomic_effects.lua")
 
 -- Actor resources
-ActorResource:defineResource("Fidelity", "fidelity", nil, "fidelity_regen", "Fidelity is the measure of genetic stability.  It ranges from 100% (good) to 0% (bad).", nil, 0) -- fidelity/sync come from parts
-ActorResource:defineResource("Sync", "sync", nil, "sync_regen", "Sync is the measure of communication between organic and cybernetic parts.  It ranges from 100% (good) to 0% (bad).", nil, 0)
-ActorResource:defineResource("Bioenergy", "bioenergy", nil, "bioenergy_regen", "Bioenergy is the amount of energy available to your body, including cybernetic implants.", nil, 50) -- bioenergy is innate but can also come from other sources
+ActorResource:defineResource("Fidelity", "fidelity", nil, "fidelity_regen", "Fidelity is the measure of genetic stability.  It ranges from 100% (good) to 0% (bad).", 0, 100) -- fidelity/sync come from parts
+ActorResource:defineResource("Sync", "sync", nil, "sync_regen", "Sync is the measure of communication between organic and cybernetic parts.  It ranges from 100% (good) to 0% (bad).", 0, 100)
+ActorResource:defineResource("Bioenergy", "bioenergy", nil, "bioenergy_regen", "Bioenergy is the amount of energy available to your body, including cybernetic implants.", 0, 50) -- bioenergy is innate but can also come from other sources
 
 -- Actor stats
 ActorStats:defineStat("Strength",	"str", 10, 1, 100, "Strength defines your character's ability to apply physical force. It increases your melee damage, damage with heavy weapons, your chance to resist physical effects, and carrying capacity.")
@@ -64,6 +69,7 @@ ActorStats:defineStat("Constitution",	"con", 10, 1, 100, "Constitution defines y
 
 -- Actor AIs
 ActorAI:loadDefinition("/engine/ai/")
+ActorAI:loadDefinition("/mod/ai/")
 
 -- Additional resolvers
 dofile("/mod/resolvers.lua")

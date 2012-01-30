@@ -25,7 +25,7 @@ require "engine.interface.ActorProject"
 require "engine.interface.ActorStats"
 require "engine.interface.ActorResource"
 require "engine.interface.ActorFOV"
-require "engine.interface.ActorInventory"
+require "mod.class.interface.ActorInventory"
 require "mod.class.interface.Combat"
 require "mod.class.interface.AtomicEffects"
 local Map = require "engine.Map"
@@ -37,15 +37,12 @@ module(..., package.seeall, class.inherit(
 	engine.interface.ActorStats,
 	engine.interface.ActorResource,
 	engine.interface.ActorFOV,
-	engine.interface.ActorInventory,
+	mod.class.interface.ActorInventory,
 	mod.class.interface.Combat,
 	mod.class.interface.AtomicEffects
 ))
 
 function _M:init(t, no_default)
-	-- Define some basic combat stats
-	t.size = 25 -- 25 is the "humanoid" reference size, used in combat accuracy calculations
-
 	-- Default regen
 	t.life_regen = t.life_regen or 0.25 -- Life regen real slow
 	t.fidelity_regen = t.fidelity_regen or 0 -- fidelity/sync (and regen) from parts, not (typically) innate
@@ -60,7 +57,7 @@ function _M:init(t, no_default)
 	engine.interface.ActorResource.init(self, t)
 	engine.interface.ActorStats.init(self, t)
 	engine.interface.ActorFOV.init(self, t)
-	engine.interface.ActorInventory.init(self, t)
+	mod.class.interface.ActorInventory.init(self, t)
 	mod.class.interface.AtomicEffects.init(self, t)
 
 end
@@ -102,16 +99,26 @@ function _M:move(x, y, force)
 end
 
 function _M:tooltip()
+	local parts_list = ""
+	local collect_parts
+	collect_parts = function(part)
+		parts_list = parts_list .. part.name .. ", "
+	end
+	self:applyToWornParts(collect_parts)
 	return ([[%s%s
 #ff0000#HP: %d (%d%%)
+Bioenergy: %d (%d%%)
 Stats: %d /  %d / %d
+Parts: %s
 %s]]):format(
 	self:getDisplayString(),
 	self.name,
 	self.life, self.life * 100 / self.max_life,
+	self:getBioenergy(), self:getBioenergy() * 100 / self:getMaxBioenergy(),
 	self:getStr(),
 	self:getDex(),
 	self:getCon(),
+	parts_list,
 	self.desc or ""
 	)
 end
@@ -123,6 +130,27 @@ end
 function _M:die(src)
 	engine.interface.ActorLife.die(self, src)
 
+	-- Extract and drop the genes first
+	local extract_genes
+	extract_genes = function(part, slot)
+		if part.slot == "GENE" or part.slot == "MODULE" then
+			if part.parent then
+				part.parent:removeObject(slot, part.parent:itemPosition(slot, part), true)
+			end
+			game.level.map:addObject(self.x, self.y, part)
+		end
+	end
+	self:applyToWornParts(extract_genes)
+	-- Drop the parts
+	for i, slot in pairs(self.inven) do
+		for j=1,slot.max do
+			local part = slot[j]
+			if part then
+				self:removeObject(slot, j, true)
+				game.level.map:addObject(self.x, self.y, part)
+			end
+		end
+	end
 	return true
 end
 
@@ -148,15 +176,30 @@ end
 
 --- Show usage dialog
 function _M:useTalents(add_cols)
-        local d = require("mod.dialogs.UseTalents").new(self, add_cols)
-        game:registerDialog(d)
+	local d = require("mod.dialogs.UseTalents").new(self, add_cols)
+	game:registerDialog(d)
+end
+
+-- @param filter A function(part, tid) that will filter out returned talents.
+function _M:getTalents(filter)
+	local talents = {}
+	local collect_talent
+	collect_talent = function(part)
+		for tid, lvl in pairs(part.talents) do
+			if not filter or filter(part, tid) then
+				talents[#talents+1] = {part=part, tid=tid}
+			end
+		end
+	end
+	self:applyToWornParts(collect_talent)
+	return talents
 end
 
 --- Actor is being attacked!
 -- Module authors should rewrite it to handle combat, dialog, ...
 -- @param target the actor attacking us
 function _M:attack(target, x, y)
-        game.logSeen(target, "%s tries to attack %s.", self.name:capitalize(), target.name:capitalize())
+	game.logSeen(target, "%s tries to attack %s.", self.name:capitalize(), target.name:capitalize())
 end
 
 function _M:melee_attack_effects(target, params)
