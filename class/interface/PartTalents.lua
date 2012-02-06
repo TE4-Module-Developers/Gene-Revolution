@@ -104,3 +104,21 @@ function _M:useTalent(id, who, force_level, ignore_cd, force_target)
 	self.changed = true
 	return true
 end
+
+function _M:cooldownTalents()
+	for tid, c in pairs(self.talents_cd) do
+		self.changed = true
+		self.talents_cd[tid] = self.talents_cd[tid] - 1
+		if self.talents_cd[tid] <= 0 then
+			self.talents_cd[tid] = nil
+			if self.onTalentCooledDown then self:onTalentCooledDown(tid) end
+		end
+	end
+	for i, inven in pairs(self.inven) do  -- ipairs causes issues
+		if inven.name ~= "INVEN" then
+			for j, part in ipairs(inven) do
+				part:cooldownTalents()
+			end
+		end
+	end
+end
