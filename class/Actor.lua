@@ -71,13 +71,7 @@ function _M:act()
 	-- Compute timed effects
 	self:timedEffects()
 	-- Cooldowns on all attached parts
-	for i, inven in ipairs(self.inven) do
-		if inven.name ~= "INVEN" then
-			for j, part in ipairs(inven) do
-				part:cooldownTalents()
-			end
-		end
-	end
+	self:applyToWornParts(function(part) part:cooldownTalents() end)
 
 	-- Still enough energy to act ?
 	if self.energy.value < game.energy_to_act then return false end
