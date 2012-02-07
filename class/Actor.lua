@@ -45,8 +45,6 @@ module(..., package.seeall, class.inherit(
 function _M:init(t, no_default)
 	-- Default regen
 	t.life_regen = t.life_regen or 0.25 -- Life regen real slow
-	t.fidelity_regen = t.fidelity_regen or 0 -- fidelity/sync (and regen) from parts, not (typically) innate
-	t.sync_regen = t.sync_regen or 0
 	t.bioenergy_regen = t.bioenergy_regen or 10
 
 	-- Default melee barehanded damage
@@ -73,13 +71,7 @@ function _M:act()
 	-- Compute timed effects
 	self:timedEffects()
 	-- Cooldowns on all attached parts
-	for i, inven in ipairs(self.inven) do
-		if inven.name ~= "INVEN" then
-			for j, part in ipairs(inven) do
-				part:cooldownTalents()
-			end
-		end
-	end
+	self:applyToWornParts(function(part) part:cooldownTalents() end)
 
 	-- Still enough energy to act ?
 	if self.energy.value < game.energy_to_act then return false end
@@ -218,14 +210,4 @@ function _M:melee_attack_effects(target, params)
 		end
 	end
 	return effs
-end
-
-function _M:getFidelityEff()  -- ranges from 20% (at 0) to 100% (at max)
-	if not self.max_fidelity or self.max_fidelity == 0 then return 0.2 end
-	return (self:getFidelity()*.8 + self.max_fidelity*0.2)/(self.max_fidelity)
-end
-
-function _M:getSyncEff()
-	if not self.max_sync or self.max_sync == 0  then return 0.2 end
-	return (self:getSync()*.8 + self.max_sync*0.2)/(self.max_sync)
 end

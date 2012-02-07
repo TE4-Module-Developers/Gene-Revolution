@@ -51,11 +51,8 @@ newTalent{
 	name = "Concussive Punch",
 	type = {"role/combat", 1},
 	points = 1,
---	cooldown = 6,
-	bioenergy = 15, -- these numbers may seem large - think about them in terms of number of successive uses
-	-- i.e. @ 50 bioenergy, and 10 regen: 50/(15 - 10) = 10 uses before empty, 1.5 turns per use to recover
-	-- this may seem like a lot but keep in mind the diminishing returns with sync/fidelity
-	sync = 5,
+	cooldown = 6,
+	bioenergy = 15,
 	range = 1,
 	requires_target = true,
 	target = function(part, t)
@@ -66,10 +63,9 @@ newTalent{
 		local x, y, target = actor:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
-		local eff = actor:getSyncEff()
 		
-		local effs = actor:melee_attack_effects(target, {attack_with = part, dam_mod = eff})
-		local knockback = actor:calcEffect("ATOMICEFF_KNOCKBACK", target, {dist=math.ceil(2 * eff)})
+		local effs = actor:melee_attack_effects(target, {attack_with = part})
+		local knockback = actor:calcEffect("ATOMICEFF_KNOCKBACK", target, {dist=math.ceil(2)})
 		-- Modify the knockback probability to only fire if "hit" lands
 		knockback.prob = knockback.prob * effs.hit.prob
 		effs[#effs+1] = knockback
@@ -85,9 +81,8 @@ newTalent{
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
---	cooldown = 4,
-	bioenergy = 20, -- 5 uses, 2 turns/use recovery
-	sync = 10,
+	cooldown = 4,
+	bioenergy = 20,
 	requires_target = true,
 	target = function(part, t)
 		return {type="hit", range=part:getTalentRange(t)}
@@ -99,21 +94,20 @@ newTalent{
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
 		local dir = util.getDir(x, y, actor.x, actor.y)
 		if dir == 5 then return nil end
-		local eff = actor:getSyncEff()
 
 		local lx, ly = util.coordAddDir(actor.x, actor.y, dir_sides[dir].left)
 		local rx, ry = util.coordAddDir(actor.x, actor.y, dir_sides[dir].right)
 		local lt, rt = game.level.map(lx, ly, Map.ACTOR), game.level.map(rx, ry, Map.ACTOR)
 
-		local effs = actor:melee_attack_effects(target, {attack_with = part, dam_mod = 2*eff})
+		local effs = actor:melee_attack_effects(target, {attack_with = part, dam_mod = 2})
 		if lt then
-			local tmp = actor:melee_attack_effects(lt, {attack_with = part, dam_mod = 2*eff})
+			local tmp = actor:melee_attack_effects(lt, {attack_with = part, dam_mod = 2})
 			for i, eff in ipairs(tmp) do
 				effs[#effs+1] = eff
 			end
 		end
 		if rt then
-			local tmp = actor:melee_attack_effects(rt, {attack_with = part, dam_mod = 2*eff})
+			local tmp = actor:melee_attack_effects(rt, {attack_with = part, dam_mod = 2})
 			for i, eff in ipairs(tmp) do
 				effs[#effs+1] = eff
 			end
@@ -130,21 +124,19 @@ newTalent{
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
---	cooldown = 10,
-	bioenergy = 30, -- 2.33 uses, 3 turns/use recovery
-	sync = 20,
+	cooldown = 10,
+	bioenergy = 30,
 	requires_target = true,
 	target = function(part, t)
 		return {type="ball", radius=1, talent=t}
 	end,
 	effects = function(actor, part, t)
 		local tg = part:getTalentTarget(t)
-		local eff = actor:getSyncEff()
 		local effs = {}
 		actor:project(tg, actor.x, actor.y, function(px, py, tg, actor)
 			local act = game.level.map(px, py, engine.Map.ACTOR)
 			if act and act ~= actor then
-				local current = actor:melee_attack_effects(act, {attack_with = part, dam_mod = 0.75 * eff})
+				local current = actor:melee_attack_effects(act, {attack_with = part, dam_mod = 0.75})
 				current.hit.prob = Probability.new{ val = 1 }
 				for i, eff in ipairs(current) do
 					effs[#effs + 1] = eff
@@ -164,10 +156,9 @@ newTalent{
 	name = "Acid Spray",
 	type = {"role/combat", 1},
 	points = 1,
---	cooldown = 6,
-	bioenergy = 30, -- 2.33 uses, 3 turns/use to recover
+	cooldown = 6,
+	bioenergy = 30,
 	range = 6,
-	fidelity = 20,
 	requires_target = true,
 	target = function(part, t)
 		return {type="ball", range=part:getTalentRange(t), radius=1, talent=t}
@@ -176,13 +167,12 @@ newTalent{
 		local tg = part:getTalentTarget(t)
 		local x, y = actor:getTarget(tg)
 		if not x or not y then return nil end
-		local eff = actor:getFidelityEff()
 
 		local effs = {}
 		actor:project(tg, x, y, function(px, py, tg, actor)
 			local act = game.level.map(px, py, engine.Map.ACTOR)
 			if act then
-				local hit = actor:calcEffect("ATOMICEFF_ACIDBURN", act, {damage=3 * math.sqrt(eff), dur=math.ceil(4 * math.sqrt(eff))})
+				local hit = actor:calcEffect("ATOMICEFF_ACIDBURN", act, {damage=3 , dur=4})
 				effs[#effs+1] = hit
 			end
 		end)
@@ -198,8 +188,8 @@ newTalent{
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
-	bioenergy = 15, -- 10 uses, 1.5 to recover
-	fidelity = 5,
+	cooldown = 5,
+	bioenergy = 15,
 	requires_target = true,
 	target = function(part, t)
 		return {type="hit", range=part:getTalentRange(t)}
@@ -209,10 +199,9 @@ newTalent{
 		local x, y, target = actor:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
-		local eff = actor:getFidelityEff()
 
 		local effs = actor:melee_attack_effects(target, {attack_with = part })
-		local acid_bite = actor:calcEffect("ATOMICEFF_ACIDBURN", target, {damage=2 * math.sqrt(eff), dur = math.ceil(3 * math.sqrt(eff))})
+		local acid_bite = actor:calcEffect("ATOMICEFF_ACIDBURN", target, {damage=2, dur = 3})
 		acid_bite.prob = acid_bite.prob * effs.hit.prob
 		effs[#effs+1] = acid_bite
 		return effs
@@ -227,8 +216,8 @@ newTalent{
 	type = {"role/combat", 1},
 	points = 1,
 	range = 1,
-	bioenergy = 30, -- 2.33 uses, 3 turns/use to recover
-	fidelity = 10,
+	cooldown = 10,
+	bioenergy = 30,
 	requires_target = true,
 	target = function(part, t)
 		return {type="hit", range=part:getTalentRange(t)}
@@ -238,10 +227,9 @@ newTalent{
 		local x, y, target = actor:getTarget(tg)
 		if not x or not y or not target then return nil end
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
-		local eff = actor:getFidelityEff()
 
 		local dam_mod = target:hasEffect("ATOMICEFF_ACIDBURN") and 2 or 1
-		local effs = actor:melee_attack_effects(target, {attack_with = part, dam_mod = dam_mod * eff})
+		local effs = actor:melee_attack_effects(target, {attack_with = part, dam_mod = dam_mod})
 		local total_damage = 0
 		for i, eff in ipairs(effs) do
 			total_damage = total_damage + (eff.damage or 0)

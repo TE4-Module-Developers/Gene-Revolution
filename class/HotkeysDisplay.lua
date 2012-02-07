@@ -38,7 +38,7 @@ function _M:display()
 			local part = ts[4]
 			local t = part:getTalentFromId(ts[1])
 			if part:isTalentCoolingDown(t) then
-				txt = ("%s (%d)"):format(t.name, a:isTalentCoolingDown(t))
+				txt = ("%s (%d)"):format(t.name, part:isTalentCoolingDown(t))
 				color = {255,0,0}
 			elseif part:isTalentActive(t.id) then
 				txt = t.name

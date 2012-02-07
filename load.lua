@@ -58,8 +58,6 @@ PartTalents:loadDefinition("/data/talents.lua")
 AtomicEffects:loadDefinition("/data/atomic_effects.lua")
 
 -- Actor resources
-ActorResource:defineResource("Fidelity", "fidelity", nil, "fidelity_regen", "Fidelity is the measure of genetic stability.  It ranges from 100% (good) to 0% (bad).", 0, 100) -- fidelity/sync come from parts
-ActorResource:defineResource("Sync", "sync", nil, "sync_regen", "Sync is the measure of communication between organic and cybernetic parts.  It ranges from 100% (good) to 0% (bad).", 0, 100)
 ActorResource:defineResource("Bioenergy", "bioenergy", nil, "bioenergy_regen", "Bioenergy is the amount of energy available to your body, including cybernetic implants.", 0, 50) -- bioenergy is innate but can also come from other sources
 
 -- Actor stats
