@@ -6,7 +6,6 @@ end
 -- Some base definitions
 newEntity{
 	define_as = "BASE_ORGANICPART",
-	level_resource = "fidelity",
 	use_resource = "bioenergy",
 	type = "organicpart",
 	desc = [[It all comes down to the carbon.]],
@@ -14,7 +13,6 @@ newEntity{
 
 newEntity{
 	define_as = "BASE_CYBERPART",
-	level_resource = "sync",
 	use_resource = "bioenergy",
 	type = "cyberpart",
 	desc = [[A bunch of metal and electronics.]],
