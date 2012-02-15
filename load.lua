@@ -75,4 +75,7 @@ dofile("/mod/resolvers.lua")
 -- Birther descriptor
 Birther:loadDefinition("/data/birth/descriptors.lua")
 
+-- Switch to hex-grid
+core.fov.set_algorithm("hex")
+
 return {require "mod.class.Game" }

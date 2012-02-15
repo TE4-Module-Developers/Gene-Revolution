@@ -95,8 +95,9 @@ newTalent{
 		local dir = util.getDir(x, y, actor.x, actor.y)
 		if dir == 5 then return nil end
 
-		local lx, ly = util.coordAddDir(actor.x, actor.y, dir_sides[dir].left)
-		local rx, ry = util.coordAddDir(actor.x, actor.y, dir_sides[dir].right)
+		local sides = util.dirSides(dir, actor.x, actor.y)
+		local lx, ly = util.coordAddDir(actor.x, actor.y, sides.left)
+		local rx, ry = util.coordAddDir(actor.x, actor.y, sides.right)
 		local lt, rt = game.level.map(lx, ly, Map.ACTOR), game.level.map(rx, ry, Map.ACTOR)
 
 		local effs = actor:melee_attack_effects(target, {attack_with = part, dam_mod = 2})

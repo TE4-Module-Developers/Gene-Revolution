@@ -113,13 +113,15 @@ function _M:loaded()
 	engine.GameTurnBased.loaded(self)
 	Zone:setup{npc_class="mod.class.NPC", grid_class="mod.class.Grid", object_class="mod.class.Object"}
 	Map:setViewerActor(self.player)
-	Map:setViewPort(200, 20, self.w - 200, math.floor(self.h * 0.80) - 20, 32, 32, nil, 22, true)
+	local tile_w = math.floor(math.sqrt(0.75) * (32 + 0.5))
+	Map:setViewPort(200, 20, self.w - 200, math.floor(self.h * 0.80) - 20, tile_w, 32, nil, 22, true)
 	self.key = engine.KeyBind.new()
 end
 
 function _M:setupDisplayMode()
 	print("[DISPLAY MODE] 32x32 ASCII/background")
-	Map:setViewPort(200, 20, self.w - 200, math.floor(self.h * 0.80) - 20, 32, 32, nil, 22, true)
+	local tile_w = math.floor(math.sqrt(0.75) * (32 + 0.5))
+	Map:setViewPort(200, 20, self.w - 200, math.floor(self.h * 0.80) - 20, tile_w, 32, nil, 22, true)
 	Map:resetTiles()
 	Map.tiles.use_images = false
 	-- Setup the player display
