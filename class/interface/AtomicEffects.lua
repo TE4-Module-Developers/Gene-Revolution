@@ -1,7 +1,5 @@
 require "engine.class"
-local DamageType = require "engine.DamageType"
 
---- Handles actors temporary effects (temporary boost of a stat, ...)
 module(..., package.seeall, class.make)
 
 _M.atomiceffect_def = {}
@@ -9,35 +7,35 @@ _M.atomiceffect_def = {}
 --- Defines actor atomic effects
 -- Static!
 function _M:loadDefinition(file, env)
-		local f, err = util.loadfilemods(file, setmetatable(env or {
-				DamageType = require "engine.DamageType",
-				AtomicEffects = self,
-				newAtomicEffect = function(t) self:newAtomicEffect(t) end,
-				load = function(f) self:loadDefinition(f, getfenv(2)) end
-		}, {__index=_G}))
-		if not f and err then error(err) end
-		f()
+	local f, err = util.loadfilemods(file, setmetatable(env or {
+		DamageType = require "engine.DamageType",
+		AtomicEffects = self,
+		newAtomicEffect = function(t) self:newAtomicEffect(t) end,
+		load = function(f) self:loadDefinition(f, getfenv(2)) end
+	}, {__index=_G}))
+	if not f and err then error(err) end
+	f()
 end
 
 --- Defines one effect
 -- Static!
 function _M:newAtomicEffect(t)
-		assert(t.name, "no effect name")
-		assert(t.desc, "no effect desc")
-		assert(t.type, "no effect type")
-		t.name = t.name:upper()
-		-- The calculate function should return a table that is passed to apply
-		-- It should contain at least the variable "prob", the probability of applying the effect
-		t.calculate= t.calculate or function() end
-		t.activate = t.activate or function() end
-		t.deactivate = t.deactivate or function() end
-		t.status = t.status or "detrimental"
-		t.default_params = t.default_params or {}
-		t.default_params.decrease = t.default_params.decrease or 1
+	assert(t.name, "no effect name")
+	assert(t.desc, "no effect desc")
+	assert(t.type, "no effect type")
+	t.name = t.name:upper()
+	-- The calculate function should return a table that is passed to apply
+	-- It should contain at least the variable "prob", the probability of applying the effect
+	t.calculate= t.calculate or function() end
+	t.activate = t.activate or function() end
+	t.deactivate = t.deactivate or function() end
+	t.status = t.status or "detrimental"
+	t.default_params = t.default_params or {}
+	t.default_params.decrease = t.default_params.decrease or 1
 
-		table.insert(self.atomiceffect_def, t)
-		t.id = #self.atomiceffect_def
-		self["ATOMICEFF_"..t.name] = #self.atomiceffect_def
+	table.insert(self.atomiceffect_def, t)
+	t.id = #self.atomiceffect_def
+	self["ATOMICEFF_"..t.name] = #self.atomiceffect_def
 end
 
 function _M:init(t)
@@ -49,12 +47,13 @@ end
 function _M:timedEffects(filter)
 	local todel = {}
 	for eff_id, effs in pairs(self.effects) do
+		local def = _M.atomiceffect_def[eff_id]
 		for instance_id, eff in pairs(effs) do
-			if (instance_id ~= "n") and (not filter or filter(eff.def, eff)) then
+			if (instance_id ~= "n") and (not filter or filter(def, eff)) then
 				if eff.dur and (eff.dur <= 0) then
 					todel[#todel+1] = eff
 				else
-					if eff.def.on_timeout and eff.def.on_timeout(self, eff) then
+					if def.on_timeout and def.on_timeout(self, eff) then
 						todel[#todel+1] = eff
 					end
 				end
@@ -77,16 +76,16 @@ function _M:calcEffect(eff_id, target, params)
 	if type(eff_id) == "string" then
 		eff_id = self[eff_id]
 	end
-	local eff_def = self.atomiceffect_def[eff_id]
-	local eff = eff_def.calculate(self, eff_def, target, params)
+	local def = self.atomiceffect_def[eff_id]
+	local eff = def.calculate(self, def, target, params)
 	if not eff then return end
 
 	-- Set defaults
-	eff.def = eff.def or eff_def
+	eff.id = eff.id or def.id
 	eff.source = eff.source or self
 	eff.target = eff.target or (target or self)
 	eff.params = eff.params or params
-	for k, e in pairs(eff_def.default_params) do
+	for k, e in pairs(def.default_params) do
 		if eff[k] == nil then eff[k] = e end
 	end
 	return eff
@@ -101,8 +100,9 @@ function _M:setEffect(eff, silent)
 
 	self:check("on_set_temporary_effect", eff)
 
-	if eff.def.on_gain then
-		local ret, fly = eff.def.on_gain(self, eff)
+	local def = _M.atomiceffect_def[eff.id]
+	if def.on_gain then
+		local ret, fly = def.on_gain(self, eff)
 		if not silent then
 			if ret then
 				game.logSeen(self, ret:gsub("#Target#", self.name:capitalize()):gsub("#target#", self.name))
@@ -114,11 +114,11 @@ function _M:setEffect(eff, silent)
 		end
 	end
 
-	local active = eff.def.activate(self, eff)
+	local active = def.activate(self, eff)
 	if active or eff.active then
 		eff.active = true
-		if not self.effects[eff.def.id] then self.effects[eff.def.id] = {n=1} end
-		local effs = self.effects[eff.def.id]
+		if not self.effects[eff.id] then self.effects[eff.id] = {n=1} end
+		local effs = self.effects[eff.id]
 		local id = effs.n
 		while effs[id] ~= nil do id = id + 1 end
 		eff.instance_id = id
@@ -140,10 +140,11 @@ end
 
 --- Removes the effect
 function _M:removeEffect(eff, silent, force)
-	if (eff.def.no_remove or not eff.active) and not force then return end
+	local def = _M.atomiceffect_def[eff.id]
+	if (def.no_remove or not eff.active) and not force then return end
 	self.changed = true
-	if eff.def.on_lose then
-		local ret, fly = eff.def.on_lose(self, eff)
+	if def.on_lose then
+		local ret, fly = def.on_lose(self, eff)
 		if not silent then
 			if ret then
 				game.logSeen(self, ret:gsub("#Target#", self.name:capitalize()):gsub("#target#", self.name))
@@ -154,8 +155,8 @@ function _M:removeEffect(eff, silent, force)
 			end
 		end
 	end
-	eff.def.deactivate(self, eff)
-	local effs = self.effects[eff.def.id]
+	def.deactivate(self, eff)
+	local effs = self.effects[eff.id]
 	effs[eff.instance_id] = nil
 	eff.active = nil
 	effs.n = math.min(effs.n, eff.instance_id)
