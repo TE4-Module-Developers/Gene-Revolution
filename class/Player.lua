@@ -238,3 +238,49 @@ function _M:hotkeyInventory(name)
 		self:playerUseItem(o, item, inven)
 	end
 end
+
+local function spotHostiles(self)
+        local seen = {}
+        if not self.x then return seen end
+
+	-- Check for visible monsters, only see LOS actors, so telepathy wont prevent resting
+	core.fov.calc_circle(self.x, self.y, game.level.map.w, game.level.map.h, self.sight or 10, function(_, x, y) return game.level.map:opaque(x, y) end, function(_, x, y)
+		local actor = game.level.map(x, y, game.level.map.ACTOR)
+		if actor and self:reactionToward(actor) < 0 and self:canSee(actor) and game.level.map.seens(x, y) then
+			seen[#seen + 1] = {x=x,y=y,actor=actor}
+		end
+	end, nil)
+	return seen
+end
+
+--- Checks for hostiles while resting
+function _M:restCheck()
+	local spotted = spotHostiles(self)
+	if #spotted > 0 then
+		for _, node in ipairs(spotted) do
+			node.actor:addParticles(engine.Particles.new("notice_enemy", 1))
+		end
+		return false, ("hostile spotted (%s%s)"):format(spotted[1].actor.name, game.level.map:isOnScreen(spotted[1].x, spotted[1].y) and "" or " - offscreen")
+	end
+	
+	-- Check resources
+	if self.life_regen <= 0 then return false, "losing health!" end
+	if self.bioenergy_regen <= 0 then return false, "losing energy!" end
+	if self.life < self.max_life then return true end
+	if self:getBioenergy() < self:getMaxBioenergy() then return true end
+	return false, "all resources are at maximum."
+end
+
+
+--- Checks for hostiles while running
+function _M:runCheck()
+	local spotted = spotHostiles(self)
+	if #spotted > 0 then
+		for _, node in ipairs(spotted) do
+			node.actor:addParticles(engine.Particles.new("notice_enemy", 1))
+		end
+		return false, ("hostile spotted (%s%s)"):format(spotted[1].actor.name, game.level.map:isOnScreen(spotted[1].x, spotted[1].y) and "" or " - offscreen")
+	end
+
+	return engine.interface.PlayerRun.runCheck(self)
+end
