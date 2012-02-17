@@ -284,3 +284,20 @@ function _M:runCheck()
 
 	return engine.interface.PlayerRun.runCheck(self)
 end
+
+
+--- Called after stopping running
+function _M:runStopped()
+	game.level.map.clean_fov = true
+	self:playerFOV()
+	local spotted = spotHostiles(self)
+	if #spotted > 0 then
+		for _, node in ipairs(spotted) do
+			node.actor:addParticles(engine.Particles.new("notice_enemy", 1))
+		end
+	end
+
+	-- if you stop at an object (such as on a trap), then mark it as seen
+	local obj = game.level.map:getObject(x, y, 1)
+	if obj then game.level.map.attrs(x, y, "obj_seen", true) end
+end
