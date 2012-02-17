@@ -116,6 +116,7 @@ function _M:loaded()
 	local tile_w = math.floor(math.sqrt(0.75) * (32 + 0.5))
 	Map:setViewPort(200, 20, self.w - 200, math.floor(self.h * 0.80) - 20, tile_w, 32, nil, 22, true)
 	self.key = engine.KeyBind.new()
+        if self.player then self.player.changed = true end
 end
 
 function _M:setupDisplayMode()
@@ -179,6 +180,7 @@ function _M:changeLevel(lev, zone)
 		self.player:move(self.level.default_down.x, self.level.default_down.y, true)
 	end
 	self.level:addEntity(self.player)
+	if self.player then self.player.changed = true end
 end
 
 function _M:getPlayer()
