@@ -94,20 +94,31 @@ end
 --- Return the full description of a talent
 -- You may overload it to add more data (like power usage, ...)
 function _M:getTalentFullDescription(t)
-	local d = {}
+	local d = tstring{}
 
-	if t.mode == "passive" then d[#d+1] = "#6fff83#Use mode: #00FF00#Passive"
-	elseif t.mode == "sustained" then d[#d+1] = "#6fff83#Use mode: #00FF00#Sustained"
-	else d[#d+1] = "#6fff83#Use mode: #00FF00#Activated"
+	-- Use mode
+	d:add({"color",0x00,0xFF,0x00}, "Use mode: ", {"color",0x00,0xFF,0x00})
+	if t.mode == "passive" then d:add("Passive")
+	elseif t.mode == "sustained" then d:add("Sustained")
+	else d:add("Activated")
+	end
+	d:add(true)
+
+	-- Resource cost
+	if t.bioenergy or t.sustain_bioenergy then d:add({"color",0x6f,0xff,0x83}, "Bioenergy cost:", {"color",0xff,0xcc,0x80} , tostring(t.bioenergy or t.sustain_bioenergy), true) end
+        if t.mode ~= "passive" then
+		d:add({"color",0x6f,0xff,0x83}, "Range: ", {"color",0xFF,0xFF,0xFF})
+		if self:getTalentRange(t) > 1 then d:add(tostring(self:getTalentRange(t)))
+		else d:add("melee/personal")
+		end
+		d:add(true)
+		if t.cooldown then d:add({"color",0x6f,0xff,0x83}, "Cooldown: ", {"color",0xFF,0xFF,0xFF}, tostring(t.cooldown), true) end
 	end
 
-	if t.bioenergy or t.sustain_bioenergy then d[#d+1] = "#6fff83#Bioenergy cost: #7fffd4#"..(t.bioenergy or t.sustain_bioenergy) end
-	if self:getTalentRange(t) > 1 then d[#d+1] = "#6fff83#Range: #FFFFFF#"..self:getTalentRange(t)
-	else d[#d+1] = "#6fff83#Range: #FFFFFF#melee/personal"
-	end
-	if t.cooldown then d[#d+1] = "#6fff83#Cooldown: #FFFFFF#"..t.cooldown end
+	d:add({"color",0x6f,0xff,0x83}, "Description: ", {"color",0xFF,0xFF,0xFF})
+	d:merge(t.info(self, t):toTString():tokenize(" ()[]"))
 
-	return table.concat(d, "\n").."\n#6fff83#Description: #FFFFFF#"..t.info(self, t)
+	return d
 end
 
 --- Returns a tooltip for the object

@@ -84,7 +84,6 @@ function _M:display()
 	end
 end
 
---[[
 --- Call when a mouse event arrives in this zone
 -- This is optional, only if you need mouse support
 function _M:onMouse(button, mx, my, click, on_over, on_click)
@@ -132,4 +131,3 @@ function _M:onMouse(button, mx, my, click, on_over, on_click)
 	end
 	self.cur_sel = nil
 end
---]]
