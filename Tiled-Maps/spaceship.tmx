@@ -236,4 +236,202 @@
    eJztl0FygzAMRc0Neq+uypIrcIleqhmWOUdu0Fs0TNFEKJL1ZTBOZlj8ARzL1tezwRm7lMZTp06dKtRHelbrnEo9fHYPvZsXzcM7erE8cC+tc/R0S//K+aA+rXP1fPw4PshL61w9H7+LtPzpt1Y+vhbl+vD9PRgcqB3Z78ictXzwuls86P5VffA1xTUZ7d7aOtrHbVkj3ntKise18kE5lORv+ZGeavnwctfWzqwh85vnaS8ffMwJyD3CwYud0tpXSf70zaW6DzvlHvVE8/J8oh74mPxaUvcST9q8ES8zw4vgIMetLTkf5XEB15hkodVla72ReIsHyoSzeEUeKBPtm7zVx5YYjQdyFrB4SC5H8ZDz78njKNXgYa0ri5O2rkv6leyPHuAhv+nW99DyrT1r8VN6HkfyuOf7PT608hHlgdbT8uHxzPHI+UD3h3X2Q9uRfjV4WP9Tayv3vtqBx/U+7nW+Ssl2tJ/SXsSjj+2PK2mec74OrI23y2fZPtj9of3RGz7A7/kqP1KJj0w8xMPyEeWRqSdad4tnmEcf46Gu6wqCefSKj8j5Cr2fUlkc8r6yfETOu5H7rXF78WjtowaPWUPgnuIiMVEefRfjcbRQHtJHjf8fW+P25BHh4vWJjIG+r0p4oDl4NUbHqLE/kHOvzNN71pSb92geW3zU5tHKx8ljXQfO5Shp81s8/gAe0y2J
   </data>
  </layer>
+ <objectgroup name="Actors" width="50" height="50">
+  <object x="799" y="267">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="831" y="267">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="723" y="304">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="939" y="335">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="760" y="367">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="883" y="365">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="849" y="429">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="783" y="428">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="656" y="650">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="693" y="686">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="694" y="648">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="980" y="686">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="981" y="656">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="941" y="802">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="976" y="801">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="846" y="910">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="629" y="885">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="469" y="1104">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="735" y="1229">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="631" y="1223">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="525" y="1230">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="424" y="1229">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="513" y="1500">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="872" y="1506">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="1084" y="1224">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="1175" y="1220">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="1165" y="1100">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+  <object x="968" y="1100">
+   <properties>
+    <property name="rank" value=""/>
+    <property name="subtype" value=""/>
+    <property name="type" value="Human"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
