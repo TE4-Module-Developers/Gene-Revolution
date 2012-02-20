@@ -45,19 +45,6 @@ newBirthDescriptor{
 	copy = {
 		equipment = resolvers.equip{
 			{type="cyberpart", subtype="humanoid", special=slotCheck("ARM")},
-		},
-	},
-}
-
-newBirthDescriptor{
-	type = "role",
-	name = "Aliens",
-	desc =
-	{
-		"As in the movie.",
-	},
-	copy = {
-		equipment = resolvers.equip{
 			{type="organicpart", subtype="alien", special=slotCheck("HEAD")},
 		},
 	},
