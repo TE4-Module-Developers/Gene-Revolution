@@ -143,6 +143,8 @@ function _M:die(src)
 			end
 		end
 	end
+	
+	if src.microLevel then src:microLevel(self)
 	return true
 end
 
@@ -210,4 +212,8 @@ function _M:melee_attack_effects(target, params)
 		end
 	end
 	return effs
+end
+
+function _M:microLevel(target)
+	self.max_life = self.max_life + 2
 end
