@@ -144,6 +144,11 @@ function _M:die(src)
 		end
 	end
 	if src.microLevel then src:microLevel(self)
+	if self.boss then 
+		for j=1,9 do
+			src:microLevel(self)
+		end
+	end
 	
 	return true
 end
