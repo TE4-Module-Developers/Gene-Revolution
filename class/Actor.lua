@@ -143,8 +143,8 @@ function _M:die(src)
 			end
 		end
 	end
-	
 	if src.microLevel then src:microLevel(self)
+	
 	return true
 end
 
@@ -216,4 +216,6 @@ end
 
 function _M:microLevel(target)
 	self.max_life = self.max_life + 2
+	self.life_regen = self.life_regen + 0.01
+	self.bioenergy_regen = self.bioenergy_regen + 0.4
 end
