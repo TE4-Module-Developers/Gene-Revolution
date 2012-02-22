@@ -143,12 +143,13 @@ function _M:die(src)
 			end
 		end
 	end
-	if src.microLevel then src:microLevel(self)
+	if src.microLevel then src:microLevel(self) end
 	if self.boss then 
 		for j=1,9 do
-			if src.microLevel then src:microLevel(self)
+			if src.microLevel then src:microLevel(self) end
 		end
 		-- TODO : generate the stairs down
+		-- game.zone:makeEntityByName
 		game.level.map(self.x, self.y, game.level.map.TERRAIN, game.zone.grid_list.DOWN_WILDERNESS)
 	end
 	
