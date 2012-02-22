@@ -150,7 +150,7 @@ function _M:die(src)
 		end
 		-- TODO : generate the stairs down
 		-- game.zone:makeEntityByName
-		game.level.map(self.x, self.y, game.level.map.TERRAIN, game.zone.grid_list.DOWN_WILDERNESS)
+		game.level.map(self.x, self.y, game.level.map.TERRAIN, game.zone.grid_list.DOWN)
 	end
 	
 	return true
@@ -226,4 +226,5 @@ function _M:microLevel(target)
 	self.max_life = self.max_life + 2
 	self.life_regen = self.life_regen + 0.01
 	self.bioenergy_regen = self.bioenergy_regen + 0.4
+	self.max_bioenergy = self.max_bioenergy + 2 
 end
