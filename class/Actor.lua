@@ -223,8 +223,8 @@ function _M:melee_attack_effects(target, params)
 end
 
 function _M:microLevel(target)
-	self.max_life = self.max_life + 2
+	self.max_life = self.max_life + 1
 	self.life_regen = self.life_regen + 0.01
-	self.bioenergy_regen = self.bioenergy_regen + 0.4
-	self.max_bioenergy = self.max_bioenergy + 2 
+	self.bioenergy_regen = self.bioenergy_regen + 0.1
+	self.max_bioenergy = self.max_bioenergy + 0.5 
 end
