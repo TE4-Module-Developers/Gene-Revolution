@@ -146,8 +146,10 @@ function _M:die(src)
 	if src.microLevel then src:microLevel(self)
 	if self.boss then 
 		for j=1,9 do
-			src:microLevel(self)
+			if src.microLevel then src:microLevel(self)
 		end
+		-- TODO : generate the stairs down
+		game.level.map(self.x, self.y, game.level.map.TERRAIN, game.zone.grid_list.DOWN_WILDERNESS)
 	end
 	
 	return true
