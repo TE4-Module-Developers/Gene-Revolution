@@ -1,3 +1,8 @@
+local slotCheck = function(slot)
+	local temp = function(e) return e.slot == slot end
+	return temp
+end
+
 newEntity{
 	define_as = "BASE_NPC_MERCENARY",
 	type = "humanoid", subtype = "mercenary",
