@@ -13,4 +13,5 @@ newEntity{
 	stats = { str=5, dex=5, con=5 },
 	body = { INVEN = 100, TORSO = 1 },
 	resolvers.recursiveequip{type="organicpart", subtype="amoeba"},
+
 }
