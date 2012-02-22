@@ -9,7 +9,8 @@ newEntity{
 	display = "m", color=colors.WHITE,
 	desc = [[A paid thug, looking to earn his keep.]],
 
-	ai = "move_simple", ai_state = { talent_in=3, },
+	--ai = "move_simple", ai_state = { talent_in=3, },
+	ai = "dumb_talented_simple", ai_state = { talent_in=1.5, },
 	stats = { str=5, dex=5, con=5 },
 	combat_armor = 0,
 	-- body = { MAINHAND = 1, OFFHAND = 1, BODY = 1, HEAD = 1 },
