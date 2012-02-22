@@ -33,8 +33,13 @@ newEntity{ base = "BASE_NPC_MERCENARY",
 	desc = [[A giant mercenary, twice the size of a human!]],
 	level_range = {1, 10}, exp_worth = 3,
 	rarity = 4,
-	max_life = resolvers.rngavg(15,20),
+	max_life = resolvers.rngavg(150,200),
 	size = 50, --big!
 	combat_armor = 5,
 	combat = { dam = 7 },
+	boss = true,
+	resolvers.equip{
+			{type="cyberpart", subtype="humanoid", special=slotCheck("ARM")},
+			{type="organicpart", subtype="alien", special=slotCheck("HEAD")},
+		},
 }
