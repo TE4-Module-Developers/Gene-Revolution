@@ -244,3 +244,39 @@ newTalent{
 		return "With great ferocity, you devour a portion of your target, healing yourself for 50%% of the damage.  The damage is doubled if the target is covered with acid."
 	end,
 }
+
+newTalent{
+	name = "Impale",
+	type = {"role/combat",1},
+	points = 1,
+	range = 3,
+	cooldown = 10,
+	bioenergy = 30,
+	target = function(part, t)
+		return {type="hit", range=part:getTalentRange(t)}
+	end,
+	effects = function(actor, part, t)
+		local tg = part:getTalentTarget(t)
+		local x, y, target = actor:getTarget(tg)
+		if not x or not y or not target then return nil end
+	end,
+	info = function(self,t)
+		return "Thick vines shoots from the ground, attempting to impale it's target."
+	end,
+}
+
+newTalent{
+	name = "Trudge",
+	type = {"vine/passive",1},
+	points = 1,
+	mode = "passive",
+	on_learn = function(self,t)
+		movespeed = 0.5
+	end,
+	on_unlearn = function(self,t)
+		movespeed = 0
+	end,
+	info = function(self,t)
+		return ("Enables moving through the ground at half movement speed.")
+	end,
+}
