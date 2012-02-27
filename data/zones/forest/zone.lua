@@ -21,7 +21,7 @@ return {
 			floor = function() if rng.chance(20) then return "FLOWER" else return "GRASS" end end,
 			wall = "TREE",
 			up = "GRASS_UP4",
-			down = "GRASS_DOWN6",
+			down = "GRASS_DOWN_WILDERNESS",
 			door = "GRASS",
 --			road = "DIRT",
 --			add_road = true,
@@ -54,14 +54,14 @@ return {
 			nb_trap = {6, 9},
 		},
 	},
-	levels =
-	{
-		[1] = {
-			generator = { map = {
-				up = "GRASS_UP_WILDERNESS",
-			}, },
-		},
-	},
+--	levels =
+--	{
+--		[1] = {
+--			generator = { map = {
+--				up = "GRASS_UP_WILDERNESS",
+--			}, },
+--		},
+--	},
 
 	foreground = function(level, x, y, nb_keyframes)
 		if not config.settings.tome.weather_effects or not level.foreground_particle then return end

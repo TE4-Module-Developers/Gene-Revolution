@@ -143,6 +143,16 @@ function _M:die(src)
 			end
 		end
 	end
+	if src.microLevel then src:microLevel(self) end
+	if self.boss == true then 
+		for j=1,9 do
+			if src.microLevel then src:microLevel(self) end
+		end
+		-- TODO : generate the stairs down
+		-- game.zone:makeEntityByName
+		game.level.map(self.x, self.y, game.level.map.TERRAIN, game.zone.grid_list.DOWN)
+	end
+	
 	return true
 end
 
@@ -210,4 +220,11 @@ function _M:melee_attack_effects(target, params)
 		end
 	end
 	return effs
+end
+
+function _M:microLevel(target)
+	self.max_life = self.max_life + 1
+	self.life_regen = self.life_regen + 0.01
+	self.bioenergy_regen = self.bioenergy_regen + 0.1
+	self.max_bioenergy = self.max_bioenergy + 0.5 
 end
