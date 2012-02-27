@@ -21,6 +21,7 @@ local DamageType = require "engine.DamageType"
 local Probability = require "mod.class.Probability"
 
 newTalentType{ type="role/combat", name = "combat", description = "Combat techniques" }
+newTalentType{ type="vine/passive", name = "vine", description = "Passive vegetation" }
 
 -- Basic melee talent
 
