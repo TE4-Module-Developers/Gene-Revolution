@@ -13,21 +13,20 @@ newEntity{
 	stats = { str=5, dex=5, con=5 },
 	body = { INVEN = 100, TORSO = 1 },
 	resolvers.recursiveequip{type="organicpart", subtype="amoeba"},
-
 }
 
 newEntity{
-	name = "Thorny Vine"
+	name = "Thorny Vine",
 	type = "alien", subtype = "vine",
 	display = "v", color=colors.BROWN,
 	desc = [[A moving vine!]],
 	
 	rarity = 3,
-	level_range = {1,10}
-	max_life = resolvers.rng(40,60),
+	level_range = {1,10},
+	max_life = resolvers.rngavg(40,60),
 	bioenergy_regen = 5,
 	stats = { str=5, dex=5, con=5 },
 	body = { INVEN = 100, TORSO = 1 },
-	resolvers.recursoveequip{type="organicpart",subtype="vine"},
+	resolvers.recursiveequip{type="organicpart",subtype="vine"},
 }
 	
