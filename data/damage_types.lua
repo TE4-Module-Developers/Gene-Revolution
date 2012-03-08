@@ -52,5 +52,5 @@ newDamageType{
 }
 
 newDamageType{
-	name = "energy", type = "ENERGY", text_color = "#BLUE#",
+	name = "energy", type = "ENERGY", text_color = "#RED#",
 }

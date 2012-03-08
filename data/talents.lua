@@ -22,6 +22,7 @@ local Probability = require "mod.class.Probability"
 
 newTalentType{ type="role/combat", name = "combat", description = "Combat techniques" }
 newTalentType{ type="vine/passive", name = "vine", description = "Passive vegetation" }
+newTalentType{ type="terrantech/active", name = "terrantech", description = "Terran technologies"}
 
 -- Basic melee talent
 
@@ -45,6 +46,8 @@ newTalent{
 		return "A solid right hook."
 	end,
 }
+
+-----------------------------------  BIONIC PARTS  -----------------------------------------
 
 -- Pneumatic Arm
 
@@ -152,7 +155,9 @@ newTalent{
 	end,
 }
 
--- Alien head
+-----------------------------------  GENETICS  -----------------------------------------
+
+-- Alien Head
 
 newTalent{
 	name = "Acid Spray",
@@ -246,6 +251,10 @@ newTalent{
 	end,
 }
 
+-----------------------------------  PLANTS  -----------------------------------------
+
+-- Vine
+
 newTalent{
 	name = "Impale",
 	type = {"role/combat",1},
@@ -279,5 +288,99 @@ newTalent{
 	end,
 	info = function(self,t)
 		return ("Enables moving through the ground at half movement speed.")
+	end,
+}
+
+-----------------------------------  GRENADES  -----------------------------------------
+
+-- Ideally I'd like some grenades to pop after X game time (this is the standard for 
+-- grenades), rather than pop on impact.
+
+
+newTalent{
+	name = "Throw Frag Grenade",
+	type = {"terrantech/active", 1},
+	points = 1,
+	cooldown = 0,
+	range = 6,
+	direct_hit = true,
+	requires_target = true,
+	proj_speed = 2.5,
+	fragments = 12, -- We may want to make this variable so that it can go into more directions and damage more heavily if multiple fragments go through the same actor
+	up_frags = 4,   -- the amount of fragments that goes "up" ie. hitting the person in the epicenter.				
+	frag_damage = 2,-- Damage per fragment
+	getDuration = function(self, t) return 1 end,
+	getDamage = function(self, t) return 5 end,  -- each of the chemical explosion parts
+	action = function(self, t)
+		local tg = {type="ball", range=self:getTalentRange(t), radius=3, talent=t}   
+		local x, y = self:getTarget(tg)
+		if not x or not y then return nil end
+		actor:project(tg, x, y, function(px, py, tg, actor)
+			local act = game.level.map(px, py, engine.Map.ACTOR)
+			if act then
+				
+				-- explode tg,tg2,tg3
+				for radius = 1,3 do
+					local _ _, _, _, x, y = self:canProject(tg, x, y)
+					-- Add a lasting map effect  (copied from fireflash) that inferno part is obviously not correct
+					game.level.map:addEffect(self,x, y, t.getDuration(self, t),	DamageType.ENERGY, t.getDamage(self, t),
+					radius, 5, nil,{type="inferno"},	nil)
+				end
+				
+				-- run through all the fragments
+				for i = 1, fragments do
+					self:project(tg, x, y, DamageType.KINETIC, frag_damage)
+				end
+			end
+		end)
+		return true
+	end,
+	info = function(self, t)
+		local duration = t.getDuration(self, t)
+		return ([[Throw a Fragmentation grenade. It explodes on contact doing energetic damage at the center of the explosion, and 
+		releasing fragments in all directions doing kenetic damage. Explosion damage is reduced further from the epicenter.]])
+	end,
+}
+
+newTalent{
+	--- copied from smoke bomb alchemist spell in ToME some things may be redudant
+	name = "Throw Smoke Grenade",
+	type = {"terrantech/active", 1},
+	points = 1,
+	cooldown = 0,
+	range = 5,
+	direct_hit = true,
+	requires_target = true,
+	getDuration = function(self, t) return 5 end,
+	action = function(self, t)
+		local tg = {type="ball", range=self:getTalentRange(t), radius=1, talent=t}
+		local x, y = self:getTarget(tg)
+		if not x or not y then return nil end
+		self:project(tg, x, y, function(px, py)
+			local e = Object.new{
+				block_sight=true,
+				temporary = t.getDuration(self, t),
+				x = px, y = py,
+				canAct = false,
+				act = function(self)
+					self:useEnergy()
+					self.temporary = self.temporary - 1
+					if self.temporary <= 0 then
+						game.level.map:remove(self.x, self.y, engine.Map.TERRAIN+2)
+						game.level:removeEntity(self)
+						game.level.map:redisplay()
+					end
+				end,
+				summoner_gain_exp = true,
+				summoner = self,
+			}
+			game.level:addEntity(e)
+			game.level.map(px, py, Map.TERRAIN+2, e)
+		end, nil, {type="dark"})
+		return true
+	end,
+	info = function(self, t)
+		local duration = t.getDuration(self, t)
+		return ([[Throw a smoke grenade, blocking line of sight. The smoke dissipates after 5 turns.]])
 	end,
 }

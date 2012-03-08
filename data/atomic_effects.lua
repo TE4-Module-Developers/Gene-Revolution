@@ -1,5 +1,62 @@
 local Probability = require "mod.class.Probability"
 
+
+newAtomicEffect{
+	name = "ENERGY_DAMAGE",
+	desc = "Energy damage",
+	type = "physical",  --- I think this comes from tome?
+	status = "detrimental",
+	calculate = function(self, def, target, params)
+		local eff = {}
+		eff.params = params or {}
+		eff.damage = (params.attack_with and params.attack_with.combat and type(params.attack_with.combat.dam) == "number" and params.attack_with.combat.dam) or 5
+		eff.damtype = eff.params.damtype or DamageType.ENERGY
+		eff.damage = eff.damage * ( eff.params.dam_mod or 1 )
+		return eff
+	end,
+	activate = function(self, eff)
+		DamageType:get(eff.damtype).projector(eff.source, eff.target.x, eff.target.y, eff.damtype, eff.damage)
+	end
+}
+
+
+newAtomicEffect{
+	name = "KINETIC_DAMAGE",
+	desc = "Kinetic damage",
+	type = "physical", --- I think this comes from tome?
+	status = "detrimental",
+	calculate = function(self, def, target, params)
+		local eff = {}
+		eff.params = params or {}
+		eff.damage = (params.attack_with and params.attack_with.combat and type(params.attack_with.combat.dam) == "number" and params.attack_with.combat.dam) or 5
+		eff.damtype = eff.params.damtype or DamageType.KINETIC
+		eff.damage = eff.damage * ( eff.params.dam_mod or 1 )
+		return eff
+	end,
+	activate = function(self, eff)
+		DamageType:get(eff.damtype).projector(eff.source, eff.target.x, eff.target.y, eff.damtype, eff.damage)
+	end
+}
+
+newAtomicEffect{
+	name = "CHEMICAL_DAMAGE",
+	desc = "Chemical damage",
+	type = "physical", --- I think this comes from tome?
+	status = "detrimental",
+	calculate = function(self, def, target, params)
+		local eff = {}
+		eff.params = params or {}
+		eff.damage = (params.attack_with and params.attack_with.combat and type(params.attack_with.combat.dam) == "number" and params.attack_with.combat.dam) or 5
+		eff.damtype = eff.params.damtype or DamageType.CHEMICAL
+		eff.damage = eff.damage * ( eff.params.dam_mod or 1 )
+		return eff
+	end,
+	activate = function(self, eff)
+		DamageType:get(eff.damtype).projector(eff.source, eff.target.x, eff.target.y, eff.damtype, eff.damage)
+	end
+}
+
+
 newAtomicEffect{
 	name = "MELEE_ATTACK",
 	desc = "Melee attack.",
@@ -81,6 +138,9 @@ newAtomicEffect{
 		end
 	end,
 }
+
+
+
 
 newAtomicEffect{
 	name = "ACIDBURN",
