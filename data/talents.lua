@@ -311,32 +311,40 @@ newTalent{
 	frag_damage = 2,-- Damage per fragment
 	getDuration = function(self, t) return 1 end,
 	getDamage = function(self, t) return 5 end,  -- each of the chemical explosion parts
-	action = function(self, t)
-		local tg = {type="ball", range=self:getTalentRange(t), radius=3, talent=t}   
-		local x, y = self:getTarget(tg)
+	effects = function(actor, part, t)
+		local tg = {type="ball", range=part:getTalentRange(t), radius=3, talent=t}   
+		local x, y = actor:getTarget(tg)
 		if not x or not y then return nil end
-		actor:project(tg, x, y, function(px, py, tg, actor)
+
+                local effs = {}
+                actor:project(tg, x, y, function(px, py, tg, actor)
 			local act = game.level.map(px, py, engine.Map.ACTOR)
 			if act then
-				
-				-- explode tg,tg2,tg3
-				for radius = 1,3 do
-					local _ _, _, _, x, y = self:canProject(tg, x, y)
-					-- Add a lasting map effect  (copied from fireflash) that inferno part is obviously not correct
-					game.level.map:addEffect(self,x, y, t.getDuration(self, t),	DamageType.ENERGY, t.getDamage(self, t),
-					radius, 5, nil,{type="inferno"},	nil)
-				end
-				
-				-- run through all the fragments
-				local r=15; local ox, oy = x, y; local a = 0; 
-				a = rng.range(1,360)
-				for i = 0, 360, 360/fragments do 
-					local x, y = math.floor(r*math.cos(math.rad(a+i))), math.floor(r*math.sin(math.rad(a+i)))
-					self:project(ox+x,oy+y, DamageType.KINETIC, frag_damage)
-				end
+				local dist = core.fov.distance(actor.x, actor.y, px, py)
+				local damage = t.getDamage(part, t) * dist / 3
+	                        local hit = actor:calcEffect("ATOMICEFF_ENERGY_DAMAGE", act, {damage=damage})
+				effs[#effs+1] = hit
 			end
+			-- Visual feedback for explosion
+			game.level.map:particleEmitter(px, py, 3, "acid")
 		end)
-		return true
+
+		-- run through all the fragments
+		local r=5
+		local tg = {type="bolt", range=r}
+		local a = rng.range(1,360)
+		for i = 0, 360, 360/t.fragments do 
+			local dx, dy = math.floor(r*math.cos(math.rad(a+i))), math.floor(r*math.sin(math.rad(a+i)))
+			actor:project(tg, x+dx, y+dy, function(px, py, tg, actor)
+				local act = game.level.map(px, py, engine.Map.ACTOR)
+				if act then
+					local hit = actor:calcEffect("ATOMICEFF_KINETIC_DAMAGE", act, {damage=t.frag_damage})
+				end
+				-- Visual feedback for fragment hit locations
+				game.level.map:particleEmitter(px, py, 1, "acid")
+			end)
+		end
+		return effs
 	end,
 	info = function(self, t)
 		local duration = t.getDuration(self, t)
