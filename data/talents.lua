@@ -328,8 +328,11 @@ newTalent{
 				end
 				
 				-- run through all the fragments
-				for i = 1, fragments do
-					self:project(tg, x, y, DamageType.KINETIC, frag_damage)
+				local r=15; local ox, oy = x, y; local a = 0; 
+				a = rng.range(1,360)
+				for i = 0, 360, 360/fragments do 
+					local x, y = math.floor(r*math.cos(math.rad(a+i))), math.floor(r*math.sin(math.rad(a+i)))
+					self:project(ox+x,oy+y, DamageType.KINETIC, frag_damage)
 				end
 			end
 		end)

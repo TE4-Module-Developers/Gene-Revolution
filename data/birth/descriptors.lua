@@ -46,6 +46,7 @@ newBirthDescriptor{
 		equipment = resolvers.equip{
 			{type="cyberpart", subtype="humanoid", special=slotCheck("ARM")},
 			{type="organicpart", subtype="alien", special=slotCheck("HEAD")},
+			{type="terrantech", subtype="terran", special=slotCheck("HAND")},
 		},
 	},
 }
