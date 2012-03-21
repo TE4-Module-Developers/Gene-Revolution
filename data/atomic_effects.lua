@@ -1,4 +1,5 @@
 local Probability = require "mod.class.Probability"
+local DamageType = require "engine.DamageType"
 
 newAtomicEffect{
 	name = "MELEE_ATTACK",
@@ -30,6 +31,14 @@ newAtomicEffect{
 			game.log("%s misses.", eff.source.name:capitalize())
 		end
 	end,
+	tactical = function(self, eff)
+		local weights, wants = {}, {}
+		local damtype = DamageType:get(eff.damtype)
+		local corrected_damage = (not damtype.alter and eff.damage) or damtype.alter(eff.source, eff.target, eff.damage)
+		local reaction = eff.source:reactionToward(eff.target)
+		weights.ATTACK = - reaction / math.abs(reaction) * corrected_damage * eff.prob:predict()
+		return weights, wants
+	end,
 }
 
 newAtomicEffect{
@@ -51,6 +60,11 @@ newAtomicEffect{
 			game.logSeen(eff.target, "%s is knocked away from %s.", eff.target.name:capitalize(), eff.source.name)
 			eff.target:knockback(eff.source.x, eff.source.y, eff.dist)
 		end
+	end,
+	tactical = function(self, eff)
+		local weights, wants = {}, {}
+		weights.ESCAPE = eff.dist
+		return weights, wants
 	end,
 }
 
@@ -80,6 +94,14 @@ newAtomicEffect{
 			DamageType:get(eff.damtype).projector(eff.source, eff.target.x, eff.target.y, eff.damtype, eff.damage)
 		end
 	end,
+	tactical = function(self, eff)
+		local weights, wants = {}, {}
+		local damtype = DamageType:get(eff.damtype)
+		local corrected_damage = (not damtype.alter and eff.damage) or damtype.alter(eff.source, eff.target, eff.damage)
+		local reaction = eff.source:reactionToward(eff.target)
+		weights.ATTACK = - reaction / math.abs(reaction) * corrected_damage * eff.prob:predict()
+		return weights, wants
+	end,
 }
 
 newAtomicEffect{
@@ -100,6 +122,14 @@ newAtomicEffect{
 	on_lose = function(self, err) return "#Target# is free from the acid.", "-Acid" end,
 	on_timeout = function(self, eff)
 		DamageType:get(DamageType.CHEMICAL).projector(eff.source or self, self.x, self.y, DamageType.CHEMICAL, eff.damage)
+	end,
+	tactical = function(self, eff)
+		local weights, wants = {}, {}
+		local damtype = DamageType:get(eff.damtype)
+		local corrected_damage = (not damtype.alter and eff.damage) or damtype.alter(eff.source, eff.target, eff.damage)
+		local reaction = eff.source:reactionToward(eff.target)
+		weights.ATTACK = - reaction / math.abs(reaction) * corrected_damage * eff.prob:predict()
+		return weights, wants
 	end,
 }
 
@@ -128,6 +158,10 @@ newAtomicEffect{
 			self.bioenergy_regen = self.bioenergy_regen + eff.drain
 		end
 	end,
+	tactical = function(self, eff)
+		local weights, wants = {}, {}
+		return weights, wants
+	end,
 }
 
 newAtomicEffect{
@@ -152,6 +186,11 @@ newAtomicEffect{
 			end
 		end
 	end,
+	tactical = function(self, eff)
+		local weights, wants = {}, {}
+		weights.LIFE = eff.heal * eff.prob:predict()
+		return weights, wants
+	end,
 }	
 
 newAtomicEffect{
@@ -171,6 +210,11 @@ newAtomicEffect{
 		if eff.prob() then
 			eff.target:incBioenergy(-eff.drain)
 		end
+	end,
+	tactical = function(self, eff)
+		local weights, wants = {}, {}
+		weights.BIOENERGY = -eff.drain * eff.prob:predict()
+		return weights, wants
 	end,
 }
 

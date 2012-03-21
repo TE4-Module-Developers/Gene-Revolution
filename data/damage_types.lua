@@ -21,11 +21,13 @@
 setDefaultProjector(function(src, x, y, type, dam)
 	local target = game.level.map(x, y, Map.ACTOR)
 	if target then
+		local damtype = DamageType:get(type)
 		local flash = game.flash.NEUTRAL
 		if target == game.player then flash = game.flash.BAD end
 		if src == game.player then flash = game.flash.GOOD end
+		dam = (not damtype.alter and dam) or damtype.alter(src, target, dam)
 
-		game.logSeen(target, flash, "%s hits %s for %s%0.2f %s damage#LAST#.", src.name:capitalize(), target.name, DamageType:get(type).text_color or "#aaaaaa#", dam, DamageType:get(type).name)
+		game.logSeen(target, flash, "%s hits %s for %s%0.2f %s damage#LAST#.", src.name:capitalize(), target.name, DamageType:get(type).text_color or "#aaaaaa#", dam, damtype.name)
 		local sx, sy = game.level.map:getTileToScreen(x, y)
 		if target:takeHit(dam, src) then
 			if src == game.player or target == game.player then
@@ -45,12 +47,21 @@ end)
 
 newDamageType{
 	name = "kinetic", type = "KINETIC", text_color = "#GREY#",
+	alter = function(src, target, dam)
+		return dam
+	end,
 }
 
 newDamageType{
 	name = "chemical", type = "CHEMICAL", text_color = "#GREEN#",
+	alter = function(src, target, dam)
+		return dam
+	end,
 }
 
 newDamageType{
 	name = "energy", type = "ENERGY", text_color = "#BLUE#",
+	alter = function(src, target, dam)
+		return dam
+	end,
 }
