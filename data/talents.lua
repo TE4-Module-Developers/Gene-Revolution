@@ -38,7 +38,7 @@ newTalent{
 		local x, y, target = actor:getTarget(tg)
 		if not x or not y or not target then game.logPlayer(actor, "No valid target selected.") return end
 		if core.fov.distance(actor.x, actor.y, x, y) > 1 then return nil end
-		return actor:melee_attack_effects(target, {attack_with = part })
+		return actor:melee_attack_effects(target, {attack_with = part})
 	end,
 	info = function(actor, part, t)
 		return "A solid right hook."

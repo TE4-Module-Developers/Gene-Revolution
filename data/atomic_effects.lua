@@ -125,7 +125,7 @@ newAtomicEffect{
 	end,
 	tactical = function(self, eff)
 		local weights, wants = {}, {}
-		local damtype = DamageType:get(eff.damtype)
+		local damtype = DamageType:get(DamageType.CHEMICAL)
 		local corrected_damage = (not damtype.alter and eff.damage) or damtype.alter(eff.source, eff.target, eff.damage)
 		local reaction = eff.source:reactionToward(eff.target)
 		weights.ATTACK = - reaction / math.abs(reaction) * corrected_damage * eff.prob:predict()

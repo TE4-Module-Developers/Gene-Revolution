@@ -11,7 +11,7 @@ newEntity{
 
 	ai = "tactical", ai_state = { talent_in=1.5, },
 	stats = { str=5, dex=5, con=5 },
-	body = { MAINHAND = 1, OFFHAND = 1, BODY = 1, HEAD = 1 },
+	body = { INVEN = 10, TORSO = 1 },
 	resolvers.recursiveequip{type="organicpart", subtype="humanoid"},
 }
 

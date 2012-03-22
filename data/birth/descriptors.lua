@@ -27,7 +27,7 @@ newBirthDescriptor{
 	name = "base",
 	desc = {
 	},
-	body = { INVEN = 100, TORSO = 1 },
+	body = { INVEN = 10, TORSO = 1 },
 	copy = {
 		lite = 4,
 		max_life = 100,

@@ -42,6 +42,9 @@ newEntity{base = "HUMANOID_ORGANICPART",
 	level_range = {1, 10},
 	rarity = 1,
 	desc = [[Opposable thumbs are a great thing.]],
+	talents = {
+		[Talents.T_PUNCH] = 5,
+	},
 }
 
 newEntity{base = "HUMANOID_ORGANICPART",
@@ -51,6 +54,10 @@ newEntity{base = "HUMANOID_ORGANICPART",
 	level_range = {1, 10},
 	rarity = 1,
 	desc = [[Mobility is survival.]],
+	-- TODO: add a T_KICK
+	talents = {
+--		[Talents.KICK] = 5,
+	},
 }
 
 newEntity{base = "HUMANOID_ORGANICPART",

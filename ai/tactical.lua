@@ -30,7 +30,7 @@ newAI("use_tactical", function(self)
 			local t = part:getTalentFromId(tid)
 			if t.mode ~= "passive" and not t.no_npc_use and part:preUseTalent(t, true, true) then
 				print(self.name, self.uid, "tactical ai talents testing", t.name, tid)
-				local effs = t.effects(self, t)
+				local effs = t.effects(part.actor, part, t)
 				if effs then
 					local weights, wants = {}, {}
 					for i, eff in ipairs(effs) do
@@ -51,7 +51,7 @@ newAI("use_tactical", function(self)
 						if header then print(header) header = nil end
 						print("* ", key, " :=: ", val)
 					end
-					avail[t] = {effs=effs, weights=weights, wants=wants}
+					avail[#avail+1] = {tid=tid, part=part, effs=effs, weights=weights, wants=wants, talent=t}
 					ok = true
 				end
 			end
@@ -61,7 +61,7 @@ newAI("use_tactical", function(self)
 	if ok then
 		-- Sum up the wants
 		local total_wants = {ATTACK=1, DEFENSE=1}	
-		for t, t_tact in pairs(avail) do
+		for _, t_tact in ipairs(avail) do
 			table.merge(total_wants, t_tact.wants, nil, nil, nil, true)
 		end
 
@@ -69,13 +69,13 @@ newAI("use_tactical", function(self)
 
 		-- Combine the talents
 		local combined_values = {}
-		for t, t_tact in pairs(avail) do
+		for idx, t_tact in ipairs(avail) do
 			local val = 0
 			for key, want in pairs(total_wants) do
 				val = val + (t_tact.weights[key] or 0) * want
 			end
 			if val > 0 then
-				combined_values[#combined_values+1] = {t, val}
+				combined_values[#combined_values+1] = {idx, val}
 			end
 		end
 		table.sort(combined_values, function(a, b) return a[2] > b[2] end)
@@ -87,11 +87,13 @@ newAI("use_tactical", function(self)
 		end
 		print(" Weights:")
 		for _, t in ipairs(combined_values) do
-			print("* ", t[1].name:capitalize(), t[2])
+			print("* ", avail[t[1]].part.name:capitalize(), avail[t[1]].talent.name:capitalize(), t[2])
 		end
 
 		if #combined_values > 0 then
-			return self:useTalent(combined_values[1][1].id)
+			local part = avail[combined_values[1][1]].part
+			local tid = avail[combined_values[1][1]].tid
+			return part:useTalent(tid)
 		end
 	end
 end)
