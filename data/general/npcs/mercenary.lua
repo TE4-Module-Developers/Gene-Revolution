@@ -9,7 +9,7 @@ newEntity{
 	display = "m", color=colors.WHITE,
 	desc = [[A paid thug, looking to earn his keep.]],
 
-	ai = "tactical", ai_state = { talent_in=1.5, },
+	ai = "tactical",
 	stats = { str=5, dex=5, con=5 },
 	body = { INVEN = 10, TORSO = 1 },
 	resolvers.recursiveequip{type="organicpart", subtype="humanoid"},

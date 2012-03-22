@@ -93,6 +93,8 @@ newAI("use_tactical", function(self)
 		if #combined_values > 0 then
 			local part = avail[combined_values[1][1]].part
 			local tid = avail[combined_values[1][1]].tid
+			local talent = avail[combined_values[1][1]].talent
+			print(" Chosen: ", part.name:capitalize(), talent.name:capitalize(), combined_values[1][2])
 			return part:useTalent(tid)
 		end
 	end
