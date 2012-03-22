@@ -22,6 +22,7 @@ require "mod.class.Actor"
 require "engine.interface.PlayerRest"
 require "engine.interface.PlayerRun"
 require "engine.interface.PlayerMouse"
+require "engine.interface.PlayerExplore"
 require "mod.class.interface.PlayerHotkeys"
 local Map = require "engine.Map"
 local Dialog = require "engine.Dialog"
@@ -37,6 +38,7 @@ module(..., package.seeall, class.inherit(
 	engine.interface.PlayerRest,
 	engine.interface.PlayerRun,
 	engine.interface.PlayerMouse,
+	engine.interface.PlayerExplore,
 	mod.class.interface.PlayerHotkeys
 ))
 
