@@ -22,7 +22,7 @@ require "mod.class.Actor"
 require "engine.interface.PlayerRest"
 require "engine.interface.PlayerRun"
 require "engine.interface.PlayerMouse"
-require "engine.interface.PlayerHotkeys"
+require "mod.class.interface.PlayerHotkeys"
 local Map = require "engine.Map"
 local Dialog = require "engine.Dialog"
 local DeathDialog = require "mod.dialogs.DeathDialog"
@@ -37,7 +37,7 @@ module(..., package.seeall, class.inherit(
 	engine.interface.PlayerRest,
 	engine.interface.PlayerRun,
 	engine.interface.PlayerMouse,
-	engine.interface.PlayerHotkeys
+	mod.class.interface.PlayerHotkeys
 ))
 
 function _M:init(t, no_default)
@@ -54,7 +54,7 @@ function _M:init(t, no_default)
 	t.lite = t.lite or 0
 
 	mod.class.Actor.init(self, t, no_default)
-	engine.interface.PlayerHotkeys.init(self, t)
+	mod.class.interface.PlayerHotkeys.init(self, t)
 
 	self.descriptor = {}
 end
@@ -213,30 +213,6 @@ function _M:playerDrop()
         self.changed = true
         return true
     end)
-end
-
---- Uses an hotkeyed talent
-function _M:activateHotkey(id)
-	if self.hotkey[id] then
-		self["hotkey"..self.hotkey[id][1]:capitalize()](self, self.hotkey[id][2], self.hotkey[id][3])
-	else
-		Dialog:simplePopup("Hotkey not defined", "You may define a hotkey by pressing 'm' and following the instructions there.")
-	end
-end
-
---- Activates a hotkey with a type "talent"
-function _M:hotkeyTalent(part, tid)
-	part:useTalent(tid)
-end
-
---- Activates a hotkey with a type "inventory"
-function _M:hotkeyInventory(name)
-	local o, item, inven = self:findInAllInventories(name)
-	if not o then
-		Dialog:simplePopup("Item not found", "You do not have any "..name..".")
-	else
-		self:playerUseItem(o, item, inven)
-	end
 end
 
 local function spotHostiles(self)

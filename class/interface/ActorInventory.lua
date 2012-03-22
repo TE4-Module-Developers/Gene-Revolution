@@ -18,6 +18,22 @@ function _M:onWear(o)
 	local set_actor
 	set_actor = function(part)
 		part.actor = o.actor
+		if o.actor.hotkey and not part.hotkeyed then
+			local _ _, part_indices = o.actor:findInWornParts("uid", part.uid)
+			for tid, _ in pairs(part.talents) do
+				print(part.name, part.uid)
+				for _, t in ipairs(part_indices) do
+					print('* ', t[1], t[2])
+				end
+				for i=1,12 * (o.actor.nb_hotkey_pages or 5) do
+					if not o.actor.hotkey[i] then
+						o.actor.hotkey[i] = table.readonly{"talent", part_indices, tid}
+						break
+					end
+				end
+			end
+			part.hotkeyed = true
+		end
 	end
 	self:applyToWornParts(set_actor)
 end
@@ -27,6 +43,26 @@ function _M:onTakeoff(o)
 	o.actor = nil
 	local set_actor
 	set_actor = function(part)
+		if part.actor.hotkey and part.hotkeyed then
+			local _ _, part_indices = part.actor:findInWornParts("uid", part.uid)
+			for i=1,12 * (part.actor.nb_hotkey_pages or 5) do
+				local part_queue = table.clone(part_indices, true)
+				local hotkey = part.actor.hotkey[i]
+				if hotkey and hotkey[1] == "talent" then
+					local match = true
+					local hotkey_queue = table.clone(hotkey[2], true)
+					while match and #hotkey_queue > 0 and #part_queue > 0 do
+						local hotkey_pos = table.remove(hotkey_queue)
+						local part_pos = table.remove(part_queue)
+						match = match and hotkey_pos[1] == part_pos[1] and hotkey_pos[2] == part_pos[2]
+					end
+					if match then
+						part.actor.hotkey[i] = nil
+					end
+				end
+			end
+			part.hotkeyed = nil
+		end
 		part.actor = o.actor
 	end
 	self:applyToWornParts(set_actor)
@@ -116,6 +152,32 @@ function _M:doTakeoff(inven, item)
 	end
 --	self:useEnergy()
 --	self.changed = true
+end
+
+--- Recursively search through all worn parts for a certain object
+-- @param prop the property to look for
+-- @param value the value to look for, can be a function(value)
+-- @return An array of {INVEN, SLOT} arrays that if popped will lead from self to the found object
+function _M:findInWornParts(prop, value)
+	for i, slot in pairs(self.inven) do
+		if slot.worn then
+			for j = 1,slot.max do
+				local part = slot[j]
+				if part then
+					if type(value) == "function" then
+						if value(part[prop]) then return part, {{i, j}} end
+					else
+						if part[prop] == value then return part, {{i, j}} end
+					end
+					local found, indices = part:findInWornParts(prop, value)
+					if found then
+						table.insert(indices, {i, j})
+						return found, indices
+					end
+				end
+			end
+		end
+	end
 end
 
 --- Recursively iterates through all worn parts and applies the functions

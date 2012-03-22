@@ -35,20 +35,31 @@ function _M:display()
 		local i = ts[2]
 		local txt, color = "", {0,255,0}
 		if ts[3] == "talent" then
-			local part = ts[4]
-			local t = part:getTalentFromId(ts[1])
-			if part:isTalentCoolingDown(t) then
-				txt = ("%s (%d)"):format(t.name, part:isTalentCoolingDown(t))
-				color = {255,0,0}
-			elseif part:isTalentActive(t.id) then
-				txt = t.name
-				color = {255,255,0}
-			elseif not part:preUseTalent(t, true, true) then
-				txt = t.name
-				color = {190,190,190}
+			local part = a
+			local queue = table.clone(ts[4], true)
+			while part and #queue > 0 do
+				local t = table.remove(queue)
+				local inven = part.inven[t[1]]
+				part = inven and inven[t[2]]
+			end
+			if part then
+				local t = part:getTalentFromId(ts[1])
+				if part:isTalentCoolingDown(t) then
+					txt = ("%s - %s (%d)"):format(t.name, part.name, part:isTalentCoolingDown(t))
+					color = {255,0,0}
+				elseif part:isTalentActive(t.id) then
+					txt = ("%s - %s"):format(t.name, part.name)
+					color = {255,255,0}
+				elseif not part:preUseTalent(t, true, true) then
+					txt = ("%s - %s"):format(t.name, part.name)
+					color = {190,190,190}
+				else
+					txt = ("%s - %s"):format(t.name, part.name)
+					color = {0,255,0}
+				end
 			else
-				txt = t.name
-				color = {0,255,0}
+				txt = "Missing part"
+				color = {128,128,128}
 			end
 		elseif ts[3] == "inventory" then
 			local o = a:findInAllInventories(ts[1], {no_add_name=true, force_id=true, no_count=true})
