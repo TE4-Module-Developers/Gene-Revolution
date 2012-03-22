@@ -21,13 +21,9 @@ function _M:onWear(o)
 		if o.actor.hotkey and not part.hotkeyed then
 			local _ _, part_indices = o.actor:findInWornParts("uid", part.uid)
 			for tid, _ in pairs(part.talents) do
-				print(part.name, part.uid)
-				for _, t in ipairs(part_indices) do
-					print('* ', t[1], t[2])
-				end
 				for i=1,12 * (o.actor.nb_hotkey_pages or 5) do
 					if not o.actor.hotkey[i] then
-						o.actor.hotkey[i] = table.readonly{"talent", part_indices, tid}
+						o.actor.hotkey[i] = {"talent", part_indices, tid}
 						break
 					end
 				end
